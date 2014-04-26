@@ -1,0 +1,17 @@
+#!/usr/bin/env python
+# encoding: utf-8
+
+def options(ctx):
+    ctx.load('compiler_cxx')
+    pass
+
+def configure(ctx):
+    ctx.load('compiler_cxx')
+    ctx.env.append_value('INCLUDES', ['../../include'])
+    pass
+
+def build(ctx):
+    # create as shared library
+    ctx.shlib(source='provider.cpp', target='feign_sample-provider')
+    ctx.shlib(source='provider.cpp', target='feign_sample-provider2')
+    pass

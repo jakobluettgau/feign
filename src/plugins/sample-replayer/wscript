@@ -1,0 +1,17 @@
+#!/usr/bin/env python
+# encoding: utf-8
+
+def options(ctx):
+    ctx.load('compiler_cxx')
+    pass
+
+def configure(ctx):
+    ctx.load('compiler_cxx')
+    ctx.env.append_value('INCLUDES', ['../../include'])
+    pass
+
+def build(ctx):
+    # create as shared library
+    ctx.shlib(source='sample-replayer.cpp', target='feign_sample-replayer')
+    ctx.shlib(source='sample-replayer.cpp', target='feign_sample-replayer2')
+    pass

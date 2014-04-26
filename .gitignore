@@ -1,0 +1,25 @@
+# waf
+build
+.waf*
+.lock-waf*
+
+# design
+design/*.svg
+design/*.png
+
+# vim
+*.swh
+*.swj
+*.swk
+*.swl
+*.swp
+*.swn
+*.swm
+*.swo
+
+#*.autosave
+#*~
+
+
+# vim-youcompleteme
+.ycm_extra_conf.pyc

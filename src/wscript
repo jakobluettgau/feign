@@ -1,0 +1,31 @@
+#! /usr/bin/env python
+
+active = [
+    "plugins",
+    "modules",
+    ]
+
+
+def options(ctx):
+    ctx.load("compiler_c compiler_cxx")
+    pass
+
+def configure(ctx):
+    ctx.load("compiler_c compiler_cxx")
+    ctx.check_cfg(package='glib-2.0', args='--cflags --libs')
+    ctx.env.CXXFLAGS = ['-std=c++11', '-Wall', "-g", "-rdynamic"]
+    ctx.env.LINKFLAGS = []
+    ctx.env.append_value('INCLUDES', ['include'])
+    # configure modules and plugins
+    for foldername in active:
+        ctx.recurse(foldername)
+    pass
+
+def build(ctx):
+    # build feign executables
+    src = ["main.cpp", "options.cpp", "plugins.cpp", "replay.cpp", "helper.cpp"]
+    ctx(features="c cxx cxxprogram", source=src, target="feign", uselib=["GLIB-2.0"], lib=["dl", "rt"])
+    # build modules and plugins
+    for foldername in active:
+        ctx.recurse(foldername)
+    pass

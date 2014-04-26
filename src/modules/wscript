@@ -1,0 +1,22 @@
+#! /usr/bin/env python
+# encoding: utf-8
+
+from waflib import Build
+
+active = [
+    #"plugin_manager"
+]
+
+
+def options(ctx):
+    pass
+
+def configure(ctx):
+    for foldername in active:
+        ctx.recurse(foldername)
+    pass
+
+def build(ctx):
+    for foldername in active:
+        ctx.recurse(foldername)
+    pass

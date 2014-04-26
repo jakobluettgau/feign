@@ -1,0 +1,5 @@
+Sample plugin
+=============
+
+Minimal example plugin, that does nothing except to conform to feigns plugin
+registration protocol.
