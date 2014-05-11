@@ -1,6 +1,6 @@
 #!/bin/sh
 
-./feign \
+feign \
 --plugin ../build/src/plugins/sample/libfeign_sample.so \
 --plugin ../build/src/plugins/sample-provider/libfeign_sample-provider.so \
 --plugin ../build/src/plugins/sample-filter/libfeign_sample-filter.so \

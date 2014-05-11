@@ -1,0 +1,28 @@
+#! /usr/bin/env python
+# encoding: utf-8
+
+from waflib import Build
+from subprocess import call
+
+active = [
+    "sample",
+    "sample-provider",
+    "sample-filter",
+    "sample-filter-context",
+    "sample-mutator",
+    "sample-mutator-context",
+    "sample-replayer",
+    ]
+
+def options(ctx):
+    pass
+
+def configure(ctx):
+    for foldername in active:
+        ctx.recurse(foldername)
+    pass
+
+def build(ctx):
+    for foldername in active:
+        ctx.recurse(foldername)
+    pass

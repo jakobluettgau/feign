@@ -1,0 +1,27 @@
+propose argparse options and implement with glib option parser
+propose ENV options and implement
+
+fs preparation module / that sets files and directories that are not created within the trace => 2 runs on a trace file
+- a preloaded tree makes no sense, as trace files may be huge
+
+
+
+
+
+--
+
+use serializer provided by siox for binary dump
+
+//@serializable
+struct mystruct {
+	int a;
+	char b;
+}
+
+requires preprocessor run to create typeinfor for generic serializer
+
+siox/devel/scripts/serialization-code-generator.py --input-file path/to/file.c --output-file out.c
+
+--
+
+

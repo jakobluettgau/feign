@@ -1,0 +1,17 @@
+POSIX I/O Plugin for feign
+==========================
+
+A prove of concept implementation for POSIX I/O, some functions maybe be
+missing, as more complex helpers would be needed for handler management
+and environment precreation.
+
+Layer-String: "POSIX"
+
+datatypes.h
+	defines the activitiy specific datatypes
+
+provider.cpp
+	#TODO what is a reasonably datasource? textfile: one operation/line?
+
+replayer.cpp
+	replays posix that encoded according datatypes.h

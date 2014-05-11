@@ -2,7 +2,7 @@
 
 
 Feign is a modular tool to recreate system activity for benchmarking, stress testing
-and debugging with a focus on parallel systems.
+and debugging with targeting parallel workloads.
 
 ## Building and installation
 
@@ -15,8 +15,7 @@ Requirements:
 Navigate into feigns repository and run the following commands:
 
     cd <feign>
-    ./waf configure
-    ./waf
+    ./waf configure build
 
 Install using:
 

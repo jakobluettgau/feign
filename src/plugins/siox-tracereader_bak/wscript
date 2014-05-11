@@ -1,0 +1,16 @@
+#!/usr/bin/env python
+# encoding: utf-8
+
+from subprocess import call
+
+
+def options(ctx):
+    pass
+
+def configure(ctx):
+    pass
+
+def build(ctx):
+    # build siox
+    call("/home/pq/WR/siox/src/tools/TraceReader/feign_plugin/build.sh")
+    pass

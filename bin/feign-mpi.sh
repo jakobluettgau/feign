@@ -1,6 +1,6 @@
 #!/bin/sh
 
-./feign \
+feign \
 --plugin ../build/src/plugins/mpi/libfeign_provider-mpi.so \
 --plugin-global ../build/src/plugins/mpi/libfeign_replayer-mpi.so \
 $@
