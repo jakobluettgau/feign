@@ -9,5 +9,5 @@ export FEIGN_SIOX_ASSOCIATION=${DATA}/association.dat
 
 feign \
 --plugin /home/pq/WR/siox/build/src/tools/TraceReader/feign_plugin/libfeign_siox-provider.so \
---plugin ../build/src/plugins/posix/libfeign_replayer-posix.so \
---plugin ../build/src/plugins/posix/libfeign_precreator-posix.so \
+--plugin $FEIGN_DEV_PLUGIN_PATH/posix/libfeign_replayer-posix.so \
+--plugin $FEIGN_DEV_PLUGIN_PATH/posix/libfeign_precreator-posix.so \
