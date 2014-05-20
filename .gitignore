@@ -7,6 +7,9 @@ build
 design/*.svg
 design/*.png
 
+#python
+*.pyc
+
 # vim
 *.swh
 *.swj

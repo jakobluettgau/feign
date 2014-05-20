@@ -70,6 +70,12 @@ from a other header file.''')
         argParser.add_argument('--template', '-t',
                                action='store', default='./template.py', dest='template',
                                help='Provide an alternative template.')
+
+        argParser.add_argument('--TEMPLATES', '-T',
+                               action='append', default='./template.py', dest='templates',
+                               help='Provide an alternative template.')
+
+
         args = argParser.parse_args()
 
         debug = args.debug
@@ -1233,6 +1239,7 @@ def main():
 
     if options.blankHeader:
         functions = functionParser.parseFile()
+
         outputWriter.headerFile(functions)
 
     else:
@@ -1240,6 +1247,7 @@ def main():
         commandParser = CommandParser(options)
 
         functions = commandParser.parse()
+
         if options.style == "wrap":
             outputWriter.sourceFileWrap(functions)
         elif options.style == "dlsym":
