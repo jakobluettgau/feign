@@ -10,10 +10,37 @@ template = {
 # SpliceCode ? ? ?
 'component': {
 	'variables': 'InterfaceName ImplementationIdentifier InstanceName="" ComponentVariable=global SpliceCode=',
+	'global': '''
+		static siox_component * %(ComponentVariable)s_component = NULL;
+      static siox_unique_interface * %(ComponentVariable)s_uid = NULL;
+      static int %(ComponentVariable)s_layer_initialized = FALSE;
+		''',
+    'init': ''' 
+		if ( siox_is_monitoring_permanently_disabled() || %(ComponentVariable)s_component ){
+				return; 
+		}		
+      %(SpliceCode)s
+		%(ComponentVariable)s_uid = siox_system_information_lookup_interface_id("%(InterfaceName)s", "%(ImplementationIdentifier)s");
 
+		// avoid double instrumentation with DLSYM and LD_PRELOAD
+		if ( siox_component_is_registered( %(ComponentVariable)s_uid ) ){
+			fprintf(stderr, "WARNING: layer '%%s/%%s' is already instrumented, do not use LD_PRELOAD again! Most likely the application breaks.\\n", "%(InterfaceName)s", "%(ImplementationIdentifier)s");
+			return;
+		}
+		%(ComponentVariable)s_component = siox_component_register(%(ComponentVariable)s_uid, "%(InstanceName)s");
+		siox_register_initialization_signal(sioxInit);
+      siox_register_termination_signal(sioxFinal);
+		
+		''',
+        'initLast': '%(ComponentVariable)s_layer_initialized = TRUE;',
+	'final': '''
+		if (%(ComponentVariable)s_layer_initialized) { siox_component_unregister(%(ComponentVariable)s_component); %(ComponentVariable)s_component = NULL; %(ComponentVariable)s_layer_initialized = FALSE; }'''
 },
 'autoInitializeLibrary':{
-	# this hint is interpreted by the wrapper.
+	'global' : """
+				static void sioxFinal() __attribute__((destructor));
+            static void sioxInit() __attribute__((constructor));
+            """
 },
 'callLibraryFinalize':{
 	'after' : 'sioxFinal();'
@@ -600,14 +627,11 @@ template = {
         'cleanup': '',
         'final': ''
 }
-
 }
 
+templateParameters = {
 # Insert global once
-globalOnce = ""
-
-# Regular expressions for functions to throw away
-throwaway = ["((^\s*)|(\s+))extern\s+.*\("]
-
+"globalOnce": "",
 # Will be included
-includes = ['<stdlib.h>', '<stdio.h>', '<stdarg.h>', '<glib.h>', '<C/siox.h>', '<assert.h>', '<string.h>']
+"includes" : ['<stdlib.h>', '<stdio.h>', '<stdarg.h>', '<glib.h>', '<C/siox.h>', '<assert.h>', '<string.h>']
+}
