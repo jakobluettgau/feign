@@ -1,6 +1,6 @@
 #! /usr/bin/env python
 
-active = [
+dirs = [
     "plugins",
     "modules",
     ]
@@ -17,8 +17,8 @@ def configure(ctx):
     ctx.env.LINKFLAGS = []
     ctx.env.append_value('INCLUDES', ['include'])
     # configure modules and plugins
-    for foldername in active:
-        ctx.recurse(foldername)
+    for d in dirs:
+        ctx.recurse(d)
     pass
 
 def build(ctx):
@@ -26,6 +26,6 @@ def build(ctx):
     src = ["main.cpp", "options.cpp", "plugins.cpp", "replay.cpp", "helper.cpp"]
     ctx(features="c cxx cxxprogram", source=src, target="feign", uselib=["GLIB-2.0"], lib=["dl", "rt"])
     # build modules and plugins
-    for foldername in active:
-        ctx.recurse(foldername)
+    for d in dirs:
+        ctx.recurse(d)
     pass
