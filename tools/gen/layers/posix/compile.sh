@@ -1,7 +1,8 @@
 #!/bin/bash -e
 
 HEADER=posix-low-level-io-feign.h
-TEMPLATE=../../template_feign.py
+#TEMPLATE=../../template.py
+TEMPLATE=../../template-feign.py
 OUTPUT_FILE=posix-ll-wrapper
 ORIGINAL_OUTPUT_FILE=original
 
@@ -14,6 +15,7 @@ ORIGINAL_OUTPUT_FILE=original
 ../../siox-skeleton-builder.py -s dlsym -t $TEMPLATE -o $OUTPUT_FILE-dlsym.c $HEADER
 ../../siox-skeleton-builder.py -s wrap  -t $TEMPLATE -o $OUTPUT_FILE-wrap.c  $HEADER
 ../../siox-skeleton-builder.py -s plain -t $TEMPLATE -o $OUTPUT_FILE-plain.c $HEADER
+#../../siox-skeleton-builder.py -s feign -t $TEMPLATE -o $OUTPUT_FILE-feign.c $HEADER
 
 #gcc $OUTPUT_FILE -c -fPIC -I ../../../low-level-C-interface `pkg-config --cflags glib-2.0`
 #gcc ${OUTPUT_FILE%%.c}.o -o libsiox-posix-ll-wrapper-dlsym.so -shared -ldl `pkg-config --libs glib-2.0`
