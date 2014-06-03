@@ -417,15 +417,15 @@ If the file is successfully opened, the function returns a pointer to a FILE obj
 Otherwise, a null pointer is returned.
 On most library implementations, thesave variable is also set to a system-specific ercode on failure.
  */
-//@guard
-//@errorErrno ''ret==NULL''
-//@activity
-//@splice_before SET_FILENAME(filename)
-//@splice_before uint32_t translatedFlags = translateFILEFlagsToSIOX(mode);
-//@activity_attribute fileOpenFlags translatedFlags
-//@horizontal_map_put_size ret
-//@splice_after int fd = (ret != 0) ? fileno(ret) : 0;
-//@activity_attribute_late fileHandle fd
+//&guard
+//&errorErrno ''ret==NULL''
+//&activity
+//&splice_before SET_FILENAME(filename)
+//&splice_before uint32_t translatedFlags = translateFILEFlagsToSIOX(mode);
+//&activity_attribute fileOpenFlags translatedFlags
+//&horizontal_map_put_size ret
+//&splice_after int fd = (ret != 0) ? fileno(ret) : 0;
+//&activity_attribute_late fileHandle fd
 FILE * fopen64( const char * filename, const char * mode );
 /*
 The  fdopen()  function  associates a stream with the existing file descriptor, fd.  The mode of the stream (one of the
