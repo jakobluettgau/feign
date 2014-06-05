@@ -73,7 +73,7 @@ End of global part
 //#guard
 //#errorErrno ''ret<0''
 //@activity
-//@splice_before uint32_t translatedFlags = translatePOSIXFlagsToSIOX(flags);
+//#splice_before uint32_t translatedFlags = translatePOSIXFlagsToSIOX(flags);
 //@activity_attribute fileOpenFlags translatedFlags
 //@splice_before SET_FILENAME(pathname)
 //@activity_attribute_late fileHandle ret
@@ -92,21 +92,21 @@ int creat( const char * pathname, mode_t mode );
 //#splice_before mode_t mode = va_arg(valist,mode_t);
 //#guard
 //#errorErrno ''ret<0''
-//@activity open
-//@splice_before SET_FILENAME(pathname)
-//@splice_before uint32_t translatedFlags = translatePOSIXFlagsToSIOX(flags);
-//@activity_attribute fileOpenFlags translatedFlags
-//@horizontal_map_put_int ret
-//@activity_attribute_late fileHandle ret
-//@rewriteCall open ''pathname,flags,mode'' ''const char *pathname, int flags, mode_t mode''
+//#activity open
+//#splice_before SET_FILENAME(pathname)
+//#splice_before uint32_t translatedFlags = translatePOSIXFlagsToSIOX(flags);
+//#activity_attribute fileOpenFlags translatedFlags
+//#horizontal_map_put_int ret
+//#activity_attribute_late fileHandle ret
+//#rewriteCall open ''pathname,flags,mode'' ''const char *pathname, int flags, mode_t mode''
 int open64( const char * pathname, int flags, ... );
 
 //#guard
-//@errorErrno ''ret<0''
-//@activity creat
-//@horizontal_map_put_int ret
-//@splice_before SET_FILENAME(pathname)
-//@activity_attribute_late fileHandle ret
+//#errorErrno ''ret<0''
+//#activity creat
+//#horizontal_map_put_int ret
+//#splice_before SET_FILENAME(pathname)
+//#activity_attribute_late fileHandle ret
 int creat64( const char * pathname, mode_t mode );
 
 //#guard
@@ -118,37 +118,37 @@ int creat64( const char * pathname, mode_t mode );
 int close( int fd );
 
 //#guard
-//@errorErrno ''ret<0''
-//@activityComponentSwitcher2BasedOnParent Key=fd ComponentVariable2=network MapName2=activityHashTable_network_int
-//@horizontal_map_put_int_ID ret ActivityID=parent
+//#errorErrno ''ret<0''
+//#activityComponentSwitcher2BasedOnParent Key=fd ComponentVariable2=network MapName2=activityHashTable_network_int
+//#horizontal_map_put_int_ID ret ActivityID=parent
 int dup( int fd );
 
 //This code is actually not completely correct, dup2 may close newfd:
 //#guard
-//@errorErrno ''ret<0''
-//@activityComponentSwitcher2BasedOnParent Key=oldfd ComponentVariable2=network MapName2=activityHashTable_network_int
-//@horizontal_map_put_int_ID newfd ActivityID=parent
+//#errorErrno ''ret<0''
+//#activityComponentSwitcher2BasedOnParent Key=oldfd ComponentVariable2=network MapName2=activityHashTable_network_int
+//#horizontal_map_put_int_ID newfd ActivityID=parent
 int dup2( int oldfd, int newfd );
 
 
 //This code is actually not completely correct, dup3 may close newfd:
 //#guard
-//@errorErrno ''ret<0''
-//@activityComponentSwitcher2BasedOnParent Key=oldfd ComponentVariable2=network MapName2=activityHashTable_network_int
-//@horizontal_map_put_int_ID newfd ActivityID=parent
+//#errorErrno ''ret<0''
+//#activityComponentSwitcher2BasedOnParent Key=oldfd ComponentVariable2=network MapName2=activityHashTable_network_int
+//#horizontal_map_put_int_ID newfd ActivityID=parent
 int dup3( int oldfd, int newfd, int flags );
 
 
 #include <sys/sendfile.h>
 //#guard
-//@errorErrno ''ret<0''
-//@activity
-//@activity_attribute bytesToWrite count
-//@activity_attribute fileHandle out_fd
-//@activity_attribute fileHandle in_fd
-//@activity_attribute_late bytesWritten ret
-//@activity_link_int out_fd
-//@activity_link_int in_fd
+//#errorErrno ''ret<0''
+//#activity
+//#activity_attribute bytesToWrite count
+//#activity_attribute fileHandle out_fd
+//#activity_attribute fileHandle in_fd
+//#activity_attribute_late bytesWritten ret
+//#activity_link_int out_fd
+//#activity_link_int in_fd
 ssize_t sendfile(int out_fd, int in_fd, off_t *offset, size_t count);
 
 //#guard
@@ -168,89 +168,89 @@ ssize_t write( int fd, const void * buf, size_t count );
 ssize_t read( int fd, void * buf, size_t count );
 
 //#guard
-//@errorErrno ''ret<0''
-//@activityComponentSwitcher2BasedOnParent Key=fd ComponentVariable2=network MapName2=activityHashTable_network_int
-//@activity_attribute fileHandle fd
-//@activity_attribute fileMemoryRegions iovcnt
-//@activity_attribute_late bytesWritten ret
+//#errorErrno ''ret<0''
+//#activityComponentSwitcher2BasedOnParent Key=fd ComponentVariable2=network MapName2=activityHashTable_network_int
+//#activity_attribute fileHandle fd
+//#activity_attribute fileMemoryRegions iovcnt
+//#activity_attribute_late bytesWritten ret
 ssize_t writev( int fd, const struct iovec * iov, int iovcnt );
 
 //#guard
-//@errorErrno ''ret<0''
-//@activityComponentSwitcher2BasedOnParent Key=fd ComponentVariable2=network MapName2=activityHashTable_network_int
-//@activity_attribute_late bytesRead ret
-//@activity_attribute fileMemoryRegions iovcnt
-//@activity_attribute fileHandle fd
+//#errorErrno ''ret<0''
+//#activityComponentSwitcher2BasedOnParent Key=fd ComponentVariable2=network MapName2=activityHashTable_network_int
+//#activity_attribute_late bytesRead ret
+//#activity_attribute fileMemoryRegions iovcnt
+//#activity_attribute fileHandle fd
 ssize_t readv( int fd, const struct iovec * iov, int iovcnt );
 
 //#guard
-//@errorErrno ''ret==(size_t)-1''
-//@activityComponentSwitcher2BasedOnParent Key=fd ComponentVariable2=network MapName2=activityHashTable_network_int
-//@activity_attribute bytesToWrite count
-//@activity_attribute filePosition offset
-//@activity_attribute_late bytesWritten ret
+//#errorErrno ''ret==(size_t)-1''
+//#activityComponentSwitcher2BasedOnParent Key=fd ComponentVariable2=network MapName2=activityHashTable_network_int
+//#activity_attribute bytesToWrite count
+//#activity_attribute filePosition offset
+//#activity_attribute_late bytesWritten ret
 ssize_t pwrite( int fd, const void * buf, size_t count, off_t offset );
 
 //#guard
-//@errorErrno ''ret==(size_t)-1''
-//@activityComponentSwitcher2BasedOnParent Key=fd ComponentVariable2=network MapName2=activityHashTable_network_int
-//@activity_attribute bytesToRead count
-//@activity_attribute_late bytesRead ret
-//@activity_attribute filePosition offset
+//#errorErrno ''ret==(size_t)-1''
+//#activityComponentSwitcher2BasedOnParent Key=fd ComponentVariable2=network MapName2=activityHashTable_network_int
+//#activity_attribute bytesToRead count
+//#activity_attribute_late bytesRead ret
+//#activity_attribute filePosition offset
 ssize_t pread( int fd, void * buf, size_t count, off_t offset );
 
 //#guard
-//@errorErrno ''ret==(size_t)-1''
-//@activityComponentSwitcher2BasedOnParent Key=fd ComponentVariable2=network MapName2=activityHashTable_network_int
-//@activity_attribute fileHandle fd
-//@activity_attribute bytesToWrite count
-//@activity_attribute filePosition offset
-//@activity_attribute_late bytesWritten ret
+//#errorErrno ''ret==(size_t)-1''
+//#activityComponentSwitcher2BasedOnParent Key=fd ComponentVariable2=network MapName2=activityHashTable_network_int
+//#activity_attribute fileHandle fd
+//#activity_attribute bytesToWrite count
+//#activity_attribute filePosition offset
+//#activity_attribute_late bytesWritten ret
 ssize_t pwrite64( int fd, const void * buf, size_t count, off_t offset );
 
 //#guard
-//@errorErrno ''ret==(size_t)-1''
-//@activityComponentSwitcher2BasedOnParent Key=fd ComponentVariable2=network MapName2=activityHashTable_network_int
-//@activity_attribute bytesToRead count
-//@activity_attribute_late bytesRead ret
-//@activity_attribute fileHandle fd
-//@activity_attribute filePosition offset
+//#errorErrno ''ret==(size_t)-1''
+//#activityComponentSwitcher2BasedOnParent Key=fd ComponentVariable2=network MapName2=activityHashTable_network_int
+//#activity_attribute bytesToRead count
+//#activity_attribute_late bytesRead ret
+//#activity_attribute fileHandle fd
+//#activity_attribute filePosition offset
 ssize_t pread64( int fd, void * buf, size_t count, off_t offset );
 
 //#guard
-//@errorErrno ''ret==(size_t)-1''
-//@activityComponentSwitcher2BasedOnParent Key=fd ComponentVariable2=network MapName2=activityHashTable_network_int
-//@activity_attribute fileMemoryRegions iovcnt
-//@activity_attribute fileHandle fd
-//@activity_attribute filePosition offset
-//@activity_attribute_late bytesWritten ret
+//#errorErrno ''ret==(size_t)-1''
+//#activityComponentSwitcher2BasedOnParent Key=fd ComponentVariable2=network MapName2=activityHashTable_network_int
+//#activity_attribute fileMemoryRegions iovcnt
+//#activity_attribute fileHandle fd
+//#activity_attribute filePosition offset
+//#activity_attribute_late bytesWritten ret
 ssize_t pwritev( int fd, const struct iovec * iov, int iovcnt, off_t offset );
 
 //#guard
-//@errorErrno ''ret==(size_t)-1''
-//@activityComponentSwitcher2BasedOnParent Key=fd ComponentVariable2=network MapName2=activityHashTable_network_int
-//@activity_attribute_late bytesRead ret
-//@activity_attribute fileMemoryRegions iovcnt
-//@activity_attribute fileHandle fd
-//@activity_attribute filePosition offset
+//#errorErrno ''ret==(size_t)-1''
+//#activityComponentSwitcher2BasedOnParent Key=fd ComponentVariable2=network MapName2=activityHashTable_network_int
+//#activity_attribute_late bytesRead ret
+//#activity_attribute fileMemoryRegions iovcnt
+//#activity_attribute fileHandle fd
+//#activity_attribute filePosition offset
 ssize_t preadv( int fd, const struct iovec * iov, int iovcnt, off_t offset );
 
 //#guard
-//@errorErrno ''ret==(size_t)-1''
-//@activityComponentSwitcher2BasedOnParent Key=fd ComponentVariable2=network MapName2=activityHashTable_network_int
-//@activity_attribute fileMemoryRegions iovcnt
-//@activity_attribute fileHandle fd
-//@activity_attribute filePosition offset
-//@activity_attribute_late bytesWritten ret
+//#errorErrno ''ret==(size_t)-1''
+//#activityComponentSwitcher2BasedOnParent Key=fd ComponentVariable2=network MapName2=activityHashTable_network_int
+//#activity_attribute fileMemoryRegions iovcnt
+//#activity_attribute fileHandle fd
+//#activity_attribute filePosition offset
+//#activity_attribute_late bytesWritten ret
 ssize_t pwritev64( int fd, const struct iovec * iov, int iovcnt, off_t offset );
 
 //#guard
-//@errorErrno ''ret==(size_t)-1''
-//@activityComponentSwitcher2BasedOnParent Key=fd ComponentVariable2=network MapName2=activityHashTable_network_int
-//@activity_attribute_late bytesRead ret
-//@activity_attribute fileMemoryRegions iovcnt
-//@activity_attribute fileHandle fd
-//@activity_attribute filePosition offset
+//#errorErrno ''ret==(size_t)-1''
+//#activityComponentSwitcher2BasedOnParent Key=fd ComponentVariable2=network MapName2=activityHashTable_network_int
+//#activity_attribute_late bytesRead ret
+//#activity_attribute fileMemoryRegions iovcnt
+//#activity_attribute fileHandle fd
+//#activity_attribute filePosition offset
 ssize_t preadv64( int fd, const struct iovec * iov, int iovcnt, off_t offset );
 
 
@@ -259,17 +259,17 @@ ssize_t preadv64( int fd, const struct iovec * iov, int iovcnt, off_t offset );
 void sync( void );
 
 //#guard
-//@errorErrno ''ret<0''
-//@activity
-//@activity_attribute fileHandle fd
-//@activity_link_int fd
+//#errorErrno ''ret<0''
+//#activity
+//#activity_attribute fileHandle fd
+//#activity_link_int fd
 int fsync( int fd );
 
 //#guard
-//@errorErrno ''ret<0''
-//@activity
-//@activity_attribute fileHandle fd
-//@activity_link_int fd
+//#errorErrno ''ret<0''
+//#activity
+//#activity_attribute fileHandle fd
+//#activity_link_int fd
 int fdatasync( int fd );
 
 //#guard
@@ -304,9 +304,9 @@ On failure, a nonzero value is returned.
 On most library implementations, the variable is also set to a system-specific error code on failure.
  */
 //#guard
-//@errorErrno ''ret<0''
-//@activity
-//@splice_before SET_FILENAME(filename)
+//#errorErrno ''ret<0''
+//#activity
+//#splice_before SET_FILENAME(filename)
 int remove( const char * filename );
 
 /*
@@ -315,34 +315,34 @@ On failure, a nonzero value is returned.
 On most library implementations, the variable is also set to a system-specific error code on failure.
  */
 //#guard
-//@errorErrno ''ret<0''
-//@activity
-//@splice_before SET_FILENAME(oldname)
+//#errorErrno ''ret<0''
+//#activity
+//#splice_before SET_FILENAME(oldname)
 int rename( const char * oldname, const char * newname );
 
 // Linux specific, Xstat is redirected to Xstat64
 // stat() symbols do not exist, a macro rewrites them, problem stat64 types.
 // Be aware this might lead to problems.
-//@splice_once ''int stat(const char *path, struct stat *buf){ return __xstat64(1, path, buf); }''
+//#splice_once ''int stat(const char *path, struct stat *buf){ return __xstat64(1, path, buf); }''
 //#guard
-//@errorErrno ''ret<0''
-//@activity Name=stat
-//@splice_before SET_FILENAME(path)
+//#errorErrno ''ret<0''
+//#activity Name=stat
+//#splice_before SET_FILENAME(path)
 int __xstat64( int __ver, const char * path, struct stat64 * buf );
 
-//@splice_once ''int lstat(const char *path, struct stat *buf){ return __lxstat64(1, path, buf); }''
+//#splice_once ''int lstat(const char *path, struct stat *buf){ return __lxstat64(1, path, buf); }''
 //#guard
-//@errorErrno ''ret<0''
-//@activity Name=lstat
-//@splice_before SET_FILENAME(path)
+//#errorErrno ''ret<0''
+//#activity Name=lstat
+//#splice_before SET_FILENAME(path)
 int __lxstat64( int __ver, const char * path, struct stat64 * buf );
 
-//@splice_once ''int fstat(int fd, struct stat *buf){ return __fxstat64(1, fd, buf); }''
+//#splice_once ''int fstat(int fd, struct stat *buf){ return __fxstat64(1, fd, buf); }''
 //#guard
-//@errorErrno ''ret<0''
-//@activity Name=fstat
-//@activity_attribute fileHandle fd
-//@activity_link_int fd
+//#errorErrno ''ret<0''
+//#activity Name=fstat
+//#activity_attribute fileHandle fd
+//#activity_link_int fd
 int __fxstat64( int __ver, int fd, struct stat64 * buf );
 
 //guard
@@ -360,10 +360,10 @@ int __fxstat64( int __ver, int fd, struct stat64 * buf );
 //int __lxstat( int __ver, const char * path, struct stat * buf );
 
 //#guard
-//@errorErrno ''ret<0''
-//@activity Name=fstat
-//@activity_attribute fileHandle fd
-//@activity_link_int fd
+//#errorErrno ''ret<0''
+//#activity Name=fstat
+//#activity_attribute fileHandle fd
+//#activity_link_int fd
 int __fxstat( int __ver, int fd, struct stat * buf );
 
 
@@ -372,19 +372,19 @@ int __fxstat( int __ver, int fd, struct stat * buf );
 
 
 //#guard
-//@errorErrno ''ret<0''
-//@activityComponentSwitcher2BasedOnParent Key=fd ComponentVariable2=network MapName2=activityHashTable_network_int
-//@activity_attribute fileHandle fd
-//@activity_attribute fileExtent length
-//@activity_attribute filePosition offset
+//#errorErrno ''ret<0''
+//#activityComponentSwitcher2BasedOnParent Key=fd ComponentVariable2=network MapName2=activityHashTable_network_int
+//#activity_attribute fileHandle fd
+//#activity_attribute fileExtent length
+//#activity_attribute filePosition offset
 void * mmap( void * address, size_t length, int protect, int flags, int fd, off_t offset );
 
 //#guard
-//@errorErrno ''ret<0''
-//@activityComponentSwitcher2BasedOnParent Key=fd ComponentVariable2=network MapName2=activityHashTable_network_int
-//@activity_attribute fileHandle fd
-//@activity_attribute fileExtent length
-//@activity_attribute filePosition offset
+//#errorErrno ''ret<0''
+//#activityComponentSwitcher2BasedOnParent Key=fd ComponentVariable2=network MapName2=activityHashTable_network_int
+//#activity_attribute fileHandle fd
+//#activity_attribute fileExtent length
+//#activity_attribute filePosition offset
 void * mmap64( void * address, size_t length, int protect, int flags, int fd, off_t offset );
 
 //void * mremap (void *address, size_t length, size_t new_length, int flag);
@@ -399,14 +399,14 @@ Otherwise, a null pointer is returned.
 On most library implementations, the variable is also set to a system-specific error code on failure.
  */
 //#guard
-//@errorErrno ''ret==NULL''
-//@activity
-//@splice_before SET_FILENAME(filename)
-//@splice_before uint32_t translatedFlags = translateFILEFlagsToSIOX(mode);
-//@activity_attribute fileOpenFlags translatedFlags
-//@splice_after int fd = (ret != 0) ? fileno(ret) : 0;
-//@activity_attribute_late fileHandle fd
-//@horizontal_map_put_size ret
+//#errorErrno ''ret==NULL''
+//#activity
+//#splice_before SET_FILENAME(filename)
+//#splice_before uint32_t translatedFlags = translateFILEFlagsToSIOX(mode);
+//#activity_attribute fileOpenFlags translatedFlags
+//#splice_after int fd = (ret != 0) ? fileno(ret) : 0;
+//#activity_attribute_late fileHandle fd
+//#horizontal_map_put_size ret
 FILE * fopen( const char * filename, const char * mode );
 
 
@@ -435,23 +435,23 @@ Modes "w" or "w+" do not cause truncation of the file.  The file descriptor is n
 stream created by fdopen() is closed.
  */
 //#guard
-//@errorErrno ''ret==NULL''
-//@activity
-//@activity_link_int fd
-//@splice_before uint32_t translatedFlags = translateFILEFlagsToSIOX(mode);
-//@activity_attribute fileOpenFlags translatedFlags
-//@horizontal_map_put_size ret
+//#errorErrno ''ret==NULL''
+//#activity
+//#activity_link_int fd
+//#splice_before uint32_t translatedFlags = translateFILEFlagsToSIOX(mode);
+//#activity_attribute fileOpenFlags translatedFlags
+//#horizontal_map_put_size ret
 FILE * fdopen( int fd, const char * mode );
 
 // The function fileno() examines the argument stream and returns its integer descriptor.
 // Function does not fail, only if stream is invalid.
 
 //#guard
-//@errorErrno ''ret==-1''
-//@activity
-//@activity_link_size stream
-//@horizontal_map_put_int ret
-//@activity_attribute_late fileHandle ret
+//#errorErrno ''ret==-1''
+//#activity
+//#activity_link_size stream
+//#horizontal_map_put_int ret
+//#activity_attribute_late fileHandle ret
 int fileno( FILE * stream );
 
 /*
@@ -465,51 +465,51 @@ Otherwise, a null pointer is returned.
 On most library implementations, the variable is also set to a system-specific error code on failure.
  */
 //#guard
-//@errorErrno ''ret==NULL''
-//@activity
-//@splice_before SET_FILENAME(filename)
-//@splice_before uint32_t translatedFlags = translateFILEFlagsToSIOX(mode);
-//@activity_attribute fileOpenFlags translatedFlags
-//@horizontal_map_remove_size stream
-//@horizontal_map_put_size ret
-//@activity_link_size stream
-//@splice_after int fd = (ret != 0) ? fileno(ret) : 0;
-//@activity_attribute_late fileHandle fd
+//#errorErrno ''ret==NULL''
+//#activity
+//#splice_before SET_FILENAME(filename)
+//#splice_before uint32_t translatedFlags = translateFILEFlagsToSIOX(mode);
+//#activity_attribute fileOpenFlags translatedFlags
+//#horizontal_map_remove_size stream
+//#horizontal_map_put_size ret
+//#activity_link_size stream
+//#splice_after int fd = (ret != 0) ? fileno(ret) : 0;
+//#activity_attribute_late fileHandle fd
 FILE * freopen( const char * filename, const char * mode, FILE * stream );
 
 //#guard
-//@errorErrno ''ret==NULL''
-//@activity
-//@horizontal_map_put_size ret
-//@splice_after int fd = (ret != 0) ? fileno(ret) : 0;
-//@activity_attribute_late fileHandle fd
+//#errorErrno ''ret==NULL''
+//#activity
+//#horizontal_map_put_size ret
+//#splice_after int fd = (ret != 0) ? fileno(ret) : 0;
+//#activity_attribute_late fileHandle fd
 FILE * tmpfile( void );
 
 //#guard
-//@errorErrno ''ret == EOF''
-//@activity
-//@activity_link_size stream
-//@horizontal_map_remove_size stream
-//@splice_before int fd = fileno(stream);
-//@activity_attribute fileHandle fd
-//@horizontal_map_remove_int fd
-//@horizontal_map_remove_int fd MapName=activityHashTable_network_int
+//#errorErrno ''ret == EOF''
+//#activity
+//#activity_link_size stream
+//#horizontal_map_remove_size stream
+//#splice_before int fd = fileno(stream);
+//#activity_attribute fileHandle fd
+//#horizontal_map_remove_int fd
+//#horizontal_map_remove_int fd MapName=activityHashTable_network_int
 int fclose( FILE * stream );
 
 //  If an error occurs, EOF is returned and the error indicator is set (see ferror).
 //#guard
-//@errorErrno ''ret == EOF''
-//@activity
-//@activity_link_size stream
+//#errorErrno ''ret == EOF''
+//#activity
+//#activity_link_size stream
 int fflush( FILE * stream );
 
 //On success, the character read is returned (promoted to an int value).
 //The return type is int to accommodate for the special value EOF, which indicates failure:
 
 //#guard
-//@errorErrno ''ret == EOF''
-//@activity
-//@activity_link_size stream
+//#errorErrno ''ret == EOF''
+//#activity
+//#activity_link_size stream
 int fgetc( FILE * stream );
 
 /*
@@ -519,9 +519,9 @@ If the position indicator was at the end-of-file, the function returns EOF and s
 If some other reading error happens, the function also returns EOF, but sets its error indicator (ferror) instead.
  */
 //#guard
-//@errorErrno ''ret == EOF''
-//@activity
-//@activity_link_size stream
+//#errorErrno ''ret == EOF''
+//#activity
+//#activity_link_size stream
 int getc( FILE * stream );
 
 
@@ -531,15 +531,15 @@ int getc( FILE * stream );
  If a writing error occurs, EOF is returned and the error indicator (ferror) is set.
  */
 //#guard
-//@errorErrno ''ret == EOF''
-//@activity
-//@activity_link_size stream
+//#errorErrno ''ret == EOF''
+//#activity
+//#activity_link_size stream
 int fputc( int character, FILE * stream );
 
 //#guard
-//@errorErrno ''ret == EOF''
-//@activity
-//@activity_link_size stream
+//#errorErrno ''ret == EOF''
+//#activity
+//#activity_link_size stream
 int putc( int character, FILE * stream );
 
 /*
@@ -551,9 +551,9 @@ If a read error occurs, the error indicator (ferror) is set and a null pointer i
 */
 
 //#guard
-//@errorErrno ''ret == NULL''
-//@activity
-//@activity_link_size stream
+//#errorErrno ''ret == NULL''
+//#activity
+//#activity_link_size stream
 char * fgets( char * str, int num, FILE * stream );
 
 
@@ -562,9 +562,9 @@ On success, a non-negative value is returned.
 On error, the function returns EOF and sets the error indicator (ferror).
  */
 //#guard
-//@errorErrno ''ret == EOF''
-//@activity
-//@activity_link_size stream
+//#errorErrno ''ret == EOF''
+//#activity
+//#activity_link_size stream
 int fputs( const char * str, FILE * stream );
 
 
@@ -575,13 +575,13 @@ If this number differs from the count parameter, either a reading error occurred
 If either size or count is zero, the function returns zero and both the stream state and the content pointed by ptr remain unchanged.
  */
 //#guard
-//@errorErrno ''ret != count''
-//@activity
-//@activity_link_size stream
-//@splice_before ''uint64_t payload = count*size;''
-//@activity_attribute bytesToRead payload
-//@splice_after ''uint64_t posDelta = ret*size;''
-//@activity_attribute_late bytesRead posDelta
+//#errorErrno ''ret != count''
+//#activity
+//#activity_link_size stream
+//#splice_before ''uint64_t payload = count*size;''
+//#activity_attribute bytesToRead payload
+//#splice_after ''uint64_t posDelta = ret*size;''
+//#activity_attribute_late bytesRead posDelta
 size_t fread( void * ptr, size_t size, size_t count, FILE * stream );
 
 /*
@@ -592,30 +592,30 @@ If this number differs from the count parameter, a writing error prevented the f
 If either size or count is zero, the function returns zero and the error indicator remains unchanged.
  */
 //#guard
-//@errorErrno ''ret != count''
-//@activity
-//@activity_link_size stream
-//@splice_before ''uint64_t payload = count*size;''
-//@activity_attribute bytesToWrite payload
-//@splice_after ''uint64_t posDelta = ret*size;''
-//@activity_attribute_late bytesWritten posDelta
+//#errorErrno ''ret != count''
+//#activity
+//#activity_link_size stream
+//#splice_before ''uint64_t payload = count*size;''
+//#activity_attribute bytesToWrite payload
+//#splice_after ''uint64_t posDelta = ret*size;''
+//#activity_attribute_late bytesWritten posDelta
 size_t fwrite( const void * ptr, size_t size, size_t count, FILE * stream );
 
 
 //#guard
-//@errorErrno ''ret != 0''
-//@activity
-//@activity_link_size stream
-//@splice_after ''uint64_t pos = (uint64_t) ftello(stream);''
-//@activity_attribute_late filePosition pos
+//#errorErrno ''ret != 0''
+//#activity
+//#activity_link_size stream
+//#splice_after ''uint64_t pos = (uint64_t) ftello(stream);''
+//#activity_attribute_late filePosition pos
 int fseeko(FILE *stream, off_t offset, int whence);
 
 //#guard
-//@errorErrno ''ret != 0''
-//@activity
-//@activity_link_size stream
-//@splice_after ''uint64_t pos = (uint64_t) ftell(stream);''
-//@activity_attribute_late filePosition pos
+//#errorErrno ''ret != 0''
+//#activity
+//#activity_link_size stream
+//#splice_after ''uint64_t pos = (uint64_t) ftell(stream);''
+//#activity_attribute_late filePosition pos
 int fseek(FILE *stream, long offset, int whence);
 
 
@@ -626,8 +626,8 @@ Specifies the buffer to be used by the stream for I/O operations, which becomes 
 This function should be called once the stream has been associated with an open file, but before any input or output operation is performed with it.
  */
 //#guard
-//@activity
-//@activity_link_size stream
+//#activity
+//#activity_link_size stream
 void setbuf( FILE * stream, char * buffer );
 
 /*
@@ -637,10 +637,10 @@ Otherwise, a non-zero value is returned; This may be due to an invalid mode para
  */
 
 //#guard
-//@activity
-//@activity_link_size stream
-//@activity_attribute fileBufferSize size
-//@activity_attribute fileBufferMode mode
+//#activity
+//#activity_link_size stream
+//#activity_attribute fileBufferSize size
+//#activity_attribute fileBufferMode mode
 int setvbuf( FILE * stream, char * buffer, int mode, size_t size );
 
 /*
@@ -649,9 +649,9 @@ It only deletes the file if there are no other processes that have the file open
 On success zero is returned. On error -1 is returned
 */
 //#guard
-//@errorErrno ''ret<0''
-//@activity
-//@splice_before SET_FILENAME(pathname);
+//#errorErrno ''ret<0''
+//#activity
+//#splice_before SET_FILENAME(pathname);
 int unlink(const char *pathname);
 
 /*
@@ -660,10 +660,10 @@ If a writing error occurs, the error indicator (ferror) is set and a negative nu
 If a multibyte character encoding error occurs while writing wide characters, is set to EILSEQ and a negative number is returned.
  */
 //#guard
-//@errorErrno ''ret < 0''
-//@activity
-//@activity_link_size stream
-//@activity_attribute_late bytesWritten ret
+//#errorErrno ''ret < 0''
+//#activity
+//#activity_link_size stream
+//#activity_attribute_late bytesWritten ret
 int vfprintf( FILE * stream, const char * format, va_list arg );
 
 /*
@@ -672,9 +672,9 @@ If a reading error happens or the end-of-file is reached while reading, the prop
 If an encoding error happens interpreting wide characters, the function sets to EILSEQ.
  */
 //#guard
-//@errorErrno ''ret < 0''
-//@activity
-//@activity_link_size stream
+//#errorErrno ''ret < 0''
+//#activity
+//#activity_link_size stream
 int vfscanf( FILE * stream, const char * format, va_list arg );
 
 
@@ -685,19 +685,19 @@ If an encoding error happens interpreting wide characters, the function sets to 
  */
 
 //#guard
-//@errorErrno ''ret < 0''
-//@activity
-//@activity_link_size stream
-//@rewriteCall vfscanf ''stream,format,valist''
+//#errorErrno ''ret < 0''
+//#activity
+//#activity_link_size stream
+//#rewriteCall vfscanf ''stream,format,valist''
 int fscanf( FILE * stream, const char * format, ... );
 
 /*
  */
 //#guard
-//@errorErrno ''ret < 0''
-//@activity
-//@activity_link_size stream
-//@rewriteCall vfprintf ''stream,format,valist''
+//#errorErrno ''ret < 0''
+//#activity
+//#activity_link_size stream
+//#rewriteCall vfprintf ''stream,format,valist''
 int fprintf( FILE * stream, const char * format, ... );
 
 
@@ -717,28 +717,28 @@ lio_listio  Initiate a list of I/O operations
 
 
 //#guard
-//@errorErrno ''ret < 0''
-//@activity
+//#errorErrno ''ret < 0''
+//#activity
 int aio_read( struct aiocb * cb );
 
 //#guard
-//@errorErrno ''ret < 0''
-//@activity
+//#errorErrno ''ret < 0''
+//#activity
 int aio_write( struct aiocb * cb );
 
 //#guard
-//@errorErrno ''ret < 0''
-//@activity
+//#errorErrno ''ret < 0''
+//#activity
 int lio_listio( int mode, struct aiocb * const aiocb_list[], int nitems, struct sigevent * sevp );
 
 //#guard
-//@errorErrno ''ret < 0''
-//@activity
+//#errorErrno ''ret < 0''
+//#activity
 int aio_suspend( const struct aiocb * const aiocb_list[], int nitems, const struct timespec * timeout );
 
 //#guard
-//@errorErrno ''ret < 0''
-//@activity
+//#errorErrno ''ret < 0''
+//#activity
 int aio_cancel( int fd, struct aiocb * aiocbp );
 
 #endif
@@ -755,27 +755,27 @@ int aio_cancel( int fd, struct aiocb * aiocbp );
 
 // special care must be taken in functions which use the SIOX low-level API monitoring but also call siox_finalize_monitoring.
 
-//@splice_before ''printf("Warning fork() called!\n");''
-//@splice_before siox_handle_prepare_fork();
-//@splice_after siox_handle_fork_complete(ret != 0);
+//#splice_before ''printf("Warning fork() called!\n");''
+//#splice_before siox_handle_prepare_fork();
+//#splice_after siox_handle_fork_complete(ret != 0);
 pid_t fork( void );
 
 
 // FILE LOCKING STUFF
 
 //#guard
-//@errorErrno ''ret<0''
-//@activity
-//@activity_attribute fileHandle fd
-//@activity_link_int fd
+//#errorErrno ''ret<0''
+//#activity
+//#activity_attribute fileHandle fd
+//#activity_link_int fd
 int lockf(int fd, int cmd, off_t len);
 
 #include <sys/file.h>
 //#guard
-//@errorErrno ''ret<0''
-//@activity
-//@activity_attribute fileHandle fd
-//@activity_link_int fd
+//#errorErrno ''ret<0''
+//#activity
+//#activity_attribute fileHandle fd
+//#activity_link_int fd
 int flock(int fd, int operation);
 
 // Special commands
@@ -798,62 +798,62 @@ int flock(int fd, int operation);
 #include <sys/types.h>
 #include <sys/socket.h>
 //#guard ComponentVariable=network
-//@errorErrno ''ret < 0''
-//@activity ComponentVariable=network
-//@activity_attribute_late fileHandle ret
-//@horizontal_map_put_int ret MapName=activityHashTable_network_int
+//#errorErrno ''ret < 0''
+//#activity ComponentVariable=network
+//#activity_attribute_late fileHandle ret
+//#horizontal_map_put_int ret MapName=activityHashTable_network_int
 int socket(int domain, int type, int protocol);
 
 //#guard ComponentVariable=network
-//@errorErrno ''ret == -1''
-//@activity ComponentVariable=network
-//@activity_attribute_late fileHandle sockfd
+//#errorErrno ''ret == -1''
+//#activity ComponentVariable=network
+//#activity_attribute_late fileHandle sockfd
 int setsockopt(int sockfd, int level, int optname, const void *optval, socklen_t optlen);
 
 
 //This is not expected to survive fork() for which it is used for (see comment at fork()), but we start with this partial instrumentation.
 
 //#guard ComponentVariable=network
-//@errorErrno ''ret < 0''
-//@activity ComponentVariable=network
-//@horizontal_map_put_int pipefd[0] MapName=activityHashTable_network_int
-//@horizontal_map_put_int pipefd[1] MapName=activityHashTable_network_int
-//@activity_attribute_late fileHandle pipefd[0]
-//@activity_attribute_late fileHandle pipefd[1]
+//#errorErrno ''ret < 0''
+//#activity ComponentVariable=network
+//#horizontal_map_put_int pipefd[0] MapName=activityHashTable_network_int
+//#horizontal_map_put_int pipefd[1] MapName=activityHashTable_network_int
+//#activity_attribute_late fileHandle pipefd[0]
+//#activity_attribute_late fileHandle pipefd[1]
 int pipe(int pipefd[2]);
 
 //#guard ComponentVariable=network
-//@errorErrno ''ret < 0''
-//@activity ComponentVariable=network
-//@horizontal_map_put_int pipefd[0] MapName=activityHashTable_network_int
-//@horizontal_map_put_int pipefd[1] MapName=activityHashTable_network_int
-//@activity_attribute_late fileHandle pipefd[0]
-//@activity_attribute_late fileHandle pipefd[1]
+//#errorErrno ''ret < 0''
+//#activity ComponentVariable=network
+//#horizontal_map_put_int pipefd[0] MapName=activityHashTable_network_int
+//#horizontal_map_put_int pipefd[1] MapName=activityHashTable_network_int
+//#activity_attribute_late fileHandle pipefd[0]
+//#activity_attribute_late fileHandle pipefd[1]
 int pipe2(int pipefd[2], int flags);
 
 //#guard ComponentVariable=network
-//@errorErrno ''ret < 0''
-//@activity ComponentVariable=network
-//@horizontal_map_put_int sv[0] MapName=activityHashTable_network_int
-//@horizontal_map_put_int sv[1] MapName=activityHashTable_network_int
-//@activity_attribute_late fileHandle sv[0]
-//@activity_attribute_late fileHandle sv[1]
+//#errorErrno ''ret < 0''
+//#activity ComponentVariable=network
+//#horizontal_map_put_int sv[0] MapName=activityHashTable_network_int
+//#horizontal_map_put_int sv[1] MapName=activityHashTable_network_int
+//#activity_attribute_late fileHandle sv[0]
+//#activity_attribute_late fileHandle sv[1]
 int socketpair(int domain, int type, int protocol, int sv[2]);
 
 //#guard ComponentVariable=network
-//@errorErrno ''ret < 0''
-//@activity ComponentVariable=network
-//@horizontal_map_put_int ret MapName=activityHashTable_network_int
-//@activity_attribute fileHandle sockfd
-//@activity_attribute_late fileHandle ret
+//#errorErrno ''ret < 0''
+//#activity ComponentVariable=network
+//#horizontal_map_put_int ret MapName=activityHashTable_network_int
+//#activity_attribute fileHandle sockfd
+//#activity_attribute_late fileHandle ret
 int accept(int sockfd, struct sockaddr *addr, socklen_t *addrlen);
 
 //#guard ComponentVariable=network
-//@errorErrno ''ret < 0''
-//@activity ComponentVariable=network
-//@horizontal_map_put_int ret MapName=activityHashTable_network_int
-//@activity_attribute fileHandle sockfd
-//@activity_attribute_late fileHandle ret
+//#errorErrno ''ret < 0''
+//#activity ComponentVariable=network
+//#horizontal_map_put_int ret MapName=activityHashTable_network_int
+//#activity_attribute fileHandle sockfd
+//#activity_attribute_late fileHandle ret
 int accept4(int sockfd, struct sockaddr *addr, socklen_t *addrlen, int flags);
 
 
