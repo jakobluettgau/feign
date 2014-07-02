@@ -33,10 +33,15 @@ class Style(skeletonBuilder.Writer):
             functionVariables = self.functionVariables(function)
 
             # write function signature
-
             print("struct", end=' ', sep='', file=output)
             print("posix_", function.name, "_struct", end='\n', sep='', file=output)
             print("{", end='\n', sep='', file=output)
+
+            # add parameters to struct
+            for parameter in function.parameterList:
+                if parameter.type != "..." and parameter.type != "void":
+                    print("\t", parameter.type, end=' ', sep='', file=output) 
+                    print(parameter.name, end=';\n', sep='', file=output) 
 
             # a variable to save the return-value
             returnType = function.type
@@ -44,7 +49,8 @@ class Style(skeletonBuilder.Writer):
             if returnType != "void":
                 print('\t', returnType, ' ret;', end='\n', sep='',
                       file=output)
-                
+            
+            # close the struct defintion
             print('};', end='\n', file=output)
 
             #e.g.  typedef struct posix_open_struct posix_open_data;
