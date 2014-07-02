@@ -24,6 +24,7 @@
 // TODO: Generall aproach to handle errors: How do we convert them to the platform dependent error message.
 
 /* Set the interface name for the library*/
+//Jakob: autoInit... just adds declaration
 //@autoInitializeLibrary
 //@component "POSIX" ""
 //@component "POSIX_Network" "" ComponentVariable=network

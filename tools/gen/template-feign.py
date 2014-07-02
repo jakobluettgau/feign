@@ -38,8 +38,8 @@ template = {
 },
 'autoInitializeLibrary':{
 	'global' : """
-				static void sioxFinal() __attribute__((destructor));
-            static void sioxInit() __attribute__((constructor));
+				static void feignFinal() __attribute__((destructor));
+            static void feignInit() __attribute__((constructor));
             """
 },
 'createInitializerForLibrary':{

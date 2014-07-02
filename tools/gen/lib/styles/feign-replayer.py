@@ -22,13 +22,13 @@ class Style(skeletonBuilder.Writer):
             print(function.getDefinitionPointer(), file=output)
         print("\tstatic int initialized_dlsym = 0;\n", file=output)
 
-        print("\nstatic void sioxSymbolInit() {\ninitialized_dlsym = 1;", file=output)
+        print("\nstatic void feignSymbolInit() {\ninitialized_dlsym = 1;", file=output)
         for function in functionList:
             print(function.getDlsym(), file=output)
 
         print("}", file=output)
 
-        print("\nstatic void sioxInit() {\n", file=output)
+        print("\nstatic void feignInit() {\n", file=output)
         print("\tif(initialized_dlsym == 0) sioxSymbolInit();", file=output)
         # write all init-templates
         for function in functionList:
