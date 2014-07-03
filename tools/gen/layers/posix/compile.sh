@@ -18,6 +18,7 @@ ORIGINAL_OUTPUT_FILE=original
 ../../siox-skeleton-builder.py -s feign-datatypes -t $TEMPLATE -o $OUTPUT_FILE-feign-datatypes.h $HEADER
 ../../siox-skeleton-builder.py -s feign-replayer -t $TEMPLATE -o $OUTPUT_FILE-feign-replayer.c $HEADER
 ../../siox-skeleton-builder.py -s feign-provider -t $TEMPLATE -o $OUTPUT_FILE-feign-provider.c $HEADER
+../../siox-skeleton-builder.py -s feign-precreator -t $TEMPLATE -o $OUTPUT_FILE-feign-precreator.c $HEADER
 
 #gcc $OUTPUT_FILE -c -fPIC -I ../../../low-level-C-interface `pkg-config --cflags glib-2.0`
 #gcc ${OUTPUT_FILE%%.c}.o -o libsiox-posix-ll-wrapper-dlsym.so -shared -ldl `pkg-config --libs glib-2.0`
