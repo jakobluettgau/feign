@@ -1,0 +1,6 @@
+
+
+# Troubleshooting
+
+The provided demonstrations expect that the compiled plugin shared object files
+are available in <feign>/build/.. direcotry or to be found via $LD_LIBRARY_PATH.

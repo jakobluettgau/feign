@@ -28,6 +28,9 @@ def options(ctx):
     pass
 
 def configure(ctx): 
+    # add feign include dir to environment
+    ctx.env.append_value('INCLUDES', [ctx.path.abspath()+'/include'])
+    # set siox environment based on --siox option
     ctx.env.SIOX = ctx.options.siox
     # recursivley configure subdirectories
     for d in dirs:
