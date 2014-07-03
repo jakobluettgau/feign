@@ -16,17 +16,17 @@ class Style(skeletonBuilder.Writer):
             print('#include ', match, end='\n', file=output)
         print('\n', file=output)
 
-        # write all global-Templates
-        #for function in functionList:
-        #    functionVariables = self.functionVariables(function)
-
-        #    for templ in function.usedTemplateList:
-        #        if templ.output('global', functionVariables) != '':
-        #            print(templ.output('global', functionVariables), file=output)
-        #print("", file=output)
-
         # write global once from template
         print(templateParameters["globalOnce"], file=output)
+
+        # write enum for function names for easy switching
+        print("enum functions {", end='\n', sep='', file=output)
+        for function in functionList:
+            functionVariables = self.functionVariables(function)
+            # write function enum name form signature
+            print("\t", "POSIX_", function.name, end=',\n', sep='', file=output)
+        
+        print("};", end='\n\n', sep='', file=output)
 
         # write all functions-bodies
         for function in functionList:
