@@ -17,13 +17,13 @@ class Style(skeletonBuilder.Writer):
         print('\n', file=output)
 
         # write all global-Templates
-        for function in functionList:
-            functionVariables = self.functionVariables(function)
+        #for function in functionList:
+        #    functionVariables = self.functionVariables(function)
 
-            for templ in function.usedTemplateList:
-                if templ.output('global', functionVariables) != '':
-                    print(templ.output('global', functionVariables), file=output)
-        print("", file=output)
+        #    for templ in function.usedTemplateList:
+        #        if templ.output('global', functionVariables) != '':
+        #            print(templ.output('global', functionVariables), file=output)
+        #print("", file=output)
 
         # write global once from template
         print(templateParameters["globalOnce"], file=output)

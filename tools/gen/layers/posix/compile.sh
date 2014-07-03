@@ -16,7 +16,7 @@ ORIGINAL_OUTPUT_FILE=original
 ../../siox-skeleton-builder.py -s wrap  -t $TEMPLATE -o $OUTPUT_FILE-wrap.c  $HEADER
 ../../siox-skeleton-builder.py -s plain -t $TEMPLATE -o $OUTPUT_FILE-plain.c $HEADER
 ../../siox-skeleton-builder.py -s feign-datatypes -t $TEMPLATE -o $OUTPUT_FILE-feign-datatypes.h $HEADER
-../../siox-skeleton-builder.py -s feign-replayer -t $TEMPLATE -o $OUTPUT_FILE-feign.c $HEADER
+../../siox-skeleton-builder.py -s feign-replayer -t $TEMPLATE -o $OUTPUT_FILE-feign-replayer.c $HEADER
 ../../siox-skeleton-builder.py -s feign-provider -t $TEMPLATE -o $OUTPUT_FILE-feign-provider.c $HEADER
 
 #gcc $OUTPUT_FILE -c -fPIC -I ../../../low-level-C-interface `pkg-config --cflags glib-2.0`
