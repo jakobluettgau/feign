@@ -9,11 +9,12 @@ all:
 
 
 # clear <feign>/plugin/posix folder and create waf compatible plugin
-export:
+export: all
 	rm -rf ../../../../plugins/posix/*
-	cp ${OUTPUT_FILE}-feign-provider.c ${PLUGIN}/provider.c
-	cp ${OUTPUT_FILE}-feign-replayer.c ${PLUGIN}/replayer.c
-	cp ${OUTPUT_FILE}-feign-precreator.c ${PLUGIN}/precreator.c
+	cp ${OUTPUT_FILE}-feign-provider.c ${PLUGIN}/provider.cpp
+	cp ${OUTPUT_FILE}-feign-replayer.c ${PLUGIN}/replayer.cpp
+	cp ${OUTPUT_FILE}-feign-precreator.c ${PLUGIN}/precreator.cpp
+	cp ${OUTPUT_FILE}-feign-datatypes.h ${PLUGIN}/datatypes.h
 	cp feign-*-helper.h ${PLUGIN}/
 	cp feign-extras/wscript ${PLUGIN}/
 

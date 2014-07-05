@@ -2,7 +2,7 @@
 
 HEADER=posix-low-level-io-feign.h
 #TEMPLATE=../../template.py
-TEMPLATE=../../template-feign.py
+TEMPLATE=template-feign.py
 OUTPUT_FILE=posix-ll-wrapper
 ORIGINAL_OUTPUT_FILE=original
 

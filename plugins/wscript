@@ -5,6 +5,7 @@ from waflib import Build
 from subprocess import call
 
 dirs = [
+       # "posix"
     ]
 
 def options(ctx):
