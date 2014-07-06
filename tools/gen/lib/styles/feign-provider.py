@@ -10,6 +10,7 @@ class Style(skeletonBuilder.Writer):
     def writeOutput(self, options, functionList, templateParameters, precompiler):
         # open the output file for writing
         output = open(options.outputFile, 'w')
+        print("/**\n * GENERATED PLUGIN! - Modify carefully. May loose changes on regeneration. \n */", end='\n', sep='', file=output)
 
         # write all needed includes
         for match in templateParameters["includes"]:
