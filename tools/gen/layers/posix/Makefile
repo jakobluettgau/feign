@@ -13,6 +13,7 @@ export: all
 	rm -rf ../../../../plugins/posix/*
 	cp ${OUTPUT_FILE}-feign-datatypes.h ${PLUGIN}/datatypes.h
 	cp ${OUTPUT_FILE}-feign-provider.cpp ${PLUGIN}/provider.cpp
+	cp ${OUTPUT_FILE}-feign-wrapper.h ${PLUGIN}/wrapper.h
 	cp ${OUTPUT_FILE}-feign-wrapper.cpp ${PLUGIN}/wrapper.cpp
 	cp ${OUTPUT_FILE}-feign-replayer.cpp ${PLUGIN}/replayer.cpp
 	cp ${OUTPUT_FILE}-feign-precreator.cpp ${PLUGIN}/precreator.cpp

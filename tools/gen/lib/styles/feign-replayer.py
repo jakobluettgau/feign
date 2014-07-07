@@ -31,7 +31,7 @@ int layer_id = 13;
 
 Plugin * init() {
     // give a sign of life
-	printf("Hello from %s\n", __FILE__);
+	printf("Hello from %s\\n", __FILE__);
 
 	// announce features and request further action
 	return &plugin;

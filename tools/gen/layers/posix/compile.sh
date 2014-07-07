@@ -13,8 +13,9 @@ ORIGINAL_OUTPUT_FILE=original
 #../../siox-skeleton-builder.py -s plain -t $TEMPLATE -o $OUTPUT_FILE-plain.c $HEADER
 
 # FEIGN specific
-../../siox-skeleton-builder.py -s feign-datatypes -t $TEMPLATE -o $OUTPUT_FILE-feign-datatypes.h $HEADER
+../../siox-skeleton-builder.py -s feign-datatypes-header -t $TEMPLATE -o $OUTPUT_FILE-feign-datatypes.h $HEADER
 ../../siox-skeleton-builder.py -s feign-wrapper -t $TEMPLATE -o $OUTPUT_FILE-feign-wrapper.cpp $HEADER
+../../siox-skeleton-builder.py -s feign-wrapper-header -t $TEMPLATE -o $OUTPUT_FILE-feign-wrapper.h $HEADER
 ../../siox-skeleton-builder.py -s feign-replayer -t $TEMPLATE -o $OUTPUT_FILE-feign-replayer.cpp $HEADER
 ../../siox-skeleton-builder.py -s feign-provider -t $TEMPLATE -o $OUTPUT_FILE-feign-provider.cpp $HEADER
 ../../siox-skeleton-builder.py -s feign-precreator -t $TEMPLATE -o $OUTPUT_FILE-feign-precreator.cpp $HEADER

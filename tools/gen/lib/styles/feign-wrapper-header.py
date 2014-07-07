@@ -1,4 +1,3 @@
-
 from __future__ import print_function
 
 import skeletonBuilder
@@ -13,19 +12,11 @@ class Style(skeletonBuilder.Writer):
         output = open(options.outputFile, 'w')
         print("/**\n * GENERATED PLUGIN! - Modify carefully. May loose changes on regeneration. \n */", end='\n', sep='', file=output)
 
-
-        templateParameters["includes"].append("<map>")
+        print("""#ifndef WRAPPER_H_CJ0RYGIY\n#define WRAPPER_H_CJ0RYGIY""", file=output)
+        
+        # drop all template includes
+        templateParameters["includes"] = []
         templateParameters["includes"].append("\"datatypes.h\"")
-
-
-        print("""/**
- * Map the trace filehandles to actual file handles
- */
-int issued = 3;	// 3 will be first issued by this replayer
-
-std::map<int,int> fds;
-std::map<int,FILE> streams;""", file=output)
-
 
         # write all needed includes
         for match in templateParameters["includes"]:
@@ -37,13 +28,10 @@ std::map<int,FILE> streams;""", file=output)
             functionVariables = self.functionVariables(function)
             # write function signature
 
-            print("int wrapped_", function.name, "(void * data)", sep='', file=output)
-            print("{\n", "\t", "posix_", function.name ,"_data * d = (posix_", function.name  ,"_data*) data;", sep='', file=output)
-
-            print("\t","DEBUG(\"'-", function.name, "()\");", sep='', file=output)
-            print("\t","return 0;\n}", sep='', file=output)
+            print("int wrapped_", function.name, "(void * data);", end='\n', sep='', file=output)
 
 
+        print("""#endif /* end of include guard: WRAPPER_H_CJ0RYGIY */""", file=output)
 
         # close the file
         output.close()

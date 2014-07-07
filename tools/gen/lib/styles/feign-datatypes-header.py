@@ -13,6 +13,8 @@ class Style(skeletonBuilder.Writer):
  
         print("/**\n * GENERATED PLUGIN! - Modify carefully. May loose changes on regeneration. \n */", end='\n', sep='', file=output)
 
+        print("""#ifndef DATATYPES_H_CJ0RYGIY\n#define DATATYPES_H_CJ0RYGIY""", file=output)
+
         # write all needed includes
         for match in templateParameters["includes"]:
             print('#include ', match, end='\n', file=output)
@@ -20,7 +22,6 @@ class Style(skeletonBuilder.Writer):
 
         # write global once from template
         print(templateParameters["globalOnce"], file=output)
-
         # write enum for function names for easy switching
         print("enum functions {", end='\n', sep='', file=output)
         for function in functionList:
@@ -29,6 +30,17 @@ class Style(skeletonBuilder.Writer):
             print("\t", "POSIX_", function.name, end=',\n', sep='', file=output)
         
         print("};", end='\n\n', sep='', file=output)
+
+        print("""/**
+ * As feign does only distinguish layers, different types within a layer could
+ * be seperated by wrapping the data again.
+ */
+//@serializable
+typedef struct posix_activity {
+	int type;
+	void * data;
+	int ret;
+} posix_activity;""", file=output)
 
         # write all functions-bodies
         for function in functionList:
@@ -61,6 +73,7 @@ class Style(skeletonBuilder.Writer):
             print("posix_", function.name, "_struct", end=' ', sep='', file=output) 
             print("posix_", function.name, "_data", end=';\n\n\n', sep='', file=output) 
 
+        print("""#endif /* end of include guard: DATATYPES_H_CJ0RYGIY */""", file=output)
 
         # close the file
         output.close()
