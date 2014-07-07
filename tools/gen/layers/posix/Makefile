@@ -1,27 +1,35 @@
+# export related
 REPO_HOME=../../../..
 PLUGIN=${REPO_HOME}/plugins/posix
 
-# original outputfile prefix as specified in compile.sh
-OUTPUT_FILE=generated
+# build related
+OUTPUT_PATH=generated-feign-plugin/
+HEADER=posix-low-level-io-feign.h
+#TEMPLATE=../../template.py
+TEMPLATE=template-feign.py
+
 
 all:
-	./compile.sh
+	# build sources
+	mkdir -p ${OUTPUT_PATH}
+	../../siox-skeleton-builder.py -s feign-datatypes-header -t ${TEMPLATE} -o ${OUTPUT_PATH}datatypes.h       ${HEADER}
+	../../siox-skeleton-builder.py -s feign-wrapper          -t ${TEMPLATE} -o ${OUTPUT_PATH}wrapper.cpp       ${HEADER}
+	../../siox-skeleton-builder.py -s feign-wrapper-header   -t ${TEMPLATE} -o ${OUTPUT_PATH}wrapper.h         ${HEADER}
+	../../siox-skeleton-builder.py -s feign-replayer         -t ${TEMPLATE} -o ${OUTPUT_PATH}replayer.cpp      ${HEADER}
+	../../siox-skeleton-builder.py -s feign-siox-provider    -t ${TEMPLATE} -o ${OUTPUT_PATH}siox-provider.cpp ${HEADER}
+	../../siox-skeleton-builder.py -s feign-precreator       -t ${TEMPLATE} -o ${OUTPUT_PATH}precreator.cpp    ${HEADER}
+	# add additional files
+	cp feign-*-helper.h ${OUTPUT_PATH}/
+	cp feign-extras/wscript ${OUTPUT_PATH}/
+	
 
 
 # clear <feign>/plugin/posix folder and create waf compatible plugin
 export: all
-	rm -rf ../../../../plugins/posix/*
-	cp ${OUTPUT_FILE}-feign-datatypes.h ${PLUGIN}/datatypes.h
-	cp ${OUTPUT_FILE}-feign-provider.cpp ${PLUGIN}/provider.cpp
-	cp ${OUTPUT_FILE}-feign-wrapper.h ${PLUGIN}/wrapper.h
-	cp ${OUTPUT_FILE}-feign-wrapper.cpp ${PLUGIN}/wrapper.cpp
-	cp ${OUTPUT_FILE}-feign-replayer.cpp ${PLUGIN}/replayer.cpp
-	cp ${OUTPUT_FILE}-feign-precreator.cpp ${PLUGIN}/precreator.cpp
-	cp feign-*-helper.h ${PLUGIN}/
-	cp feign-extras/wscript ${PLUGIN}/
-
+	# export
+	rm -rf ${PLUGIN}
+	cp -r ${OUTPUT_PATH} ${PLUGIN}
 
 clean:
-	rm -f ${OUTPUT_FILE}-*.cpp
-	rm -f ${OUTPUT_FILE}-*.h
+	rm -rf ${OUTPUT_PATH}
 

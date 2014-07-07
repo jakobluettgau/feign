@@ -1,4 +1,3 @@
-
 from __future__ import print_function
 
 import skeletonBuilder
@@ -13,23 +12,25 @@ class Style(skeletonBuilder.Writer):
         output = open(options.outputFile, 'w')
         print("/**\n * GENERATED PLUGIN! - Modify carefully. May loose changes on regeneration. \n */", end='\n', sep='', file=output)
 
-
-        templateParameters["includes"].append("<map>")
-        templateParameters["includes"].append("\"datatypes.h\"")
+        templateParameters["includes"].append("<iostream>")
+        templateParameters["includes"].append("<string>")
+        templateParameters["includes"].append("<stdlib.h>")
+        templateParameters["includes"].append("<stdio.h>")
+        
+        templateParameters["includes"].append("\"../TraceReader.hpp\"")
 
         # write all needed includes
         for match in templateParameters["includes"]:
             print('#include ', match, end='\n', file=output)
-        print('\n', file=output)   
+        print('\n', file=output)  
 
+        
+        print("""namespace feign {
+	#define FEIGN_NO_CPP_INCLUDES
+	#include "feign.h"
+	#include "feign-plugin_posix/datatypes.h"
+}""", end='\n', file=output)
 
-        print("""/**
- * Map the trace filehandles to actual file handles
- */
-int issued = 3;	// 3 will be first issued by this replayer
-
-std::map<int,int> fds;
-std::map<int,FILE> streams;""", file=output)
 
         # declare function prototypes
         for function in functionList:
@@ -40,9 +41,22 @@ std::map<int,FILE> streams;""", file=output)
             print("{\n", "\t", "posix_", function.name ,"_data * d = (posix_", function.name  ,"_data*) data;", sep='', file=output)
 
             print("\t","DEBUG(\"'-", function.name, "()\");", sep='', file=output)
-            print("\t","return 0;\n}", sep='', file=output)
-
+            print("\t","return 0;\n}", sep='', file=output)    
 
 
         # close the file
         output.close()
+
+
+
+    def generate_create_activity():
+        str = ""
+        return str
+
+    def generate_provide():
+        str = ""
+        return str
+
+    def generate_destroy():
+        str = ""
+        return str
