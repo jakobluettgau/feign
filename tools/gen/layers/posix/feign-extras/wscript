@@ -12,8 +12,8 @@ def configure(ctx):
 
 def build(ctx):
     # create as shared library
-    #ctx.shlib(source=['provider.cpp'], target='feign_provider-posix')
-    #ctx.shlib(source=['replayer.cpp', 'wrapper.cpp'], target='feign_replayer-posix')
-    ctx.shlib(source=['replayer.cpp', 'wrapper.cpp'], target='feign_replayer-posix')
-    #ctx.shlib(source=['precreator.cpp'], target='feign_precreator-posix')
+    #ctx.shlib(source=['provider.cpp'], target='feign_posix-provider')
+    #ctx.shlib(source=['replayer.cpp', 'wrapper.cpp'], target='feign_posix-replayer')
+    ctx.shlib(source=['replayer.cpp', 'wrapper.cpp'], target='feign_posix-replayer')
+    #ctx.shlib(source=['precreator.cpp'], target='feign_posix-precreator')
     pass

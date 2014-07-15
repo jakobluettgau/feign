@@ -1,6 +1,9 @@
 all:
 	./waf
 
+plugins:
+	./waf plugins
+
 install:
 	./waf install
 

@@ -15,6 +15,10 @@ dirs = [
     "plugins",
     ]
 
+feign_plugins = [
+    "tools/gen/layers/posix",
+]
+
 
 def options(ctx):
     # options to work with other tools
@@ -48,3 +52,12 @@ def docs(ctx):
         ctx.recurse(d)
     pass
 
+
+def plugins(ctx):
+    # generate plugins
+    print "To generate plugins copy and run the following commands:"
+    for p in feign_plugins:
+       # ctx.recurse(d)
+       cmd = "export ORIGIN=$PWD && cd %s && make export && cd $ORIGIN" % (p)
+       print cmd
+    pass

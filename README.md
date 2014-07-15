@@ -14,7 +14,7 @@ Requirements:
 
 Navigate into feigns repository and run the following commands:
 
-	export FEIGN=<feign-repository-root>
+	export FEIGN=$PWD
     cd $FEIGN
     ./waf configure build
 
