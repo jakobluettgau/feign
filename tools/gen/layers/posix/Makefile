@@ -8,6 +8,8 @@ HEADER=posix-low-level-io-feign.h
 #TEMPLATE=../../template.py
 TEMPLATE=template-feign.py
 
+# path to siox-trace-reader
+SIOX=~/wr/siox/src/tools/TraceReader/feing-siox-provider
 
 all:
 	# build sources
@@ -23,6 +25,8 @@ all:
 	cp feign-extras/wscript ${OUTPUT_PATH}/
 	
 
+siox:
+	mkdir -p 
 
 # clear <feign>/plugin/posix folder and create waf compatible plugin
 export: all
@@ -33,3 +37,5 @@ export: all
 clean:
 	rm -rf ${OUTPUT_PATH}
 
+clean-siox:
+	echo "blub"
