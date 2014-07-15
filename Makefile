@@ -3,3 +3,6 @@ all:
 
 install:
 	./waf install
+
+clean:
+	./waf clean

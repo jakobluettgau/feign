@@ -1,6 +1,6 @@
 #!/bin/sh
 
-feign \
+valgrind feign \
 --plugin $FEIGN_DEV_PLUGIN_PATH/sample/libfeign_sample.so \
 --plugin $FEIGN_DEV_PLUGIN_PATH/sample-provider/libfeign_sample-provider.so \
 --plugin $FEIGN_DEV_PLUGIN_PATH/sample-filter/libfeign_sample-filter.so \
