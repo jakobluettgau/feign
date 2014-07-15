@@ -27,7 +27,7 @@ Install using:
 
 Feign can be extended by using plugins to support arbitrary layers (e.g. POSIX,
 MPI, ..). Via plugins it is also possible to manipulate and change how the trace
-is replay.
+is replayed.
 
 ### Replaying SIOX traces (POSIX)
 
@@ -42,8 +42,8 @@ feign-siox-provider plugin need to be generated.
 A simple example to build on can be found in demos directory. Follow the README
 for the specific demo to get started.
 
-   cd $FEIGN/demos/siox-replay
-   cat README
+    cd $FEIGN/demos/siox-replay
+    cat README
 
 
 
