@@ -7,5 +7,6 @@ all:
 	${CC} -o ${TARGET} ${SOURCE}
 
 clean:
-	rm test.tmp
-	rm ${TARGET}
+	rm -f test.tmp
+	rm -f ${TARGET}
+	rm -rf mytrace

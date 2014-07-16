@@ -1,13 +1,22 @@
 #!/bin/sh
 
 # pass datadir with first argument
-DATA=$1
+TRACE_DIR=$1
 
-# populate environment variables used by the plugin (feing_siox-proivder)
-export FEIGN_SIOX_ACTIVITIES=${DATA}/activities.dat
-export FEIGN_SIOX_SYSTEMINFO=${DATA}/system-info.dat
-export FEIGN_SIOX_ONTOLOGY=${DATA}/ontology.dat
-export FEIGN_SIOX_ASSOCIATION=${DATA}/association.dat
+if [ -z "$TRACE_DIR"];
+then
+	echo "Please specifiy a directory that contains a trace to replay."
+	echo "Example:"
+	echo "$0 mytrace"
+	exit
+fi
+
+# populate environment variables used by the plugin (feing_siox-provider)
+export FEIGN_SIOX_ACTIVITIES=${TRACE_DIR}/activities.dat
+export FEIGN_SIOX_SYSTEMINFO=${TRACE_DIR}/system-info.dat
+export FEIGN_SIOX_ONTOLOGY=${TRACE_DIR}/ontology.dat
+export FEIGN_SIOX_ASSOCIATION=${TRACE_DIR}/association.dat
+
 
 feign \
 --plugin /home/pq/WR/siox/build/src/tools/TraceReader/feign_plugin/libfeign_siox-provider.so \
