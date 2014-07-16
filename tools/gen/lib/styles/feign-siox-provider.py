@@ -299,4 +299,11 @@ Activity * destroy(Activity * activity) {
     ###########################################################################
     def generate_reset(self, functionList):
         str = "// reset"
+        str = """
+Activity * reset(Activity * activity) {
+    CDEBUG("reset");
+    create_trace_reader();
+    return NULL;
+}"""
+        
         return str
