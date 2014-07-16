@@ -1,4 +1,4 @@
---- ../TraceReader-backup/CMakeLists.txt	2014-07-15 17:25:32.667452910 +0200
+--- ../TraceReader.backup/CMakeLists.txt	2014-07-15 17:25:32.667452910 +0200
 +++ CMakeLists.txt	2014-07-15 23:27:57.631343495 +0200
 @@ -42,6 +42,7 @@
  

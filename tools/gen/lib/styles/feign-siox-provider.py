@@ -12,11 +12,12 @@ class Style(skeletonBuilder.Writer):
         output = open(options.outputFile, 'w')
         print("/**\n * GENERATED PLUGIN! - Modify carefully. May loose changes on regeneration. \n */", end='\n', sep='', file=output)
 
+        # truncate template include list and repopulate
+        templateParameters["includes"] = []
         templateParameters["includes"].append("<iostream>")
         templateParameters["includes"].append("<string>")
         templateParameters["includes"].append("<stdlib.h>")
         templateParameters["includes"].append("<stdio.h>")
-        
         templateParameters["includes"].append("\"../TraceReader.hpp\"")
 
         # write all needed includes
@@ -24,39 +25,278 @@ class Style(skeletonBuilder.Writer):
             print('#include ', match, end='\n', file=output)
         print('\n', file=output)  
 
-        
+        # seperate feign logic from siox logic, as symbol names may collide
         print("""namespace feign {
-	#define FEIGN_NO_CPP_INCLUDES
-	#include "feign.h"
-	#include "feign-plugin_posix/datatypes.h"
-}""", end='\n', file=output)
+    #define FEIGN_NO_CPP_INCLUDES
+    #include "feign.h"
+    #include "feign_posix/datatypes.h"
+}
+""", end='\n\n', file=output)
 
+
+#        # declare function prototypes
+#        for function in functionList:
+#            functionVariables = self.functionVariables(function)
+#            # write function signature
+#
+#            print("int wrapped_", function.name, "(void * data)", sep='', file=output)
+#            print("{\n", "\t", "posix_", function.name ,"_data * d = (posix_", function.name  ,"_data*) data;", sep='', file=output)
+#
+#            print("\t","DEBUG(\"'-", function.name, "()\");", sep='', file=output)
+#            print("\t","return 0;\n}", sep='', file=output)    
+
+
+        # seperate feign logic from siox logic, as symbol names may collide
+        # Note: namespace not closed
+        print("""namespace feign {""", end='\n', file=output)
+        # generate init does a little bit more than creating one function
+        print(self.generate_init(functionList), file=output)
+        print(self.generate_create_activity(functionList), file=output)
+        print(self.generate_convert_siox_to_feign(functionList), file=output)
+        print(self.generate_provide(functionList), file=output)
+        # destroy also generates a helper
+        print(self.generate_destroy(functionList), file=output)
+        print(self.generate_reset(functionList), file=output)
+
+        print ("} // close feign namespace", file=output)
+
+        # close the file
+        output.close()
+
+
+    ###########################################################################
+    # init
+    ###########################################################################
+    def generate_init(self, functionList):
+        str = "// init\n"
+        
+        str += """
+Plugin plugin = {
+    .name = "siox-provider",
+    .version = NULL,
+    .intents = FEIGN_PROVIDER,
+};
+
+
+TraceReader * tr2;
+
+char const * get_dat_env(char const * name, char const * fallback) {
+    char const * value;
+    value = getenv (name);
+    if (! value) {
+        value = fallback;
+    }
+    else {
+        printf ("%s = %s\\n", name, value);
+    }
+
+    return value;
+}
+
+void create_trace_reader() {
+    char const * activities = get_dat_env("FEIGN_SIOX_ACTIVITIES", "activities.dat");
+    char const * systeminfo = get_dat_env("FEIGN_SIOX_SYSTEMINFO", "systeminfo.dat");
+    char const * ontology = get_dat_env("FEIGN_SIOX_ONTOLOGY", "ontology.dat");
+    char const * association = get_dat_env("FEIGN_SIOX_ASSOCIATION", "association.dat");
+
+    if ( tr2 != NULL )
+        delete tr2;
+
+    tr2 = new TraceReader( (string)activities, (string)systeminfo, (string)ontology, (string)association );
+}
+
+
+Plugin * init() {
+    // maybe provide an ENUM Bitmap Type to easilly announce capabilities
+    // e.g. FEIGN_PLUGIN_SUCCESS && FEIGN_PLUGIN_PROVIDER && FEIGN_PLUGIN_REPLAYER
+    // to say: init was completed succesfully, i can provide and replay tracedata
+    // please call the appropiate handlers
+
+    printf("Hello from %s\\n", __FILE__);
+    // gonna be provider and replayer
+    // but provider should negotiate identifier
+
+    //main(0, NULL);
+
+
+
+    create_trace_reader();
+
+    // announce features and request further action
+    return &plugin;
+}"""
+
+        return str
+
+
+    ###########################################################################
+    # create_activity
+    ###########################################################################
+    def generate_create_activity(self, functionList):
+        str = "// create_activity\n"
+        
+        str += """Activity * create_activity(long offset, int type) {
+    int layer_id = 13;
+    Activity * activity = (Activity *) malloc(sizeof(Activity));
+
+    posix_activity * sub_activity = (posix_activity *) malloc(sizeof(posix_activity));
+
+
+    void * data;
+
+    switch ( type ) { \n"""
 
         # declare function prototypes
         for function in functionList:
             functionVariables = self.functionVariables(function)
             # write function signature
 
-            print("int wrapped_", function.name, "(void * data)", sep='', file=output)
-            print("{\n", "\t", "posix_", function.name ,"_data * d = (posix_", function.name  ,"_data*) data;", sep='', file=output)
+            str += "\t"*2 + """case POSIX_%s:\n""" % (function.name)
+            str += "\t"*3 + """DEBUG("create %s()");\n""" % (function.name)
+            str += "\t"*3 + """break;\n\n"""
 
-            print("\t","DEBUG(\"'-", function.name, "()\");", sep='', file=output)
-            print("\t","return 0;\n}", sep='', file=output)    
+        str += """
+    }
 
+    sub_activity->type = type;
+    //sub_activity->data = data;
 
-        # close the file
-        output.close()
+    activity->layer = layer_id;
+    activity->offset = offset;
+    activity->data = sub_activity;
+    activity->provider = plugin.instance_id;
 
-
-
-    def generate_create_activity():
-        str = ""
+    return activity;
+}"""
         return str
 
-    def generate_provide():
-        str = ""
+    ###########################################################################
+    # convert siox to feign
+    ###########################################################################
+    def generate_convert_siox_to_feign(self, functionList):
+        str = "// create_activity\n"
+        
+        str += """Activity * convert_siox_to_feign(monitoring::Activity * a) {
+	Activity * activity = NULL;\n\n"""
+
+        # declare function prototypes
+        for function in functionList:
+            functionVariables = self.functionVariables(function)
+            # create match string
+            str += "\t"*1 + """std::string str_%s ("%s");\n""" % (function.name, function.name)
+
+        str += """\n\tstring activity_name = tr2->s->lookup_activity_name( a->ucaid() );\n\n"""
+
+        # declare function prototypes
+        for function in functionList:
+            functionVariables = self.functionVariables(function)
+            # create match string
+            str += """\n\t// %s
+	if ( str_write.compare(activity_name) == 0) {
+		activity = create_activity(0, POSIX_%s);
+	} else\n""" % (function.name, function.name)
+  
+        str += """\t{\n\t\t// no match \n\t}\n """
+
+        #TODO: offset calculation is wrong, needs to consider previos activity!
+        str += """
+	// siox timestamps come in nanosecond resolution
+	long offset = a->time_stop() - a->time_start();
+
+	if ( activity != NULL ) {
+		activity->offset = offset;
+
+		//tr2->printActivity( a );
+	}
+
+	return activity;
+}"""
+
         return str
 
-    def generate_destroy():
-        str = ""
+    ###########################################################################
+    # provide 
+    ###########################################################################
+    def generate_provide(self, functionList):
+        str = "// provide"
+        str += """
+Activity * provide(Activity * activity) {
+    CDEBUG("provide");
+
+    activity = NULL;
+
+jump:
+
+    monitoring::Activity * a = tr2->nextActivity();
+    if( a == nullptr )
+        return NULL;
+
+    //tr2->printActivity( a );
+
+    activity = convert_siox_to_feign(a);
+    delete(a);
+
+    if ( activity == NULL )
+        goto jump;
+
+
+    return activity;
+}"""
+        return str
+
+    ###########################################################################
+    # destroy 
+    ###########################################################################
+    def generate_destroy(self, functionList):
+        str = "// destroy"
+        str += """
+void free_sub_activity(posix_activity * pa) {
+    switch ( pa->type ) {\n"""
+
+        # declare function prototypes
+        for function in functionList:
+            functionVariables = self.functionVariables(function)
+            # write function signature
+
+            str += "\t"*2 + """case POSIX_%s:\n""" % (function.name)
+            str += "\t"*3 + """DEBUG("free %s()");\n""" % (function.name)
+            str += "\t"*3 + """break;\n\n"""
+
+
+        str +="""
+    }
+
+}"""
+        # actual destroy
+        str += """\n\n
+Activity * destroy(Activity * activity) {
+    CDEBUG("destroy");
+
+    if ( activity->provider == plugin.instance_id ) {
+        if ( activity->data != NULL ) {
+            posix_activity * sub_activity = (posix_activity *)(activity->data);
+
+            if ( sub_activity->data != NULL ) {
+                //free(sub_activity->data);
+            } else {
+            }
+            free(sub_activity);
+        } else {
+        }
+        free(activity);
+        return NULL;
+    } else {
+        return activity;
+    }
+
+    return NULL;
+}"""
+        return str
+
+
+    ###########################################################################
+    # destroy 
+    ###########################################################################
+    def generate_reset(self, functionList):
+        str = "// reset"
         return str

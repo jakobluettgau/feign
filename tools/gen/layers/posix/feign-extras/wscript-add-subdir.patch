@@ -1,4 +1,4 @@
---- ../plugins-backup/wscript	2014-07-16 15:30:35.151991377 +0200
+--- ../plugins.backup/wscript	2014-07-16 15:30:35.151991377 +0200
 +++ wscript	2014-07-15 23:01:49.403786172 +0200
 @@ -5,6 +5,7 @@
  from subprocess import call
