@@ -15,6 +15,7 @@ class Style(skeletonBuilder.Writer):
 
 
         templateParameters["includes"].append("<map>")
+        templateParameters["includes"].append("\"wrapper.h\"")
         templateParameters["includes"].append("\"datatypes.h\"")
 
         # write all needed includes

@@ -14,6 +14,7 @@ class Style(skeletonBuilder.Writer):
 
         precompiler.insert(0, "define _GNU_SOURCE")
         templateParameters["includes"].append("dlfcn.h")
+        templateParameters["includes"].append("<feign.h>")
 
         self.writeHeaderBegin(output, functionList, templateParameters["includes"], templateParameters["globalOnce"], precompiler);
 

@@ -16,6 +16,7 @@ class Style(skeletonBuilder.Writer):
         
         # drop all template includes
         templateParameters["includes"] = []
+        templateParameters["includes"].append("<feign.h>")
         templateParameters["includes"].append("\"datatypes.h\"")
 
         # write all needed includes

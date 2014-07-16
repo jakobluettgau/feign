@@ -9,15 +9,13 @@
 #endif
 
 
-//#define DEBUG(a) printf("%-30s %3d %s:%d\n", a, plugin.instance_id, __FILE__, __LINE__)
-#define DEBUG(a)
-//#define CDEBUG(a) printf("%-30s %3d %s:%d\n", a, plugin.instance_id, __FILE__, __LINE__)
-#define CDEBUG(a)
 
 
 
-
-
+#define DEBUG(a) printf("%-30s %3d %s:%d\n", a, -1 /* plugin.instance_id */, __FILE__, __LINE__)
+//#define DEBUG(a)
+#define CDEBUG(a) printf("%-30s %3d %s:%d\n", a, -1 /* plugin.instance_id */, __FILE__, __LINE__)
+//#define CDEBUG(a)
 
 
 /**
@@ -136,6 +134,11 @@ typedef struct Layer {
 	int intents;
 	int * layer_id; // determined during runtime
 } Layer;
+
+
+
+
+
 
 
 

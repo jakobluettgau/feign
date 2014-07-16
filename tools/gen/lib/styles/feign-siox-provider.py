@@ -102,7 +102,7 @@ void create_trace_reader() {
     if ( tr2 != NULL )
         delete tr2;
 
-    tr2 = new TraceReader( (string)activities, (string)systeminfo, (string)ontology, (string)association );
+    tr2 = new TraceReader( (string)activities, (string)systeminfo, (string)ontology, (string)association, "");
 }
 
 

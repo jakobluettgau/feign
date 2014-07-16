@@ -12,6 +12,7 @@ class Style(skeletonBuilder.Writer):
         output = open(options.outputFile, 'w')
         print("/**\n * GENERATED PLUGIN! - Modify carefully. May loose changes on regeneration. \n */", end='\n', sep='', file=output)
 
+        templateParameters["includes"].append("<feign.h>")
         templateParameters["includes"].append("\"datatypes.h\"")
         templateParameters["includes"].append("\"wrapper.h\"")
         # write all needed includes
