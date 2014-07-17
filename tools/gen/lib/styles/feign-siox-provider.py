@@ -192,9 +192,9 @@ Plugin * init() {
             functionVariables = self.functionVariables(function)
             # create match string
             str += """\n\t// %s
-	if ( str_write.compare(activity_name) == 0) {
+	if ( str_%s.compare(activity_name) == 0) {
 		activity = create_activity(0, POSIX_%s);
-	} else\n""" % (function.name, function.name)
+	} else\n""" % (function.name, function.name, function.name)
   
         str += """\t{\n\t\t// no match \n\t}\n """
 

@@ -251,7 +251,7 @@ void reset_buffer_flags() {
 /**
  * print the different activity counters
  */
-void print_replay_stats() {
+void replay_manager_print_stats() {
 	printf("Replay Statistics\n");
 	printf("Provided:   %-5d\n", provide_count);
 	printf("Filtered:   %-5d\n", filter_count);

@@ -122,14 +122,15 @@ void plugin_manager_print_stats()
  */
 int pm_load_handlers(void * handle, int intents) {
 
+	printf("Intent map: ");
 	print_bits(sizeof(int), &intents);
 
 	if ( FEIGN_UNDEFINED == intents ) {
-		printf("This plugin seems to do nothing. Specify some intents/features. (See: feign_plugin_intents)\n");
+		printf("'-> This plugin seems to do nothing. Specify some intents/features. (See: feign_plugin_intents)\n");
 	}
 
 	if ( FEIGN_PROVIDER & intents ) {
-		printf("This plugin wants to register as a provider.\n");
+		printf("'-> This plugin wants to register as a provider.\n");
 		dlsym_push_back_handler(handle, &providers, "provide",
 			"\nMake sure to define \"Activity * provide(Activity * activity) {}\" when the FEIGN_PROVIDER flag is set.\n");
 		dlsym_push_back_handler(handle, &destroyers, "destroy",
@@ -140,37 +141,37 @@ int pm_load_handlers(void * handle, int intents) {
 	}
 
 	if ( FEIGN_FILTER & intents ) {
-		printf("This plugin wants to register as a filter.\n");
+		printf("'-> This plugin wants to register as a filter.\n");
 		dlsym_push_back_handler(handle, &filters, "filter",
 			"\nMake sure to define \"Activity * filter(Activity * activity) {}\" when the FEIGN_FILTER flag is set.\n");
 	}
 
 	if ( FEIGN_MUTATOR & intents ) {
-		printf("This plugin wants to register as a mutator.\n");
+		printf("'-> This plugin wants to register as a mutator.\n");
 		dlsym_push_back_handler(handle, &mutators, "mutate",
 			"\nMake sure to define \"Activity * mutate(Activity * activity) {}\" when the FEIGN_MUTATOR flag is set.\n");
 	}
 
 	if ( FEIGN_FILTER_CONTEXT & intents ) {
-		printf("This plugin wants to register as a context aware filter.\n");
+		printf("'-> This plugin wants to register as a context aware filter.\n");
 		dlsym_push_back_context_handler(handle, &context_filters, "filter_context",
 			"\nMake sure to define \"Activity * filter_context(Activity * activity) {}\" when the FEIGN_FILTER_CONTEXT flag is set.\n");
 	}
 
 	if ( FEIGN_MUTATOR_CONTEXT & intents ) {
-		printf("This plugin wants to register as a context aware mutator.\n");
+		printf("'-> This plugin wants to register as a context aware mutator.\n");
 		dlsym_push_back_context_handler(handle, &context_mutators, "mutate_context",
 			"\nMake sure to define \"Activity * mutate_context(Activity * activity) {}\" when the FEIGN_MUTATOR_CONTEXT flag is set.\n");
 	}
 
 	if ( FEIGN_REPLAYER & intents ) {
-		printf("This plugin wants to register as a replayer.\n");
+		printf("'-> This plugin wants to register as a replayer.\n");
 		dlsym_push_back_handler(handle, &replayers, "replay",
 			"\nMake sure to define \"Activity * replay(Activity * activity) {}\" when the FEIGN_REPLAYER flag is set.\n");
 	}
 
 	if ( FEIGN_PRECREATOR & intents ) {
-		printf("This plugin wants to register as a precreator.\n");
+		printf("'-> This plugin wants to register as a precreator.\n");
 		dlsym_push_back_handler(handle, &precreators, "precreate",
 			"\nMake sure to define \"Activity * precreate(Activity * activity) {}\" when the FEIGN_PRECREATOR flag is set.\n");
 		dlsym_push_back_handler(handle, &precreate_checkers, "precreate_check",

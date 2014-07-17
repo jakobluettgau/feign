@@ -54,9 +54,14 @@ int main(int argc, char *argv[])
 	printf("Option: version = %d\n", version);
 	printf("Option: lookahead = %d\n", lookahead);
 
+	// keep everything nice and tidy
+	printf("\n");
+
 	// load plugins from arguments
-	load_plugins(plugins, plugin_manager_load_plugin);
+	load_plugins(plugins,        plugin_manager_load_plugin);
 	load_plugins(plugins_global, plugin_manager_load_plugin_global);
+
+
 
 	if ( lookahead < 1 ) {
 		lookahead = 1;
@@ -89,7 +94,7 @@ int main(int argc, char *argv[])
 		printf("finish precreation ===============================================\n\n");
 
 		// reset
-		print_replay_stats();
+		replay_manager_print_stats();
 		reset_replay_stats();
 		reset_buffer_flags();
 		activity_reset(NULL);
@@ -112,7 +117,7 @@ int main(int argc, char *argv[])
 	stop_timer(&start, &end, 1e4);
 	printf("finish replay ====================================================\n\n");
 
-	print_replay_stats();
+	replay_manager_print_stats();
 	plugin_manager_print_stats();
 
 	// finalize

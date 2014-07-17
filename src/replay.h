@@ -7,7 +7,7 @@ int replay();
 
 void reset_buffer_flags();
 
-void print_replay_stats();
+void replay_manager_print_stats();
 void reset_replay_stats();
 void print_replay_buffer();
 
