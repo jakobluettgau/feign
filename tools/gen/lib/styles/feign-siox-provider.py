@@ -175,15 +175,18 @@ Plugin * init() {
     ###########################################################################
     def generate_convert_siox_to_feign(self, functionList):
         str = "// create_activity\n"
-        
+  
+        # generate string lookup strings
+        for function in functionList:
+            functionVariables = self.functionVariables(function)
+            # create match string
+            str += "\t"*0 + """std::string str_%s ("%s");\n""" % (function.name, function.name)
+
         str += """Activity * convert_siox_to_feign(monitoring::Activity * a) {
 	Activity * activity = NULL;\n\n"""
 
         # declare function prototypes
-        for function in functionList:
-            functionVariables = self.functionVariables(function)
-            # create match string
-            str += "\t"*1 + """std::string str_%s ("%s");\n""" % (function.name, function.name)
+
 
         str += """\n\tstring activity_name = tr2->s->lookup_activity_name( a->ucaid() );\n\n"""
 
