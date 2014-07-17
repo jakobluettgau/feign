@@ -5,6 +5,7 @@ PLUGIN=${REPO_HOME}/plugins/posix
 # build related
 OUTPUT_PATH=generated-feign-plugin
 HEADER=posix-low-level-io-feign.h
+HEADER=posix-low-level-io.h
 #TEMPLATE=../../template.py
 TEMPLATE=template-feign.py
 
@@ -20,6 +21,8 @@ all:
 	../../siox-skeleton-builder.py -s feign-replayer         -t ${TEMPLATE} -o ${OUTPUT_PATH}/replayer.cpp      ${HEADER}
 	../../siox-skeleton-builder.py -s feign-siox-provider    -t ${TEMPLATE} -o ${OUTPUT_PATH}/siox-provider.cpp ${HEADER}
 	../../siox-skeleton-builder.py -s feign-precreator       -t ${TEMPLATE} -o ${OUTPUT_PATH}/precreator.cpp    ${HEADER}
+	# dlsym instrumenter for reference
+	../../siox-skeleton-builder.py -s dlsym -t ../../template.py -o ${OUTPUT_PATH}/reference_instrumented.c		${HEADER}
 	# add additional files
 	cp feign-*-helper.h ${OUTPUT_PATH}/
 	cp feign-extras/wscript ${OUTPUT_PATH}/

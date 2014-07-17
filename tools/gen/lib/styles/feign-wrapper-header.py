@@ -13,7 +13,7 @@ class Style(skeletonBuilder.Writer):
         print("/**\n * GENERATED PLUGIN! - Modify carefully. May loose changes on regeneration. \n */", end='\n', sep='', file=output)
 
         print("""#ifndef WRAPPER_H_CJ0RYGIY\n#define WRAPPER_H_CJ0RYGIY""", file=output)
-        
+       
         # drop all template includes
         templateParameters["includes"] = []
         templateParameters["includes"].append("<feign.h>")

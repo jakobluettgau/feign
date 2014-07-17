@@ -78,7 +78,7 @@ End of global part
 //@activity_attribute fileOpenFlags translatedFlags
 //@splice_before SET_FILENAME(pathname)
 //@activity_attribute_late fileHandle ret
-//#horizontal_map_put_int ret
+//@horizontal_map_put_int ret
 //@rewriteCall open ''pathname,flags,mode'' ''const char *pathname, int flags, mode_t mode''
 int open( const char * pathname, int flags, ... );
 

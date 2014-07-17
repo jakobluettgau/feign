@@ -15,6 +15,11 @@ class Style(skeletonBuilder.Writer):
 
         print("""#ifndef DATATYPES_H_CJ0RYGIY\n#define DATATYPES_H_CJ0RYGIY""", file=output)
 
+        # include all headers in from the annotated header
+        self.writeHeaderBegin(output, [], templateParameters["includes"], templateParameters["globalOnce"], precompiler);
+
+
+
         # write all needed includes
         for match in templateParameters["includes"]:
             print('#include ', match, end='\n', file=output)

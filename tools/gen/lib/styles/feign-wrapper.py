@@ -40,6 +40,13 @@ std::map<int,FILE> streams;""", file=output)
             print("int wrapped_", function.name, "(void * data)", sep='', file=output)
             print("{\n", "\t", "posix_", function.name ,"_data * d = (posix_", function.name  ,"_data*) data;", sep='', file=output)
 
+            print("// GENERATED FROM TEMPLATE\n", file=output)
+            for templ in function.usedTemplateList:
+                outputString = templ.output('init', functionVariables)
+                if outputString != '':
+                    print('\t', outputString, end='\n', sep='', file=output)
+            print("// GENERATED FROM TEMPLATE END\n", file=output)
+
             print("\t","DEBUG(\"'-", function.name, "()\");", sep='', file=output)
             print("\t","return 0;\n}", sep='', file=output)
 

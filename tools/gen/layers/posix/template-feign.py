@@ -10,52 +10,25 @@ template = {
 # SpliceCode ? ? ?
 'component': {
 	'variables': 'InterfaceName ImplementationIdentifier InstanceName="" ComponentVariable=global SpliceCode=',
-	'global': '''
-		static siox_component * %(ComponentVariable)s_component = NULL;
-      static siox_unique_interface * %(ComponentVariable)s_uid = NULL;
-      static int %(ComponentVariable)s_layer_initialized = FALSE;
-		''',
-    'init': ''' 
-		if ( siox_is_monitoring_permanently_disabled() || %(ComponentVariable)s_component ){
-				return; 
-		}		
-      %(SpliceCode)s
-		%(ComponentVariable)s_uid = siox_system_information_lookup_interface_id("%(InterfaceName)s", "%(ImplementationIdentifier)s");
-
-		// avoid double instrumentation with DLSYM and LD_PRELOAD
-		if ( siox_component_is_registered( %(ComponentVariable)s_uid ) ){
-			fprintf(stderr, "WARNING: layer '%%s/%%s' is already instrumented, do not use LD_PRELOAD again! Most likely the application breaks.\\n", "%(InterfaceName)s", "%(ImplementationIdentifier)s");
-			return;
-		}
-		%(ComponentVariable)s_component = siox_component_register(%(ComponentVariable)s_uid, "%(InstanceName)s");
-		siox_register_initialization_signal(sioxInit);
-      siox_register_termination_signal(sioxFinal);
-		
-		''',
-        'initLast': '%(ComponentVariable)s_layer_initialized = TRUE;',
-	'final': '''
-		if (%(ComponentVariable)s_layer_initialized) { siox_component_unregister(%(ComponentVariable)s_component); %(ComponentVariable)s_component = NULL; %(ComponentVariable)s_layer_initialized = FALSE; }'''
+	'global': '',
+    'init': '''''',
+    'initLast': '',
+	'final': '',
 },
 'autoInitializeLibrary':{
-	'global' : """
-				static void feignFinal() __attribute__((destructor));
-            static void feignInit() __attribute__((constructor));
-            """
+	'global' : "",
 },
 'createInitializerForLibrary':{
-	'global' : """ 
-				static void sioxFinal();
-            static void sioxInit();
-            """
+	'global' : "",
 },
 'callLibraryFinalize':{
-	'after' : 'sioxFinal();'
+	'after' : '',
 },
 'callLibraryFinalizeBefore':{
-	'before' : 'sioxFinal();'
+	'before' : '',
 },
 'callLibraryInitialize':{
-	'before' : 'sioxInit();'
+	'before' : '',
 },
 # register_attribute
 #
@@ -69,9 +42,9 @@ template = {
 #			  attribute
 'register_attribute': {
 	'variables': 'AttributeVariable Domain Name StorageType',
-	'global': '''static siox_attribute * %(AttributeVariable)s;''',
-	'init': '''%(AttributeVariable)s = siox_ontology_register_attribute( "%(Domain)s", "%(Name)s", %(StorageType)s ); assert(%(AttributeVariable)s != NULL);''',
-    'before': '''''',
+	'global': '',
+	'init': '',
+    'before': '',
 	'after': '',
 	'cleanup': '',
 	'final': ''
@@ -85,25 +58,17 @@ template = {
 # Value: Pointer to the real value of the attribute
 'component_attribute_pointer': {
 	'variables': 'Attribute Value SpliceCode=',
-	'global': '''''',
-	'after': '''
-				%(SpliceCode)s 
-				assert( %(Attribute)s != NULL );
-				siox_component_set_attribute( global_component,  %(Attribute)s, %(Value)s);
-			''',
-    'before': '''''',
+	'global': '',
+	'after': '',
+    'before': '',
 	'cleanup': '',
 	'final': ''
 },
 'component_attribute': {
 	'variables': 'Attribute Value SpliceCode=',
-	'global': '''''',
-	'after': '''
-				%(SpliceCode)s 
-				assert( %(Attribute)s != NULL );
-				siox_component_set_attribute( global_component,  %(Attribute)s, &%(Value)s);
-			''',
-    'before': '''''',
+	'global': '',
+	'after': '',
+    'before': '',
 	'cleanup': '',
 	'final': ''
 },
@@ -116,8 +81,8 @@ template = {
 # MapName: The name for this map; defaults to activityHashTable_str
 'horizontal_map_create_str': {
 	'variables': 'MapName=activityHashTable_str',
-	'global': '''static GHashTable * %(MapName)s;''',
-    'init': '''%(MapName)s = g_hash_table_new(g_str_hash, g_str_equal); GRWLock lock_%(MapName)s;''',
+	'global': '',
+    'init': '',
 	'before': '',
 	'after': '',
 	'cleanup': '',
@@ -133,8 +98,8 @@ template = {
 # MapName: The name for this map; defaults to activityHashTable_int
 'horizontal_map_create_int': {
 	'variables': 'MapName=activityHashTable_int',
-	'global': '''static GHashTable * %(MapName)s;\nGRWLock lock_%(MapName)s;''',
-    'init': '''%(MapName)s = g_hash_table_new_full(g_direct_hash, g_direct_equal, NULL, free);''',
+	'global': '',
+    'init': '',
 	'before': '',
 	'after': '',
 	'cleanup': '',
@@ -142,8 +107,8 @@ template = {
 },
 'horizontal_map_create_size': {
 	'variables': 'MapName=activityHashTable_size',
-	'global': '''static GHashTable * %(MapName)s; GRWLock lock_%(MapName)s;''',
-    'init': '''%(MapName)s = g_hash_table_new_full(g_direct_hash, g_direct_equal, NULL, free);''',
+	'global': '',
+    'init': '',
 	'before': '',
 	'after': '',
 	'cleanup': '',
@@ -161,66 +126,31 @@ template = {
 # TimeStop: Stop time to be reported; defaults to NULL, which will draw a current time stamp
 'activity': {
 	'variables': 'Name=%(FUNCTION_NAME)s ComponentActivity=cv%(FUNCTION_NAME)s ComponentVariable=global ActivityVariable=sioxActivity',
-	'global': '''static siox_component_activity * %(ComponentActivity)s;''',
-	'init': '''%(ComponentActivity)s = siox_component_register_activity( %(ComponentVariable)s_uid, "%(Name)s" );''',
-    	'before': '''
-	    	assert(%(ComponentVariable)s_component);
-	    	assert(%(ComponentActivity)s);
-	    	siox_activity * %(ActivityVariable)s = siox_activity_begin( %(ComponentVariable)s_component, %(ComponentActivity)s );''',
-	   'beforeLast': '''siox_activity_start(%(ActivityVariable)s);''',
-	'after': '''
-			siox_activity_stop( %(ActivityVariable)s );''',
-	'cleanup': 'siox_activity_end( %(ActivityVariable)s );',
+	'global': '',
+	'init': '',
+    	'before': '',
+	   'beforeLast': '',
+	'after': '',
+	'cleanup': '',
 	'final': ''
 },
 # This template allows to inject an activity into a component in which it belongs to.
 'activityComponentSwitcher2BasedOnParent': {
 	'variables': 'Name=%(FUNCTION_NAME)s Key=unknown ComponentVariable1=global ComponentVariable2=global MapName1=activityHashTable_int MapName2=activityHashTable_int2 ActivityVariable=sioxActivity ActivityParentVar=parent',
-	'global': '''
-				static siox_component_activity * %(Name)s_%(ComponentVariable1)s;
-				static siox_component_activity * %(Name)s_%(ComponentVariable2)s;
-					''',
-	'init': '''
-	%(Name)s_%(ComponentVariable1)s = siox_component_register_activity( %(ComponentVariable1)s_uid, "%(Name)s" );
-	%(Name)s_%(ComponentVariable2)s = siox_component_register_activity( %(ComponentVariable2)s_uid, "%(Name)s" );''',
+	'global': '',
+	'init': '',
 
-    	'before': '''
-    		g_rw_lock_reader_lock(& lock_%(MapName1)s); 
-			siox_activity_ID * %(ActivityParentVar)s = (siox_activity_ID*) g_hash_table_lookup( %(MapName1)s, GINT_TO_POINTER(%(Key)s) ); 
-			g_rw_lock_reader_unlock(& lock_%(MapName1)s);
-			// now decide to which component the activity parent belongs to
-			// we expect it is likely to belong to the first component
-			siox_activity * %(ActivityVariable)s = NULL;
-			
-			if ( %(ActivityParentVar)s == NULL ){
-				// check if it belongs to the other component
-				g_rw_lock_reader_lock(& lock_%(MapName2)s); 
-			   %(ActivityParentVar)s = (siox_activity_ID*) g_hash_table_lookup( %(MapName2)s, GINT_TO_POINTER(%(Key)s) ); 
-				g_rw_lock_reader_unlock(& lock_%(MapName2)s);
-
-				if( %(ActivityParentVar)s != NULL ){
-					%(ActivityVariable)s = siox_activity_begin( %(ComponentVariable2)s_component, %(Name)s_%(ComponentVariable2)s );					
-				}else{
-				   // unknown so we keep the first component
-					%(ActivityVariable)s = siox_activity_begin( %(ComponentVariable1)s_component, %(Name)s_%(ComponentVariable1)s );
-				}
-			}else{
-				%(ActivityVariable)s = siox_activity_begin( %(ComponentVariable1)s_component, %(Name)s_%(ComponentVariable1)s );
-			}
-
-	    	
-	    	siox_activity_link_to_parent( %(ActivityVariable)s, %(ActivityParentVar)s );
-	    	''',
-	   'beforeLast': '''siox_activity_start(%(ActivityVariable)s);''',
-	'after': '''siox_activity_stop( %(ActivityVariable)s );''',
+    	'before': '',
+	   'beforeLast': '',
+	'after': '',
 	'cleanup': 'siox_activity_end( %(ActivityVariable)s );',
 },
 'guard': {
 	'variables': 'Name=guard FC=%(FUNCTION_CALL)s ComponentVariable=global',
-	'global': '''''',
-	'init': '''''',
-	'before': '''\tif( siox_monitoring_namespace_deactivated() && %(ComponentVariable)s_layer_initialized && siox_is_monitoring_enabled() ){ ''',
-	'after': '''''',
+	'global': '',
+	'init': '',
+	'before': '',
+	'after': '',
 	'cleanup': '',
 	'cleanupLast': '\t}else{\n\t\t%(FC)s \t}',
 	'final': ''
@@ -236,31 +166,31 @@ template = {
 # Activity: The activity; defaults to sioxActivity
 'activity_attribute': {
 	'variables': 'Attribute Value Activity=sioxActivity',
-	'before': 'siox_activity_set_attribute( %(Activity)s, %(Attribute)s, &%(Value)s );',
+	'before': '',
 },
 'activity_attribute_pointer': {
 	'variables': 'Attribute Value Activity=sioxActivity',
-	'before': 'siox_activity_set_attribute( %(Activity)s, %(Attribute)s, %(Value)s );',
+	'before': '',
 },
 'activity_attribute_str': {
 	'variables': 'Attribute Value Activity=sioxActivity',
-	'before': 'siox_activity_set_attribute( %(Activity)s, %(Attribute)s, %(Value)s );',
+	'before': '',
 },
 'activity_attribute_u32': {
 	'variables': 'Attribute Value Activity=sioxActivity',
-	'before': ' {uint32_t u64_tmp_1 = (uint32_t) %(Value)s ; \n\tsiox_activity_set_attribute( %(Activity)s, %(Attribute)s, & u64_tmp_1 );}',
+	'before': '',
 },
 'activity_attribute_late': {
 	'variables': 'Attribute Value Activity=sioxActivity',
-	'after': 'siox_activity_set_attribute( %(Activity)s, %(Attribute)s, &%(Value)s );',
+	'after': '',
 },
 'activity_attribute_late_pointer': {
 	'variables': 'Attribute Value Activity=sioxActivity',
-	'after': 'siox_activity_set_attribute( %(Activity)s, %(Attribute)s, %(Value)s );',
+	'after': '',
 },
 'activity_attribute_late_u32': {
 	'variables': 'Attribute Value Activity=sioxActivity',
-	'after': ' {uint32_t u64_tmp_1 = (uint32_t) %(Value)s ; \n\tsiox_activity_set_attribute( %(Activity)s, %(Attribute)s, & u64_tmp_1 );}',
+	'after': '',
 },
 # horizontal_map_put_int
 #
@@ -273,39 +203,28 @@ template = {
 # Activity: The activity; defaults to sioxActivity
 'horizontal_map_put_int': {
 	'variables': 'Key MapName=activityHashTable_int Activity=sioxActivity',
-	'global': '''''',
-	'init': '''''',
+	'global': '',
+	'init': '',
 	'before': '',
-    'after': '''g_rw_lock_writer_lock(& lock_%(MapName)s); 
-    	g_hash_table_insert( %(MapName)s, GINT_TO_POINTER(%(Key)s), siox_activity_get_ID(%(Activity)s) );
-    	g_rw_lock_writer_unlock(& lock_%(MapName)s);''',
+    'after': '',
 	'cleanup': '',
 	'final': ''
 },
 'horizontal_map_put_int_ID': {
 	'variables': 'Key MapName=activityHashTable_int ActivityID=sioxActivityID',
-	'global': '''''',
-	'init': '''''',
+	'global': '',
+	'init': '',
 	'before': '',
-    'after': '''
-	if ( %(ActivityID)s != NULL ){
-    	siox_activity_ID * nID = malloc(sizeof(siox_activity_ID));
-    	memcpy(nID, %(ActivityID)s, sizeof(siox_activity_ID));
-    	g_rw_lock_writer_lock(& lock_%(MapName)s);
-    	g_hash_table_insert( %(MapName)s, GINT_TO_POINTER(%(Key)s), nID );
-    	g_rw_lock_writer_unlock(& lock_%(MapName)s);
-	}''',
+    'after': '',
 	'cleanup': '',
 	'final': ''
 },
 'horizontal_map_put_size': {
 	'variables': 'Key MapName=activityHashTable_size Activity=sioxActivity',
-	'global': '''''',
-	'init': '''''',
+	'global': '',
+	'init': '',
 	'before': '',
-    'after': '''g_rw_lock_writer_lock(& lock_%(MapName)s); 
-    	g_hash_table_insert( %(MapName)s, GSIZE_TO_POINTER(%(Key)s), siox_activity_get_ID(%(Activity)s) );
-    	g_rw_lock_writer_unlock(& lock_%(MapName)s);''',
+    'after': '',
 	'cleanup': '',
 	'final': ''
 },
@@ -320,14 +239,10 @@ template = {
 # Activity: The activity; defaults to sioxActivity
 'horizontal_map_put_str': {
 	'variables': 'Key MapName=activityHashTable_str Activity=sioxActivity',
-	'global': '''''',
-	'init': '''''',
+	'global': '',
+	'init': '',
 	'before': '',
-    'after': '''
-    	g_rw_lock_writer_lock(& lock_%(MapName)s);
-    	g_hash_table_insert( %(MapName)s, %(Key)s, siox_activity_get_ID(%(Activity)s) );
-    	g_rw_lock_writer_unlock(& lock_%(MapName)s);
-    	''',
+    'after': '',
 	'cleanup': '',
 	'final': ''
 },
@@ -342,27 +257,19 @@ template = {
 # MapName: The map to be used; defaults to activityHashTable_int
 'horizontal_map_remove_int': {
 	'variables': 'Key MapName=activityHashTable_int Activity=sioxActivity',
-	'global': '''''',
-	'init': '''''',
+	'global': '',
+	'init': '',
 	'before': '',
-    'after': '''
-    	g_rw_lock_writer_lock(& lock_%(MapName)s);
-    	g_hash_table_remove( %(MapName)s, GINT_TO_POINTER(%(Key)s) );
-    	g_rw_lock_writer_unlock(& lock_%(MapName)s);
-    	''',
+    'after': '',
 	'cleanup': '',
 	'final': ''
 },
 'horizontal_map_remove_size': {
 	'variables': 'Key MapName=activityHashTable_size Activity=sioxActivity',
-	'global': '''''',
-	'init': '''''',
+	'global': '',
+	'init': '',
 	'before': '',
-    'after': '''
-    	g_rw_lock_writer_lock(& lock_%(MapName)s);
-    	g_hash_table_remove( %(MapName)s, GSIZE_TO_POINTER(%(Key)s) );
-    	g_rw_lock_writer_unlock(& lock_%(MapName)s);
-    	''',
+    'after': '',
 	'cleanup': '',
 	'final': ''
 },
@@ -377,14 +284,10 @@ template = {
 # MapName: The map to be used; defaults to activityHashTable_int
 'horizontal_map_remove_str': {
 	'variables': 'Key MapName=activityHashTable_str Activity=sioxActivity',
-	'global': '''''',
-	'init': '''''',
+	'global': '',
+	'init': '',
 	'before': '',
-    'after': '''
-    	g_rw_lock_writer_lock(& lock_%(MapName)s);
-    	g_hash_table_remove( %(MapName)s, %(Key)s );
-    	g_rw_lock_writer_unlock(& lock_%(MapName)s);
-    	''',
+    'after': '',
 	'cleanup': '',
 	'final': ''
 },
@@ -399,23 +302,16 @@ template = {
 # The parent may be NULL in some cases
 'activity_link_int': {
 	'variables': 'Key MapName=activityHashTable_int Activity=sioxActivity',
-	'global': '''''',
-	'init': '''''',
-	'before': '''
-		{
-		g_rw_lock_reader_lock(& lock_%(MapName)s); 
-		siox_activity_ID * Parent = (siox_activity_ID*) g_hash_table_lookup( %(MapName)s, GINT_TO_POINTER(%(Key)s) );
-		g_rw_lock_reader_unlock(& lock_%(MapName)s);
-        siox_activity_link_to_parent( %(Activity)s, Parent ); 
-      }
-			  ''',
+	'global': '',
+	'init': '',
+	'before': '',
 	'cleanup': '',
 	'final': ''
 },
 'activity_link_size': {
 	'variables': 'Key MapName=activityHashTable_size Activity=sioxActivity',
-	'global': '''''',
-	'init': '''''',
+	'global': '',
+	'init': '',
 	'before': '''
 		g_rw_lock_reader_lock(& lock_%(MapName)s);
 		siox_activity_ID * Parent = (siox_activity_ID*) g_hash_table_lookup( %(MapName)s, GSIZE_TO_POINTER(%(Key)s) );
@@ -442,7 +338,7 @@ template = {
 # Link an already known parent
 'activity_link_parent': {
 	'variables': 'Parent=Parent Activity=sioxActivity',
-	'before': '''siox_activity_link_to_parent( %(Activity)s, %(Parent)s ); ''',
+	'before': '',
 },
 
 # activity_link_str
@@ -455,12 +351,10 @@ template = {
 # Activity: Activity to be linked; defaults to sioxActivity
 'activity_link_str': {
 	'variables': 'Key MapName=activityHashTable_str Activity=sioxActivity',
-	'global': '''''',
-	'init': '''''',
-    'before': '''''',
-	'after': '''g_rw_lock_reader_lock(& lock_%(MapName)s); siox_activity_ID * Parent = (siox_activity_ID*) g_hash_table_lookup( %(MapName)s, %(Key)s ); g_rw_lock_reader_unlock(& lock_%(MapName)s);
-    	siox_activity_link_to_parent( %(Activity)s, Parent ); 
-			  ''',
+	'global': '',
+	'init': '',
+    'before': '',
+	'after': '',
 	'cleanup': '',
 	'final': ''
 },
@@ -475,9 +369,9 @@ template = {
 # Activity: The Activity to be reported; defaults to sioxActivity
 'error': {
 	'variables': 'Condition="ret<0" Error=ret Activity=sioxActivity',
-	'global': '''''',
-	'init': '''''',
-    	'before': '''''',
+	'global': '',
+	'init': '',
+    	'before': '',
 	'after': '''if ( %(Condition)s ){
                       siox_activity_report_error( %(Activity)s, %(Error)s );
                       siox_activity_stop(%(Activity)s);
@@ -489,9 +383,9 @@ template = {
 },
 'errorErrno': {
         'variables': 'Condition="ret<0" Activity=sioxActivity',
-        'global': '''''',
-        'init': '''''',
-        'before': '''''',
+        'global': '',
+        'init': '',
+        'before': '',
         'after': ''' int errsv = errno;
 		    if ( %(Condition)s ){
                       siox_activity_report_error( %(Activity)s, errsv );
@@ -518,9 +412,9 @@ template = {
 # TargetIID: The instance id of the target machine
 'remote_call_start': {
 	'variables': 'RemoteCallVariable activity TargetNode TargetUID TargetIID',
-	'global': '''''',
-	'init': '''siox_remote_call * %(RemoteCallVariable)s;\n''',
-    'before': '''%(RemoteCallVariable)s = siox_remote_call_setup( %(activity)s, %(targetNode)s, %(targetUID)s, %(TargetIID)s );''',
+	'global': '',
+	'init': '',
+    'before': '',
 	'after': '',
 	'cleanup': '',
 	'final': ''
@@ -534,9 +428,9 @@ template = {
 # Value: The actual value to be sent
 'remote_call_attribute': {
 	'variables': 'RemoteCall Attribute Value',
-	'global': '''''',
-	'init': '''''',
-    'before': '''siox_remote_call_set_attribute( %(RemoteCall)s, %(Attribute)s, (void *) &%(Value)s );''',
+	'global': '',
+	'init': '',
+    'before': '',
 	'after': '',
 	'cleanup': '',
 	'final': ''
@@ -550,9 +444,9 @@ template = {
 # Activity: The activity; defaults to sioxActivity
 'remote_call_received': {
 	'variables': 'RemoteCall',
-	'global': '''''',
-	'init': '''''',
-    'before': '''siox_remote_call_start( %(RemoteCall)s );''',
+	'global': '',
+	'init': '',
+    'before': '',
 	'after': '',
 	'cleanup': '',
 	'final': ''
@@ -566,7 +460,7 @@ template = {
 	'variables': 'PROGRAMCODE',
 	'global': '',
 	'init': '',
-	'before': '%(PROGRAMCODE)s',
+	'before': '',
 	'after': '',
 	'cleanup': '',
 	'final': ''
@@ -590,14 +484,14 @@ template = {
 	'global': '',
 	'init': '',
 	'before': '',
-	'after': '%(PROGRAMCODE)s',
+	'after': '',
 	'cleanup': '',
 	'final': ''
 },
 
 'splice_once': {
 	'variables': 'PROGRAMCODE',
-	'global': '%(PROGRAMCODE)s',
+	'global': '',
 	'init': '',
 	'before': '',
 	'after': '',
@@ -608,7 +502,7 @@ template = {
 
 'include': {
 	'variables': 'what',
-	'global': '#include "%(what)s"',
+	'global': '',
 	'init': '',
 	'before': '',
 	'after': '',
@@ -620,7 +514,7 @@ template = {
         'global': '',
         'init': '',
         'before': '',
-        'after': 'printf("In: "); printf(__FUNCTION__); printf("\\n");\n',
+        'after': '',
         'cleanup': '',
         'final': ''
 },
