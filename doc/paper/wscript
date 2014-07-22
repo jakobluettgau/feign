@@ -1,0 +1,20 @@
+#! /usr/bin/env python
+# encoding: utf-8
+
+def configure(ctx):
+    ctx.load('tex')
+    if not ctx.env.PDFLATEX:
+        ctx.fatal('could not find the program pdflatex')
+    ctx.env.append_value('PDFLATEXFLAGS','-shell-escape')
+    pass
+
+def build(ctx):
+    # using shell-escape to generate pdfs from eps that reside outside of the
+    # thesis directory (latex is somehow dislikes that condition)
+	obj = ctx(features = 'tex', type='pdflatex', source = 'paper.tex', using='-shell-escape')
+	obj = ctx(features = 'tex', type='pdflatex', source = 'paper_short.tex', using='-shell-escape')
+    
+    # generate the titlepage seperately?
+	#obj = ctx(features = 'tex', type='pdflatex', source = 'titlepage.tex', using='-shell-escape')
+
+
