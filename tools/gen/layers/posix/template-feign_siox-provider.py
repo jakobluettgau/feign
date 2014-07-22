@@ -204,7 +204,7 @@ template = {
 'horizontal_map_put_int': {
 	'variables': 'Key MapName=activityHashTable_int Activity=sioxActivity',
 	'global': '',
-	'init': '',
+	'init': '''d->ret = a->errorValue();''',
 	'before': '',
     'after': '',
 	'cleanup': '',

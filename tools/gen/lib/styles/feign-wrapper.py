@@ -32,7 +32,18 @@ int issued = 3;	// 3 will be first issued by this replayer
 std::map<int,int> fds;
 std::map<int,FILE> streams;""", file=output)
 
-        # declare function prototypes
+        # create global template code
+        print("// GENERATED FROM TEMPLATE GLOBAL \n", file=output)
+        for function in functionList:
+            functionVariables = self.functionVariables(function)
+
+            for templ in function.usedTemplateList:
+                outputString = templ.output('global', functionVariables)
+                if outputString != '':
+                    print(outputString, end='\n', sep='', file=output)
+        print("// GENERATED FROM TEMPLATE GLOBAL END\n", file=output)
+
+
         for function in functionList:
             functionVariables = self.functionVariables(function)
             # write function signature

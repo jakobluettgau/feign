@@ -184,7 +184,6 @@ Plugin * init() {
 
     posix_activity * sub_activity = (posix_activity *) malloc(sizeof(posix_activity));
 
-
     void * data;
 
     switch ( type ) { \n"""
@@ -194,7 +193,13 @@ Plugin * init() {
             functionVariables = self.functionVariables(function)
            
             str += "\t"*2 + """case POSIX_%s:\n""" % (function.name)
-            
+            str += "\t"*2 + "{\n"
+            ###
+            str += "\t"*3 + "posix_%s_data * d = (posix_%s_data *) malloc(sizeof(posix_%s_data));\n" % (function.name, function.name, function.name)
+            #str += "\t"*3 + "posix_%s_data * d = (posix_%s_data*) data;\n" % (function.name, function.name)
+
+            str += "\t"*3 + "data = (void *) d; \n"
+        
             # insert template code for creating feign activities
             str += "\t"*3 + "// GENERATED FROM TEMPLATE\n"
             for templ in function.usedTemplateList:
@@ -204,13 +209,15 @@ Plugin * init() {
             str += "\t"*3 + "// GENERATED FROM TEMPLATE END\n"
 
             str += "\t"*3 + """DEBUG("create %s()");\n""" % (function.name)
+            ###
+            str += "\t"*2 + "}\n"
             str += "\t"*3 + """break;\n\n"""
 
         str += """
     }
 
     sub_activity->type = type;
-    //sub_activity->data = data;
+    sub_activity->data = data;
 
     activity->layer = layer_id;
     activity->offset = offset;

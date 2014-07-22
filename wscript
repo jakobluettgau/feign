@@ -22,11 +22,17 @@ feign_plugins = [
 
 def options(ctx):
     # options to work with other tools
+    ctx.add_option('--debug', action='store', default=False, help='enable debugging')
+    ctx.add_option('--doc', action='store', default='', help='enable documentation')
+    ctx.add_option('--production', action='store', default=False, help='enable debugging')
     ctx.add_option('--siox', action='store', default=False, help='path to siox repository')
-    # options for features
+    # options for features (probably not going to work)
     #ctx.add_option('+mpi', action='store', dest="feat_mpi", default=False, help='compile with mpi support')
     #ctx.add_option('+threads', action='store', dest="feat_threads", default=False, help='compile with multi-threading support')
     # fetch options recursively
+
+
+
     for d in dirs:
         ctx.recurse(d)
     pass
@@ -36,18 +42,26 @@ def configure(ctx):
     ctx.env.append_value('INCLUDES', [ctx.path.abspath()+'/include'])
     # set siox environment based on --siox option
     ctx.env.SIOX = ctx.options.siox
+
+    if ctx.options.doc:
+        dirs.append("doc")
+
     # recursivley configure subdirectories
     for d in dirs:
         ctx.recurse(d)
     pass
 
 def build(ctx):
+
+    if ctx.options.doc:
+        dirs.append("doc")
+
     for d in dirs:
         ctx.recurse(d)
     #ctx.recurse('docs')
     pass
 
-def docs(ctx):
+def doc(ctx):
     for d in dirs:
         ctx.recurse(d)
     pass
@@ -58,6 +72,6 @@ def plugins(ctx):
     print "To generate plugins copy and run the following commands:"
     for p in feign_plugins:
        # ctx.recurse(d)
-       cmd = "export ORIGIN=$PWD && cd %s && make export && cd $ORIGIN" % (p)
+       cmd = "export ORIGIN=$PWD && cd %s && make siox && cd $ORIGIN" % (p)
        print cmd
     pass

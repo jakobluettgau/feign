@@ -98,7 +98,7 @@ template = {
 # MapName: The name for this map; defaults to activityHashTable_int
 'horizontal_map_create_int': {
 	'variables': 'MapName=activityHashTable_int',
-	'global': '',
+	'global': 'std::map<int,int> %(MapName)s;',
     'init': '',
 	'before': '',
 	'after': '',
@@ -206,9 +206,9 @@ template = {
 	'global': '',
 	'init': '''
 	// get issued filehandle, increment and store association to map
-	int fd = issued;
+	//int fd_%(MapName)s = issued;
 	issued++;
-	fds[d->ret] = fd; 
+	%(MapName)s[d->ret] = issued; 
 	''',
 	'before': '',
     'after': '',
