@@ -8,6 +8,7 @@ HEADER=posix-low-level-io-feign.h
 HEADER=posix-low-level-io.h
 #TEMPLATE=../../template.py
 TEMPLATE=template-feign.py
+TEMPLATE_SIOX_PROVIDER=template-feign_siox-provider.py
 
 # path to siox-trace-reader
 SIOX_TR=~/wr/siox/src/tools/TraceReader/feign_siox-provider
@@ -19,12 +20,12 @@ all:
 	../../siox-skeleton-builder.py -s feign-wrapper          -t ${TEMPLATE} -o ${OUTPUT_PATH}/wrapper.cpp       ${HEADER}
 	../../siox-skeleton-builder.py -s feign-wrapper-header   -t ${TEMPLATE} -o ${OUTPUT_PATH}/wrapper.h         ${HEADER}
 	../../siox-skeleton-builder.py -s feign-replayer         -t ${TEMPLATE} -o ${OUTPUT_PATH}/replayer.cpp      ${HEADER}
-	../../siox-skeleton-builder.py -s feign-siox-provider    -t ${TEMPLATE} -o ${OUTPUT_PATH}/siox-provider.cpp ${HEADER}
+	../../siox-skeleton-builder.py -s feign-siox-provider    -t ${TEMPLATE_SIOX_PROVIDER} -o ${OUTPUT_PATH}/siox-provider.cpp ${HEADER}
 	../../siox-skeleton-builder.py -s feign-precreator       -t ${TEMPLATE} -o ${OUTPUT_PATH}/precreator.cpp    ${HEADER}
 	# dlsym instrumenter for reference
 	../../siox-skeleton-builder.py -s dlsym -t ../../template.py -o ${OUTPUT_PATH}/reference_instrumented.c		${HEADER}
 	# add additional files
-	cp feign-*-helper.h ${OUTPUT_PATH}/
+	cp feign-extras/feign-*-helper.h ${OUTPUT_PATH}/
 	cp feign-extras/wscript ${OUTPUT_PATH}/
 	
 

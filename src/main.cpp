@@ -32,7 +32,7 @@ int load_plugins(gchar ** list, int(*load_plugin)(char const *)) {
 	}
 	printf("Option: count(plugin) = %d\n", plugin_count);
 
-	return 0;
+	return plugin_count;
 }
 
 
@@ -57,10 +57,17 @@ int main(int argc, char *argv[])
 	// keep everything nice and tidy
 	printf("\n");
 
-	// load plugins from arguments
-	load_plugins(plugins,        plugin_manager_load_plugin);
-	load_plugins(plugins_global, plugin_manager_load_plugin_global);
+	
+	int num_plugins_loaded = 0;
 
+	// load plugins from arguments
+	num_plugins_loaded += load_plugins(plugins,        plugin_manager_load_plugin);
+	num_plugins_loaded += load_plugins(plugins_global, plugin_manager_load_plugin_global);
+
+	if ( num_plugins_loaded <= 0 ) {
+		printf("\nThere is nothing to do!\n");
+		return 0;
+	}
 
 
 	if ( lookahead < 1 ) {

@@ -204,12 +204,7 @@ template = {
 'horizontal_map_put_int': {
 	'variables': 'Key MapName=activityHashTable_int Activity=sioxActivity',
 	'global': '',
-	'init': '''
-	// get issued filehandle, increment and store association to map
-	int fd = issued;
-	issued++;
-	fds[d->ret] = fd; 
-	''',
+	'init': '',
 	'before': '',
     'after': '',
 	'cleanup': '',

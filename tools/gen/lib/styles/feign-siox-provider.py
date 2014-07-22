@@ -129,6 +129,49 @@ Plugin * init() {
         return str
 
 
+
+    ###########################################################################
+    # create_subactivity
+    ###########################################################################
+    def generate_create_subactivity(self, functionList):
+        str = "// create_activity\n"
+        
+        str += """Activity * create_activity(long offset, int type) {
+    int layer_id = 13;
+    Activity * activity = (Activity *) malloc(sizeof(Activity));
+
+    posix_activity * sub_activity = (posix_activity *) malloc(sizeof(posix_activity));
+
+
+    void * data;
+
+    switch ( type ) { \n"""
+
+        # declare function prototypes
+        for function in functionList:
+            functionVariables = self.functionVariables(function)
+            # write function signature
+
+            str += "\t"*2 + """case POSIX_%s:\n""" % (function.name)
+            str += "\t"*3 + """DEBUG("create %s()");\n""" % (function.name)
+            str += "\t"*3 + """break;\n\n"""
+
+        str += """
+    }
+
+    sub_activity->type = type;
+    //sub_activity->data = data;
+
+    activity->layer = layer_id;
+    activity->offset = offset;
+    activity->data = sub_activity;
+    activity->provider = plugin.instance_id;
+
+    return activity;
+}"""
+        return str
+
+
     ###########################################################################
     # create_activity
     ###########################################################################
@@ -149,9 +192,17 @@ Plugin * init() {
         # declare function prototypes
         for function in functionList:
             functionVariables = self.functionVariables(function)
-            # write function signature
-
+           
             str += "\t"*2 + """case POSIX_%s:\n""" % (function.name)
+            
+            # insert template code for creating feign activities
+            str += "\t"*3 + "// GENERATED FROM TEMPLATE\n"
+            for templ in function.usedTemplateList:
+                outputString = templ.output('init', functionVariables)
+                if outputString != '':
+                    str += "\t"*3 + outputString + '\n'
+            str += "\t"*3 + "// GENERATED FROM TEMPLATE END\n"
+
             str += "\t"*3 + """DEBUG("create %s()");\n""" % (function.name)
             str += "\t"*3 + """break;\n\n"""
 
