@@ -178,7 +178,7 @@ Plugin * init() {
     def generate_create_activity(self, functionList):
         str = "// create_activity\n"
         
-        str += """Activity * create_activity(long offset, int type) {
+        str += """Activity * create_activity(long offset, int type, monitoring::Activity * a) {
     int layer_id = 13;
     Activity * activity = (Activity *) malloc(sizeof(Activity));
 
@@ -254,7 +254,7 @@ Plugin * init() {
             # create match string
             str += """\n\t// %s
 	if ( str_%s.compare(activity_name) == 0) {
-		activity = create_activity(0, POSIX_%s);
+		activity = create_activity(0, POSIX_%s, a);
 	} else\n""" % (function.name, function.name, function.name)
   
         str += """\t{\n\t\t// no match \n\t}\n """
@@ -292,7 +292,7 @@ jump:
     if( a == nullptr )
         return NULL;
 
-    //tr2->printActivity( a );
+    tr2->printActivity( a );
 
     activity = convert_siox_to_feign(a);
     delete(a);

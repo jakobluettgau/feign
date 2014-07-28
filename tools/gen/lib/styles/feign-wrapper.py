@@ -15,6 +15,7 @@ class Style(skeletonBuilder.Writer):
 
 
         templateParameters["includes"].append("<map>")
+        templateParameters["includes"].append("<iostream>")
         templateParameters["includes"].append("\"wrapper.h\"")
         templateParameters["includes"].append("\"datatypes.h\"")
 
@@ -42,6 +43,17 @@ std::map<int,FILE> streams;""", file=output)
                 if outputString != '':
                     print(outputString, end='\n', sep='', file=output)
         print("// GENERATED FROM TEMPLATE GLOBAL END\n", file=output)
+
+
+        print("""
+void dump_map() {
+	printf("dump_map()\\n");
+	for (auto it=activityHashTable_int.begin(); it!=activityHashTable_int.end(); ++it) {
+        std::cout << " dm: " << it->first << " => " << it->second << '\\n';
+	}
+	printf("dump_map() end \\n");
+}
+                """, file=output)
 
 
         for function in functionList:

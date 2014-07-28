@@ -23,6 +23,8 @@ class Style(skeletonBuilder.Writer):
         for match in templateParameters["includes"]:
             print('#include ', match, end='\n', file=output)
         print('\n', file=output)   
+        
+        print('void dump_map();\n\n', file=output)   
 
         # declare function prototypes
         for function in functionList:
