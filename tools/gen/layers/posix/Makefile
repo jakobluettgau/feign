@@ -40,8 +40,9 @@ siox: export
 	cp feign-extras/CMakeLists.txt ${SIOX_TR}
 	cp ${OUTPUT_PATH}/siox-provider.cpp ${SIOX_TR}/feign_siox-provider.cpp
 	# You may want to apply the patch to TraceReader CMakeLists.txt manually:
-	# patch ${SIOX_TR}/../CMakeLists.txt < feign-extras/cmake-add-subdir.patch
-	# patch ${SIOX_TR}/../TraceReader.hpp < feign-extras/TraceReader-declare-s-public.patch
+	# patch ${SIOX_TR}/../CMakeLists.txt < feign-extras/patchfiles/cmake-add-subdir.patch
+	# patch ${SIOX_TR}/../TraceReader.hpp < feign-extras/patchfiles/TraceReader.hpp-getAttributeValueByName.patch
+	# patch ${SIOX_TR}/../TraceReader.cpp < feign-extras/patchfiles/TraceReader.cpp-getAttributeValueByName.patch
 
 # clear <feign>/plugin/posix folder and create waf compatible plugin
 export: all

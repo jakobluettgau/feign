@@ -18,6 +18,7 @@ class Style(skeletonBuilder.Writer):
         templateParameters["includes"].append("<string>")
         templateParameters["includes"].append("<stdlib.h>")
         templateParameters["includes"].append("<stdio.h>")
+        templateParameters["includes"].append("<C/siox.h>")
         templateParameters["includes"].append("\"../TraceReader.hpp\"")
 
         # write all needed includes

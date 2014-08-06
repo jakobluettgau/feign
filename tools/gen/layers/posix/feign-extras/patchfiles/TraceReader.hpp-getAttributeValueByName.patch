@@ -1,13 +1,21 @@
 --- ../TraceReader.backup/TraceReader.hpp	2014-07-15 17:25:32.665452949 +0200
-+++ TraceReader.hpp	2014-07-16 22:53:44.077162588 +0200
-@@ -54,14 +54,16 @@
++++ TraceReader.hpp	2014-08-04 20:42:14.266099562 +0200
+@@ -25,6 +25,7 @@
+ 		Activity * nextActivity();
+ 
+ 		void printActivity( Activity * activity );
++		void getActivityAttribute( Activity * activity, const char * attributeName, void * buf );
+ 
+ 		bool printHostname = false;
+ 
+@@ -54,14 +55,16 @@
  				delete(t);
  			}			
  		}
+-	private:
 +
 +		SystemInformationGlobalIDManager * s = nullptr;
 +
- 	private:
  		AssociationMapper * a = nullptr;
  		Ontology * o = nullptr;
 -		SystemInformationGlobalIDManager * s = nullptr;
@@ -15,6 +23,7 @@
  		ActivitySerializationPlugin * activityDeserializer;
  
  		void strattribute( const Attribute & a, stringstream & s ) throw( NotFoundError );
++		bool strattribute_compare( const Attribute & a, const char* name ) throw( NotFoundError );
  };
  
 -#endif

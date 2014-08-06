@@ -1,0 +1,97 @@
+--- ../TraceReader.backup/TraceReader.cpp	2014-07-15 17:25:32.666452930 +0200
++++ TraceReader.cpp	2014-08-06 15:42:46.225560415 +0200
+@@ -124,6 +124,27 @@
+ 	}
+ }
+ 
++bool TraceReader::strattribute_compare( const Attribute & a, const char* attributeName  ) throw( NotFoundError )
++{
++	stringstream s;
++
++	OntologyAttributeFull oa = o->lookup_attribute_by_ID( a.id );
++	s << oa.domain << "/" << oa.name << "=";
++	
++	//if( a.value.type() == VariableDatatype::Type::STRING){
++	//	s << '"' << a.value << '"' ;
++	//}else{
++	//	s << a.value ;
++	//}
++	
++	if ( s == attributeName ) {
++		return true;
++	} else {
++		return false;
++	}
++}
++
++
+ 
+ void TraceReader::printActivity( Activity * a )
+ {
+@@ -170,6 +191,59 @@
+ }
+ 
+ 
++
++void TraceReader::getActivityAttribute( Activity * a, const char * attributeName, void * buf )
++{
++
++
++//
++//	stringstream str;
++//	try {
++//		
++//		strdelta( a->time_stop() - a->time_start(), str );
++//		if( printHostname )
++//			str << " " << s->lookup_node_hostname( a->aid().cid.pid.nid );
++//
++//		str  << " " << a->aid() << " ";
++//
++//		UniqueInterfaceID uid = s->lookup_interface_of_activity( a->ucaid() );
++//
++//		str << s->lookup_interface_name( uid ) << " ";
++//		str << s->lookup_interface_implementation( uid ) << " ";
++//
++//		str << s->lookup_activity_name( a->ucaid() ) << "(";
++//		for( auto itr = a->attributeArray().begin() ; itr != a->attributeArray().end(); itr++ ) {
++//			if( itr != a->attributeArray().begin() ) {
++//				str << ", ";
++//			}
++//			strattribute( *itr, str );
++//		}
++//		str << ")";
++//		str << " = " << a->errorValue();
++//
++//		if( a->parentArray().begin() != a->parentArray().end() ) {
++//			str << " ";
++//			for( auto itr = a->parentArray().begin(); itr != a->parentArray().end(); itr++ ) {
++//				if( itr != a->parentArray().begin() ) {
++//					str << ", ";
++//				}
++//				str << *itr;
++//			}
++//		}
++//
++//		cout << str.str() << endl;
++//
++//	} catch( NotFoundError & e ) {
++//		cerr << "Error while parsing activity! Parsed so far: " << str.str() << endl;
++//	}
++}
++
++
++
++
++
++
++
+ //try{
+ //   o->set_process_attribute(pid, a1, v2);
+ //   assert(false);
+@@ -180,4 +254,4 @@
+ //  assert(false);
+ // }catch(NotFoundError & e){
+ 
+-// }
+\ No newline at end of file
++// }
