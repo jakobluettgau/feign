@@ -1,40 +1,139 @@
 \documentclass[]{article}
 
-\usepackage[]{lipsum}
+% debug
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+% packages
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage[utf8]{inputenc}		   % handle special characters
+\usepackage[english]{babel}		   % typesetting rules for english
+\usepackage[fixlanguage]{babelbib} % 
+\usepackage{hyperref}
+\usepackage{titling}
 \usepackage[]{multicol}
 \usepackage[]{float}
 \usepackage[]{abstract}
+\usepackage{graphicx}
+\usepackage[showframe,hmarginratio=1:1,top=13mm,columnsep=20pt]{geometry}
 
-\usepackage[hmarginratio=1:1,top=13mm,columnsep=20pt]{geometry}
+% settings
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\selectlanguage{english}
+\selectbiblanguage{english}
+% non intrusive hyperref
+\hypersetup{colorlinks, citecolor=black, filecolor=black, linkcolor=black, urlcolor=black}
 
-\title{\textbf{Feign - Flexible Event Imitation Engine}} % Article title
+
+% meta
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\title{
+	\textbf{Feign: Laboratory for I/O Research}\\
+	Flexible Event Imitation Engine
+} % Article title
 
 \author{
-	{Jakob Luettgau}, {Julian Kunkel} \\
-	\normalsize{University of Hamburg} \\
-	\normalsize{Workgroup Scientific Computing} \\
+	\small{
+		{Jakob Luettgau},
+		{Julian Kunkel}
+	}\\
+	\footnotesize{University of Hamburg} \\
+	\footnotesize{Workgroup Scientific Computing} \\
 }
 \date{}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{document}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\maketitle
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{abstract}
+Quickly evaluating application performance across different systems is usually
+a very work intensive task that requires in dept knowledge of the original and
+the target systems especially when it comes to evaluating parallel software.
+\emph{Feign} aims to be a extendible trace replay solution for parallel
+application traces that supports arbitrary software and library layers. The
+tool abstracts and streamlines the replay process while allowing plugins to
+provide, manipulate and interpret the trace data.  Through these plugins it
+becomes possible to retract and add optimization or apply other systematic
+changes to achieve meaningful replay.
+\end{abstract}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Introduction}
+\label{sec:introduction}
 
-	\maketitle
+Today most high performance computers are cluster computers \cite{Top500}.
+Cluster computers introduce complexity on many levels because of the variety of
+different technologies they utilize. This includes not only hardware and
+software but also topologies and they are combined. That is because of the
+different demands characteristics of scientific applications as described by
+the thirteen dwarfs\cite{Asanovic2006}.
 
-	\begin{abstract}
-		Quickly evaluating application performance accross different systems
-		is usually a very work intensive task that also requires indept 
-		knowledge of original and target systems. 
-	\end{abstract}
-
-	\begin{multicols}{2}
-		
-		\lipsum[2-3]
-		\lipsum[2-3]
-		\lipsum[2-3]
-		\lipsum[2-3]
+Storage and network technologies are common bottlenecks.
 
 
-	\end{multicols}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Related Work}
+\label{sec:related}
 
+While there is no lack of sequential replayers, there is not many tools available
+in the domain of parallel computers. Also the tools that are publicly available
+are not modular and hard to extend. But a monolitic solutions is impractical
+when it comes to meet the diverse demands of parallel systems.
+
+It is also important to realize that 
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Flexible Event Imitation}
+\label{sec:evaluation}	
+
+
+\begin{figure*}
+	\centering
+	\includegraphics[width=\linewidth]{../../../doc/assets/workflow_timecritical}
+	\caption{The activity pipeline established by \emph{Feign} populated with different plugins (grey).}
+	\label{fig:}
+\end{figure*}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\linewidth]{../../../doc/assets/components}
+	\caption{The \emph{Feign}-API and how plugins can interact with the core components.}
+	\label{fig:}
+\end{figure}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Virtual Laboratory}
+\label{sec:evaluation}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\linewidth]{../../../doc/assets/lab_siox_filters+results+input}
+	\caption{How to integrate \emph{Feign} into other applications as a virtual lab.}
+	\label{fig:}
+\end{figure}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Evaluation}
+\label{sec:evaluation}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Conclusion}
+\label{sec:conclusion}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% bibliography
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage
+\nocite{*}
+\bibliographystyle{apalike}
+\bibliography{bibliography}
+% appendix
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \end{document}

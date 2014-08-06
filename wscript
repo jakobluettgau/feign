@@ -13,6 +13,7 @@ from waflib import Build
 dirs = [
     "src",
     "plugins",
+    "doc",
     ]
 
 feign_plugins = [

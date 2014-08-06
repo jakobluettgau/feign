@@ -12,7 +12,7 @@ def build(ctx):
     # using shell-escape to generate pdfs from eps that reside outside of the
     # thesis directory (latex is somehow dislikes that condition)
 	obj = ctx(features = 'tex', type='pdflatex', source = 'paper.tex', using='-shell-escape')
-	obj = ctx(features = 'tex', type='pdflatex', source = 'paper_short.tex', using='-shell-escape')
+#	obj = ctx(features = 'tex', type='pdflatex', source = 'paper_brief.tex', using='-shell-escape')
     
     # generate the titlepage seperately?
 	#obj = ctx(features = 'tex', type='pdflatex', source = 'titlepage.tex', using='-shell-escape')
