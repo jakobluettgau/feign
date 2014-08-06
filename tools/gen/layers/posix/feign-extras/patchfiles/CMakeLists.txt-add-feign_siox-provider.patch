@@ -1,0 +1,17 @@
+--- ../TraceReader.reference/CMakeLists.txt	2014-07-15 17:25:32.667452910 +0200
++++ CMakeLists.txt	2014-08-06 16:47:30.458997928 +0200
+@@ -36,12 +36,14 @@
+ 	siox-monitoring-TopologyOntology
+ 	siox-monitoring-TopologySystemInformation
+ 	siox-monitoring-Topology
++	siox-util
+ )
+ #	siox-monitoring-DatabaseTopology
+ 
+ 
+ add_subdirectory(test)
+ add_subdirectory(plugin)
++add_subdirectory(feign_siox-provider)
+ 
+ install(TARGETS siox-tools-TraceReader siox-trace-reader LIBRARY DESTINATION ${SIOX_INSTALL_LIBRARY_DIR} RUNTIME DESTINATION bin ARCHIVE DESTINATION ${SIOX_INSTALL_LIBRARY_DIR})
+ 

@@ -1,15 +1,24 @@
---- ../TraceReader.backup/TraceReader.cpp	2014-07-15 17:25:32.666452930 +0200
-+++ TraceReader.cpp	2014-08-06 15:42:46.225560415 +0200
-@@ -124,6 +124,27 @@
+--- ../TraceReader.reference/TraceReader.cpp	2014-07-15 17:25:32.666452930 +0200
++++ TraceReader.cpp	2014-08-06 17:49:17.111960891 +0200
+@@ -12,6 +12,7 @@
+ #include <monitoring/association_mapper/modules/TopologyAssociationMapper/TopologyAssociationMapperOptions.hpp>
+ #include <monitoring/ontology/modules/TopologyOntology/TopologyOntologyOptions.hpp>
+ #include <monitoring/system_information/modules/TopologySystemInformation/TopologySystemInformationOptions.hpp>
++#include <util/time.h>
+ 
+ #include "TraceReader.hpp"
+ 
+@@ -124,13 +125,41 @@
  	}
  }
  
 +bool TraceReader::strattribute_compare( const Attribute & a, const char* attributeName  ) throw( NotFoundError )
 +{
 +	stringstream s;
++	stringstream debug_string;
 +
 +	OntologyAttributeFull oa = o->lookup_attribute_by_ID( a.id );
-+	s << oa.domain << "/" << oa.name << "=";
++	s << oa.domain << "/" << oa.name;
 +	
 +	//if( a.value.type() == VariableDatatype::Type::STRING){
 +	//	s << '"' << a.value << '"' ;
@@ -17,7 +26,10 @@
 +	//	s << a.value ;
 +	//}
 +	
-+	if ( s == attributeName ) {
++	debug_string << "TR: strattribute_compare: s=" << s.str() << "\n";
++	cout << debug_string.str();
++
++	if ( s.str().compare(attributeName) == 0 ) {
 +		return true;
 +	} else {
 +		return false;
@@ -28,40 +40,47 @@
  
  void TraceReader::printActivity( Activity * a )
  {
-@@ -170,6 +191,59 @@
+-
+ 	stringstream str;
+ 	try {
+-		
++		char buff[40];
++		siox_time_to_str( a->time_start(), buff, false );
++
++		str << buff << " ";
++
+ 		strdelta( a->time_stop() - a->time_start(), str );
+ 		if( printHostname )
+ 			str << " " << s->lookup_node_hostname( a->aid().cid.pid.nid );
+@@ -170,6 +199,52 @@
  }
  
  
 +
-+void TraceReader::getActivityAttribute( Activity * a, const char * attributeName, void * buf )
++void TraceReader::getActivityAttributeValueByName( Activity * a, const char * attributeName, void * buf )
 +{
++	
++	printf("TR: trying to find attribute\n");
++	try {
++		
++
++		UniqueInterfaceID uid = s->lookup_interface_of_activity( a->ucaid() );
 +
 +
-+//
-+//	stringstream str;
-+//	try {
-+//		
-+//		strdelta( a->time_stop() - a->time_start(), str );
-+//		if( printHostname )
-+//			str << " " << s->lookup_node_hostname( a->aid().cid.pid.nid );
-+//
-+//		str  << " " << a->aid() << " ";
-+//
-+//		UniqueInterfaceID uid = s->lookup_interface_of_activity( a->ucaid() );
-+//
-+//		str << s->lookup_interface_name( uid ) << " ";
-+//		str << s->lookup_interface_implementation( uid ) << " ";
-+//
-+//		str << s->lookup_activity_name( a->ucaid() ) << "(";
-+//		for( auto itr = a->attributeArray().begin() ; itr != a->attributeArray().end(); itr++ ) {
-+//			if( itr != a->attributeArray().begin() ) {
-+//				str << ", ";
-+//			}
-+//			strattribute( *itr, str );
-+//		}
-+//		str << ")";
-+//		str << " = " << a->errorValue();
-+//
++		for( auto itr = a->attributeArray().begin() ; itr != a->attributeArray().end(); itr++ ) {
++			if ( strattribute_compare(*itr, attributeName) ) {
++				// activity has attribute write to buf
++				// TODO: buf = (void *) a->value;
++				printf("Attribute found! :)\n");
++				break; // TODO: check if multiple instances of same attribute are allowed
++			} else {
++				// not found
++			}
++		}
++
++		
++
++		// parent ids!?
 +//		if( a->parentArray().begin() != a->parentArray().end() ) {
 +//			str << " ";
 +//			for( auto itr = a->parentArray().begin(); itr != a->parentArray().end(); itr++ ) {
@@ -71,12 +90,10 @@
 +//				str << *itr;
 +//			}
 +//		}
-+//
-+//		cout << str.str() << endl;
-+//
-+//	} catch( NotFoundError & e ) {
-+//		cerr << "Error while parsing activity! Parsed so far: " << str.str() << endl;
-+//	}
++
++	} catch( NotFoundError & e ) {
++		cerr << "Error while parsing activity! Parsed so far: (ommited by getActivityAttributeValueByName)" << endl;
++	}
 +}
 +
 +
@@ -88,7 +105,7 @@
  //try{
  //   o->set_process_attribute(pid, a1, v2);
  //   assert(false);
-@@ -180,4 +254,4 @@
+@@ -180,4 +255,4 @@
  //  assert(false);
  // }catch(NotFoundError & e){
  
