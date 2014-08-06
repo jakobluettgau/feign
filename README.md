@@ -35,9 +35,11 @@ To replay SIOX trace files a number of feign-layer plugins as well as a
 feign-siox-provider plugin need to be generated.
 
 	cd $FEIGN/tools/gen/layers/posix
-	make export                       # also patches $FEIGN/plugins/wscript
+	# modify the Makefile and change $SIOX_TR if needed
+	make siox                       # also patches $FEIGN/plugins/wscript
 	cd $FEIGN
 	./waf install
+	# you will also need to rebuild SIOX or at least the siox-tracereader
 
 A simple example to build on can be found in demos directory. Follow the README
 for the specific demo to get started.
