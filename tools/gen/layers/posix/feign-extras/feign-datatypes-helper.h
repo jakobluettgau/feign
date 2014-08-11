@@ -9,6 +9,7 @@
 typedef struct posix_activity {
 	int type;
 	void * data;
+	void * siox_activity;
 	int ret;
 } posix_activity;
 

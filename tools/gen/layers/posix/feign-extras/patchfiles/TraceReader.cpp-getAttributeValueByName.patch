@@ -1,6 +1,6 @@
 --- ../TraceReader.reference/TraceReader.cpp	2014-07-15 17:25:32.666452930 +0200
-+++ TraceReader.cpp	2014-08-06 17:49:17.111960891 +0200
-@@ -12,6 +12,7 @@
++++ TraceReader.cpp	2014-08-11 13:26:26.195594188 +0200
+@@ -12,11 +12,44 @@
  #include <monitoring/association_mapper/modules/TopologyAssociationMapper/TopologyAssociationMapperOptions.hpp>
  #include <monitoring/ontology/modules/TopologyOntology/TopologyOntologyOptions.hpp>
  #include <monitoring/system_information/modules/TopologySystemInformation/TopologySystemInformationOptions.hpp>
@@ -8,7 +8,44 @@
  
  #include "TraceReader.hpp"
  
-@@ -124,13 +125,41 @@
+ //#include <core/component/ActivitySerializableText.cpp>
+ 
++static bool convert_attribute_back( OntologyAttribute & oa, const VariableDatatype & val, void * out_value ){
++	switch( val.type() ) {
++		case VariableDatatype::Type::INT32:
++			*((int32_t*) out_value) = val.int32();
++			return true;
++		case VariableDatatype::Type::UINT32:
++			*((uint32_t*) out_value) = val.uint32();
++			return true;
++		case VariableDatatype::Type::INT64:
++			*((int64_t*) out_value) = val.int64();
++			return true;
++		case VariableDatatype::Type::UINT64:
++			*((uint64_t*) out_value) = val.uint64();
++			return true;
++		case VariableDatatype::Type::FLOAT:
++			*((float*) out_value) = val.flt();
++			return true;
++		case VariableDatatype::Type::DOUBLE:
++			*((double*) out_value) = val.dbl();
++			return true;
++		case VariableDatatype::Type::STRING: {
++			*(char**) out_value = strdup(val.str());
++			return true;
++		}
++		case VariableDatatype::Type::INVALID:
++		default:
++			assert(0 && "tried to optimize for a VariableDatatype of invalid type");
++			return false;
++	}
++}	
++
++
+ Activity * TraceReader::nextActivity() {
+ 	try{
+ 	if( activityDeserializer->hasNextActivity() )
+@@ -124,13 +157,41 @@
  	}
  }
  
@@ -52,12 +89,12 @@
  		strdelta( a->time_stop() - a->time_start(), str );
  		if( printHostname )
  			str << " " << s->lookup_node_hostname( a->aid().cid.pid.nid );
-@@ -170,6 +199,52 @@
+@@ -170,6 +231,54 @@
  }
  
  
 +
-+void TraceReader::getActivityAttributeValueByName( Activity * a, const char * attributeName, void * buf )
++void TraceReader::getActivityAttributeValueByName( Activity * a, const char * domain, const char * name, void * buf )
 +{
 +	
 +	printf("TR: trying to find attribute\n");
@@ -66,12 +103,14 @@
 +
 +		UniqueInterfaceID uid = s->lookup_interface_of_activity( a->ucaid() );
 +
++		auto oa = o->lookup_attribute_by_name( domain, name );
 +
 +		for( auto itr = a->attributeArray().begin() ; itr != a->attributeArray().end(); itr++ ) {
-+			if ( strattribute_compare(*itr, attributeName) ) {
++			if ( itr->id == oa.aID ){
 +				// activity has attribute write to buf
 +				// TODO: buf = (void *) a->value;
 +				printf("Attribute found! :)\n");
++				convert_attribute_back(oa, itr->value, buf);
 +				break; // TODO: check if multiple instances of same attribute are allowed
 +			} else {
 +				// not found
@@ -105,7 +144,7 @@
  //try{
  //   o->set_process_attribute(pid, a1, v2);
  //   assert(false);
-@@ -180,4 +255,4 @@
+@@ -180,4 +289,4 @@
  //  assert(false);
  // }catch(NotFoundError & e){
  

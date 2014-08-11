@@ -1,10 +1,10 @@
 --- ../TraceReader.reference/TraceReader.hpp	2014-07-15 17:25:32.665452949 +0200
-+++ TraceReader.hpp	2014-08-06 16:53:15.944534510 +0200
++++ TraceReader.hpp	2014-08-11 13:24:27.042773183 +0200
 @@ -25,6 +25,7 @@
  		Activity * nextActivity();
  
  		void printActivity( Activity * activity );
-+		void getActivityAttributeValueByName( Activity * activity, const char * attributeName, void * buf );
++		void getActivityAttributeValueByName( Activity * activity, const char * domain, const char * name, void * buf );
  
  		bool printHostname = false;
  

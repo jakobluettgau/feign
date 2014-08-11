@@ -26,6 +26,16 @@ class Style(skeletonBuilder.Writer):
             print('#include ', match, end='\n', file=output)
         print('\n', file=output)  
 
+        for function in functionList:
+            functionVariables = self.functionVariables(function)
+
+            for templ in function.usedTemplateList:
+                outputString = templ.output('init', functionVariables)
+                if outputString != '':
+                    print(outputString, end='\n', sep='', file=output)
+
+        print('\n', file=output)  
+
         # seperate feign logic from siox logic, as symbol names may collide
         print("""namespace feign {
     #define FEIGN_NO_CPP_INCLUDES
@@ -204,7 +214,7 @@ Plugin * init() {
             # insert template code for creating feign activities
             str += "\t"*3 + "// GENERATED FROM TEMPLATE\n"
             for templ in function.usedTemplateList:
-                outputString = templ.output('init', functionVariables)
+                outputString = templ.output('after', functionVariables)
                 if outputString != '':
                     str += "\t"*3 + outputString + '\n'
             str += "\t"*3 + "// GENERATED FROM TEMPLATE END\n"

@@ -43,7 +43,8 @@ template = {
 'register_attribute': {
 	'variables': 'AttributeVariable Domain Name StorageType',
 	'global': '',
-	'init': '',
+	'init': '''#define AO_MACRO_%(AttributeVariable)s "%(Domain)s", "%(Name)s"''',
+	#'init': '''%(AttributeVariable)s = siox_ontology_register_attribute( "%(Domain)s", "%(Name)s", %(StorageType)s ); assert(%(AttributeVariable)s != NULL);''',
     'before': '',
 	'after': '',
 	'cleanup': '',
@@ -182,7 +183,8 @@ template = {
 },
 'activity_attribute_late': {
 	'variables': 'Attribute Value Activity=sioxActivity',
-	'after': '',
+	'after': 'tr2->getActivityAttributeValueByName(a,  AO_MACRO_%(Attribute)s, (void *) &d->%(Value)s);',
+	#'after': 'siox_activity_set_attribute( %(Activity)s, %(Attribute)s, &%(Value)s );',
 },
 'activity_attribute_late_pointer': {
 	'variables': 'Attribute Value Activity=sioxActivity',
@@ -204,7 +206,7 @@ template = {
 'horizontal_map_put_int': {
 	'variables': 'Key MapName=activityHashTable_int Activity=sioxActivity',
 	'global': '',
-	'init': '''d->ret = a->errorValue();''',
+	'init': '',
 	'before': '',
     'after': '',
 	'cleanup': '',
@@ -313,10 +315,7 @@ template = {
 	'global': '',
 	'init': '',
 	'before': '''
-		g_rw_lock_reader_lock(& lock_%(MapName)s);
-		siox_activity_ID * Parent = (siox_activity_ID*) g_hash_table_lookup( %(MapName)s, GSIZE_TO_POINTER(%(Key)s) );
-		g_rw_lock_reader_unlock(& lock_%(MapName)s);
-        siox_activity_link_to_parent( %(Activity)s, Parent ); 
+
 			  ''',
 	'cleanup': '',
 	'final': ''
@@ -325,15 +324,11 @@ template = {
 # This template allows to lookup a parent based on the integer key.
 'activity_lookup_ID_int': {
 	'variables': 'Key ActivityID=Parent MapName=activityHashTable_int',
-	'after': '''g_rw_lock_reader_lock(& lock_%(MapName)s); 
-		siox_activity_ID * %(ActivityID)s = (siox_activity_ID*) g_hash_table_lookup( %(MapName)s, GINT_TO_POINTER(%(Key)s) ); 
-		g_rw_lock_reader_unlock(& lock_%(MapName)s);''',
+	'after': '''''',
 },
 'activity_lookup_ID_before_int': {
 	'variables': 'Key ActivityID=Parent MapName=activityHashTable_int',
-   'before': '''g_rw_lock_reader_lock(& lock_%(MapName)s); 
-		siox_activity_ID * %(ActivityID)s = (siox_activity_ID*) g_hash_table_lookup( %(MapName)s, GINT_TO_POINTER(%(Key)s) ); 
-		g_rw_lock_reader_unlock(& lock_%(MapName)s);''',
+   'before': '''''',
 },
 # Link an already known parent
 'activity_link_parent': {
@@ -372,12 +367,7 @@ template = {
 	'global': '',
 	'init': '',
     	'before': '',
-	'after': '''if ( %(Condition)s ){
-                      siox_activity_report_error( %(Activity)s, %(Error)s );
-                      siox_activity_stop(%(Activity)s);
-                      siox_activity_end(%(Activity)s);
-                      return ret;
-		    }''',
+	'after': '''''',
 	'cleanup': '',
 	'final': ''
 },
@@ -386,20 +376,13 @@ template = {
         'global': '',
         'init': '',
         'before': '',
-        'after': ''' int errsv = errno;
-		    if ( %(Condition)s ){
-                      siox_activity_report_error( %(Activity)s, errsv );
-                      siox_activity_stop(%(Activity)s);
-                      siox_activity_end(%(Activity)s);
-							 errno = errsv;
-							 return ret;
-                    }''',
+        'after': '''''',
         'cleanup': '',
         #'cleanupLast': '''errno = errsv;''',        
         'final': ''
 },
 'restoreErrno': {
-        'after': ''' errno = errsv; '''
+        'after': ''''''
 },
 
 # remote_call_start
