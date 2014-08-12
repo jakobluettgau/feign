@@ -5,7 +5,7 @@ PLUGIN=${REPO_HOME}/plugins/posix
 # build related
 OUTPUT_PATH=generated-feign-plugin
 HEADER=posix-low-level-io-feign.h
-HEADER=posix-low-level-io.h
+#HEADER=posix-low-level-io.h
 #TEMPLATE=../../template.py
 TEMPLATE=template-feign.py
 TEMPLATE_SIOX_PROVIDER=template-feign_siox-provider.py

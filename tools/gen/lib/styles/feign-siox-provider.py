@@ -214,9 +214,10 @@ Plugin * init() {
             # insert template code for creating feign activities
             str += "\t"*3 + "// GENERATED FROM TEMPLATE\n"
             for templ in function.usedTemplateList:
-                outputString = templ.output('after', functionVariables)
+                outputString = templ.output('siox2feign', functionVariables)
                 if outputString != '':
                     str += "\t"*3 + outputString + '\n'
+
             str += "\t"*3 + "// GENERATED FROM TEMPLATE END\n"
 
             str += "\t"*3 + """DEBUG("create %s()");\n""" % (function.name)

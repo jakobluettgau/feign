@@ -183,7 +183,7 @@ template = {
 },
 'activity_attribute_late': {
 	'variables': 'Attribute Value Activity=sioxActivity',
-	'after': 'tr2->getActivityAttributeValueByName(a,  AO_MACRO_%(Attribute)s, (void *) &d->%(Value)s);',
+	'siox2feign': 'tr2->getActivityAttributeValueByName(a,  AO_MACRO_%(Attribute)s, (void *) &d->%(Value)s);',
 	#'after': 'siox_activity_set_attribute( %(Activity)s, %(Attribute)s, &%(Value)s );',
 },
 'activity_attribute_late_pointer': {
