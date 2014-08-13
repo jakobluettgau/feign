@@ -7,6 +7,7 @@ from subprocess import call
 dirs = [
         "posix",
         "sample",
+        "test",
     ]
 
 def options(ctx):

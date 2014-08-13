@@ -5,6 +5,7 @@ from waflib import Build
 
 active = [
     #"plugin_manager"
+    "helper"
 ]
 
 

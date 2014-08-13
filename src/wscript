@@ -24,9 +24,11 @@ def configure(ctx):
 
 def build(ctx):
     # build feign executables
-    src = ["main.cpp", "options.cpp", "plugins.cpp", "replay.cpp", "helper.cpp"]
-    ctx(features="c cxx cxxprogram", source=src, target="feign", uselib=["GLIB-2.0"], lib=["dl", "rt"])
-    # build modules and plugins
     for d in dirs:
         ctx.recurse(d)
+
+    src = ["main.cpp", "options.cpp", "plugins.cpp", "replay.cpp", "helper.cpp"]
+    ctx(features="c cxx cxxprogram", source=src, target="feign", use=["feign-helper"], uselib=["GLIB-2.0"], lib=["dl", "rt"])
+    # build modules and plugins
+
     pass

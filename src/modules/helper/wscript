@@ -1,0 +1,19 @@
+#! /usr/bin/env python
+
+
+def options(ctx):
+    ctx.load("compiler_c compiler_cxx")
+    pass
+
+def configure(ctx):
+    ctx.load("compiler_c compiler_cxx")
+    ctx.env.LINKFLAGS = []
+    #TODO: absolute path
+    #ctx.env.append_value('INCLUDES', ['../include'])
+    # configure modules and plugins
+    pass
+
+def build(ctx):
+    # build feign executables
+    ctx.shlib(source=['helper.cpp'], target='feign-helper')
+    pass
