@@ -703,6 +703,7 @@ at the end of """)
     def matchCommand(self, inputLine, templateList):
         match = self.commandRegex.match(inputLine)
 
+
         if (match):
             availableCommands = template.keys()
             commandName = match.group(1)
@@ -719,19 +720,22 @@ at the end of """)
                 newTemplate = Template( template[commandName], commandName, commandArgs )
                 templateList.append(newTemplate)
 
-            # Jakob: But actually that case is obscure behaivor :/
+           
+            # Jakob:
             # It seems to make more sense to consider this command being related
             # to another usecase that is not required by the template/style combination
+            # ALSO: the case does not seem to occur!
 
-            # If the command name is not in the template the parsed line
-            # belongs to the command parsed in a earlier line and the line only
-            # contains command arguments.
+            ### # If the command name is not in the template the parsed line
+            ### # belongs to the command parsed in a earlier line and the line only
+            ### # contains command arguments.
             else:
-                if commandArgs[0] == "=":
-                    templateList[-1].setParameters(commandName + commandArgs)
-                else:
-                    templateList[-1].setParameters(
-                        commandName + " " + commandArgs)
+                print( "Warning: \"", commandName, "\" not in availableCommands.\n" )
+            ###     if commandArgs[0] == "=":
+            ###         templateList[-1].setParameters(commandName + commandArgs)
+            ###     else:
+            ###         templateList[-1].setParameters(
+            ###             commandName + " " + commandArgs)
 
             return False
 

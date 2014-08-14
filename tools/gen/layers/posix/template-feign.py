@@ -8,6 +8,29 @@ template = {
 # InstanceName ?
 # ComponentVariable ? ?
 # SpliceCode ? ? ?
+
+
+
+###############################################################################
+# feign related
+###############################################################################
+'feign_datatype_splice_after': {
+	'variables': 'PROGRAMCODE',
+	'global': '',
+	'init': '',
+	'before': '',
+	'after': '',
+	'cleanup': '',
+	'feign_datatype_after': '%(PROGRAMCODE)s'
+},
+
+
+
+
+
+###############################################################################
+# SIOX related
+###############################################################################
 'component': {
 	'variables': 'InterfaceName ImplementationIdentifier InstanceName="" ComponentVariable=global SpliceCode=',
 	'global': '',
@@ -15,6 +38,7 @@ template = {
     'initLast': '',
 	'final': '',
 },
+
 'autoInitializeLibrary':{
 	'global' : "",
 },

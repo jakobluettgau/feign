@@ -410,6 +410,7 @@ On most library implementations, the variable is also set to a system-specific e
 //@splice_after int fd = (ret != 0) ? fileno(ret) : 0;
 //@activity_attribute_late fileHandle fd
 //@horizontal_map_put_size ret
+//@feign_datatype_splice_after int fd;
 FILE * fopen( const char * filename, const char * mode );
 
 
@@ -429,6 +430,7 @@ On most library implementations, thesave variable is also set to a system-specif
 //@horizontal_map_put_size ret
 //@splice_after int fd = (ret != 0) ? fileno(ret) : 0;
 //@activity_attribute_late fileHandle fd
+//@feign_datatype_splice_after int fd;
 FILE * fopen64( const char * filename, const char * mode );
 /*
 The  fdopen()  function  associates a stream with the existing file descriptor, fd.  The mode of the stream (one of the
@@ -478,6 +480,7 @@ On most library implementations, the variable is also set to a system-specific e
 //@activity_link_size stream
 //@splice_after int fd = (ret != 0) ? fileno(ret) : 0;
 //@activity_attribute_late fileHandle fd
+//@feign_datatype_splice_after int fd;
 FILE * freopen( const char * filename, const char * mode, FILE * stream );
 
 //@guard
@@ -486,6 +489,7 @@ FILE * freopen( const char * filename, const char * mode, FILE * stream );
 //@horizontal_map_put_size ret
 //@splice_after int fd = (ret != 0) ? fileno(ret) : 0;
 //@activity_attribute_late fileHandle fd
+//@feign_datatype_splice_after int fd;
 FILE * tmpfile( void );
 
 //@guard
@@ -585,6 +589,7 @@ If either size or count is zero, the function returns zero and both the stream s
 //@activity_attribute bytesToRead payload
 //@splice_after ''uint64_t posDelta = ret*size;''
 //@activity_attribute_late bytesRead posDelta
+//@feign_datatype_splice_after uint64_t posDelta;
 size_t fread( void * ptr, size_t size, size_t count, FILE * stream );
 
 /*
@@ -602,6 +607,7 @@ If either size or count is zero, the function returns zero and the error indicat
 //@activity_attribute bytesToWrite payload
 //@splice_after ''uint64_t posDelta = ret*size;''
 //@activity_attribute_late bytesWritten posDelta
+//@feign_datatype_splice_after uint64_t posDelta;
 size_t fwrite( const void * ptr, size_t size, size_t count, FILE * stream );
 
 
@@ -611,6 +617,7 @@ size_t fwrite( const void * ptr, size_t size, size_t count, FILE * stream );
 //@activity_link_size stream
 //@splice_after ''uint64_t pos = (uint64_t) ftello(stream);''
 //@activity_attribute_late filePosition pos
+//@feign_datatype_splice_after uint64_t pos;
 int fseeko(FILE *stream, off_t offset, int whence);
 
 //@guard
@@ -619,6 +626,7 @@ int fseeko(FILE *stream, off_t offset, int whence);
 //@activity_link_size stream
 //@splice_after ''uint64_t pos = (uint64_t) ftell(stream);''
 //@activity_attribute_late filePosition pos
+//@feign_datatype_splice_after uint64_t pos;
 int fseek(FILE *stream, long offset, int whence);
 
 
@@ -819,28 +827,31 @@ int setsockopt(int sockfd, int level, int optname, const void *optval, socklen_t
 //@guard ComponentVariable=network
 //@errorErrno ''ret < 0''
 //@activity ComponentVariable=network
-//@horizontal_map_put_int pipefd[0] MapName=activityHashTable_network_int
-//@horizontal_map_put_int pipefd[1] MapName=activityHashTable_network_int
-//@activity_attribute_late fileHandle pipefd[0]
-//@activity_attribute_late fileHandle pipefd[1]
+//feign//@horizontal_map_put_int pipefd[0] MapName=activityHashTable_network_int
+//fegin//@horizontal_map_put_int pipefd[1] MapName=activityHashTable_network_int
+//feing//@activity_attribute_late fileHandle pipefd[0]
+//feing//@activity_attribute_late fileHandle pipefd[1]
+//@feign_map_ignore
 int pipe(int pipefd[2]);
 
 //@guard ComponentVariable=network
 //@errorErrno ''ret < 0''
 //@activity ComponentVariable=network
-//@horizontal_map_put_int pipefd[0] MapName=activityHashTable_network_int
-//@horizontal_map_put_int pipefd[1] MapName=activityHashTable_network_int
-//@activity_attribute_late fileHandle pipefd[0]
-//@activity_attribute_late fileHandle pipefd[1]
+//feign//@horizontal_map_put_int pipefd[0] MapName=activityHashTable_network_int
+//feign//@horizontal_map_put_int pipefd[1] MapName=activityHashTable_network_int
+//feing//@activity_attribute_late fileHandle pipefd[0]
+//feing//@activity_attribute_late fileHandle pipefd[1]
+//@feign_map_ignore
 int pipe2(int pipefd[2], int flags);
 
 //@guard ComponentVariable=network
 //@errorErrno ''ret < 0''
 //@activity ComponentVariable=network
-//@horizontal_map_put_int sv[0] MapName=activityHashTable_network_int
-//@horizontal_map_put_int sv[1] MapName=activityHashTable_network_int
-//@activity_attribute_late fileHandle sv[0]
-//@activity_attribute_late fileHandle sv[1]
+//feign//@horizontal_map_put_int sv[0] MapName=activityHashTable_network_int
+//feign//@horizontal_map_put_int sv[1] MapName=activityHashTable_network_int
+//feing//@activity_attribute_late fileHandle sv[0]
+//feing//@activity_attribute_late fileHandle sv[1]
+//@feign_map_ignore
 int socketpair(int domain, int type, int protocol, int sv[2]);
 
 //@guard ComponentVariable=network

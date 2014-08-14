@@ -68,7 +68,14 @@ typedef struct posix_activity {
             if returnType != "void":
                 print('\t', returnType, ' ret;', end='\n', sep='',
                       file=output)
-            
+           
+            # extra fields as defined by template
+            for templ in function.usedTemplateList:
+                outputString = templ.output('feign_datatype_after', functionVariables)
+                if outputString != '':
+                    print(outputString, end='\n', sep='', file=output)
+
+
             # close the struct defintion
             print('};', end='\n', file=output)
 
