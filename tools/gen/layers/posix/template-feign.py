@@ -562,5 +562,5 @@ templateParameters = {
 # Insert global once
 "globalOnce": "",
 # Will be included
-"includes" : ['<stdlib.h>', '<stdio.h>', '<stdarg.h>', '<string.h>']
+"includes" : ['<stdlib.h>', '<stdio.h>', '<stdarg.h>', '<string.h>', '<stdint.h>']
 }
