@@ -5,7 +5,6 @@
 
 #include <feign.h>
 
-
 // core options
 // TODO the following variables don't get global scope, but every *.cpp has their own :/
 extern gboolean verbose;			// display debug?

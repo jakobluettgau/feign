@@ -10,12 +10,20 @@
 #include "helper.h"
 
 
+// General helpers for debugging and information
+///////////////////////////////////////////////////////////////////////////////
 void feign_log(char const * message, int log_level) {
 	printf("LOG! LOG! LOG! :)\n");
 }
 
 
-// i/o related ////////////////////////////////////////////////////////////////
+
+
+
+
+
+// I/O related helpers
+///////////////////////////////////////////////////////////////////////////////
 /**
  * Use the feign_shared_buffer() function  if dummy data is needed, to prevent
  * redunt dummy data in memory.

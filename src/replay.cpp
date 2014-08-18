@@ -4,7 +4,6 @@
 
 #include "replay.h"
 #include "plugins.h"
-#include "helper.h"
 
 // buffer settings
 std::list<Activity*> buffer;

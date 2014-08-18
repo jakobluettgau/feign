@@ -9,7 +9,9 @@
 #include "options.h"
 #include "plugins.h"
 #include "replay.h"
-#include "helper.h"
+#include "modules/helper/helper.h"
+
+
 
 // set some default options
 // TODO: reconsider dropping "real" globals within feign core
