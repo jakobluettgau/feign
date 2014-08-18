@@ -82,6 +82,7 @@ End of global part
 //@activity_attribute_late fileHandle ret
 //@horizontal_map_put_int ret
 //@rewriteCall open ''pathname,flags,mode'' ''const char *pathname, int flags, mode_t mode''
+//@feign_datatype_splice_after int translatedFlags;
 int open( const char * pathname, int flags, ... );
 
 //@guard
@@ -102,6 +103,7 @@ int creat( const char * pathname, mode_t mode );
 //@horizontal_map_put_int ret
 //@activity_attribute_late fileHandle ret
 //@rewriteCall open ''pathname,flags,mode'' ''const char *pathname, int flags, mode_t mode''
+//@feign_datatype_splice_after int translatedFlags;
 int open64( const char * pathname, int flags, ... );
 
 //@guard
@@ -411,6 +413,7 @@ On most library implementations, the variable is also set to a system-specific e
 //@activity_attribute_late fileHandle fd
 //@horizontal_map_put_size ret
 //@feign_datatype_splice_after int fd;
+//@feign_datatype_splice_after int translatedFlags;
 FILE * fopen( const char * filename, const char * mode );
 
 
@@ -431,6 +434,7 @@ On most library implementations, thesave variable is also set to a system-specif
 //@splice_after int fd = (ret != 0) ? fileno(ret) : 0;
 //@activity_attribute_late fileHandle fd
 //@feign_datatype_splice_after int fd;
+//@feign_datatype_splice_after int translatedFlags;
 FILE * fopen64( const char * filename, const char * mode );
 /*
 The  fdopen()  function  associates a stream with the existing file descriptor, fd.  The mode of the stream (one of the
@@ -446,6 +450,7 @@ stream created by fdopen() is closed.
 //@splice_before uint32_t translatedFlags = translateFILEFlagsToSIOX(mode);
 //@activity_attribute fileOpenFlags translatedFlags
 //@horizontal_map_put_size ret
+//@feign_datatype_splice_after int translatedFlags;
 FILE * fdopen( int fd, const char * mode );
 
 // The function fileno() examines the argument stream and returns its integer descriptor.
@@ -481,6 +486,7 @@ On most library implementations, the variable is also set to a system-specific e
 //@splice_after int fd = (ret != 0) ? fileno(ret) : 0;
 //@activity_attribute_late fileHandle fd
 //@feign_datatype_splice_after int fd;
+//@feign_datatype_splice_after int translatedFlags;
 FILE * freopen( const char * filename, const char * mode, FILE * stream );
 
 //@guard
@@ -501,6 +507,7 @@ FILE * tmpfile( void );
 //@activity_attribute fileHandle fd
 //@horizontal_map_remove_int fd
 //@horizontal_map_remove_int fd MapName=activityHashTable_network_int
+//@feign_datatype_splice_after int fd;
 int fclose( FILE * stream );
 
 //  If an error occurs, EOF is returned and the error indicator is set (see ferror).
@@ -590,6 +597,7 @@ If either size or count is zero, the function returns zero and both the stream s
 //@splice_after ''uint64_t posDelta = ret*size;''
 //@activity_attribute_late bytesRead posDelta
 //@feign_datatype_splice_after uint64_t posDelta;
+//@feign_datatype_splice_after int payload;
 size_t fread( void * ptr, size_t size, size_t count, FILE * stream );
 
 /*
@@ -608,6 +616,7 @@ If either size or count is zero, the function returns zero and the error indicat
 //@splice_after ''uint64_t posDelta = ret*size;''
 //@activity_attribute_late bytesWritten posDelta
 //@feign_datatype_splice_after uint64_t posDelta;
+//@feign_datatype_splice_after int payload;
 size_t fwrite( const void * ptr, size_t size, size_t count, FILE * stream );
 
 

@@ -168,6 +168,7 @@ template = {
 'activity_attribute': {
 	'variables': 'Attribute Value Activity=sioxActivity',
 	'before': '',
+    'siox2feign': 'tr2->getActivityAttributeValueByName(a,  AO_MACRO_%(Attribute)s, (void *) &d->%(Value)s);',
 },
 'activity_attribute_pointer': {
 	'variables': 'Attribute Value Activity=sioxActivity',
