@@ -1,0 +1,9 @@
+Context aware mutation plugin that inserts fadvise function calls before
+a certain pattern.
+
+Requirements:
+	You need to have the SIOX-POSIX Plugins generated. Without changes to the
+	build scripts these are expected to reside in "../../../plugins/posix".
+
+	The datatypes header file is especially important. Correct the symlink
+	if necessary.

@@ -1,0 +1,5 @@
+The following demo shows how to use context aware plugins to modify taces.
+Make sure you got the "../siox-replay" demo running before trying this one.
+
+The example case, uses previously recorded trace data and injects fadvise 
+readahead hints automatically.
