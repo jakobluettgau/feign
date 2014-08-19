@@ -171,7 +171,7 @@ extern "C" {
 
 	void feign_log(char const * message, int log_level);
 
-	char * feign_shared_buffer(int bytes);
+	char * feign_shared_buffer(unsigned int bytes);
 	int feign_precreate_file(const char * filename, size_t size);
 
 }

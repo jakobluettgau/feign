@@ -32,6 +32,7 @@ Plugin * init() {
 	// but provider should negotiate identifier
 
 	feign_log("blub", 2);
+	feign_shared_buffer(3);
 
 
 	// announce features and request further action

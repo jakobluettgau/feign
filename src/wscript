@@ -14,7 +14,7 @@ def configure(ctx):
     ctx.load("compiler_c compiler_cxx")
     ctx.check_cfg(package='glib-2.0', args='--cflags --libs')
     ctx.env.CXXFLAGS = ['-std=c++11', '-Wall', "-g", "-rdynamic"]
-    ctx.env.LINKFLAGS = []
+    ctx.env.LINKFLAGS = ['']
     #TODO: absolute path
     #ctx.env.append_value('INCLUDES', ['../include'])
     # configure modules and plugins
@@ -29,6 +29,7 @@ def build(ctx):
 
     src = ["main.cpp", "options.cpp", "plugins.cpp", "replay.cpp"]
     ctx(features="c cxx cxxprogram", source=src, target="feign", use=["feign-helper"], uselib=["GLIB-2.0"], lib=["dl", "rt"])
+    #linkflags=['-rdynamic'])
     # build modules and plugins
 
     pass

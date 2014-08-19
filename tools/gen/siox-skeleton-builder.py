@@ -721,7 +721,7 @@ at the end of """)
                 templateList.append(newTemplate)
 
            
-            # Jakob:
+            
             # It seems to make more sense to consider this command being related
             # to another usecase that is not required by the template/style combination
             # ALSO: the case does not seem to occur!
@@ -856,8 +856,8 @@ class Template():
             # Error
             print('ERROR: Section: ', type, ' not known.', file=sys.stderr)
             #sys.exit(1)
-            # Jakob: more graceful handling:
-            return "// section \"%s\" not known." % (type)
+            # feign: more graceful handling:
+            return ""
 
 #
 # @brief The main function.

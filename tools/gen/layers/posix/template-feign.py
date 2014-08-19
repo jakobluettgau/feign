@@ -1,15 +1,4 @@
 template = {
-# component
-#
-# Registers (and unregisters) a new component with SIOX and
-# connects to the ontology.
-# InterfaceName = Name of interface
-# ImplementationIdentifier ?
-# InstanceName ?
-# ComponentVariable ? ?
-# SpliceCode ? ? ?
-
-
 
 ###############################################################################
 # feign related
@@ -26,11 +15,43 @@ template = {
 
 
 
+'feign_wrapper_splice_before': {
+	'variables': 'PROGRAMCODE',
+	'global': '',
+	'init': '',
+	'before': '',
+	'after': '',
+	'cleanup': '',
+	'feign_wrapper_before': '%(PROGRAMCODE)s'
+},
+
+'feign_wrapper_splice_after': {
+	'variables': 'PROGRAMCODE',
+	'global': '',
+	'init': '',
+	'before': '',
+	'after': '',
+	'cleanup': '',
+	'feign_wrapper_after': '%(PROGRAMCODE)s'
+},
+
+
+
 
 
 ###############################################################################
 # SIOX related
 ###############################################################################
+
+# component
+#
+# Registers (and unregisters) a new component with SIOX and
+# connects to the ontology.
+# InterfaceName = Name of interface
+# ImplementationIdentifier ?
+# InstanceName ?
+# ComponentVariable ? ?
+# SpliceCode ? ? ?
 'component': {
 	'variables': 'InterfaceName ImplementationIdentifier InstanceName="" ComponentVariable=global SpliceCode=',
 	'global': '',
@@ -232,7 +253,7 @@ template = {
 	// get issued filehandle, increment and store association to map
 	//int fd_%(MapName)s = issued;
 	issued++;
-	%(MapName)s[d->ret] = issued; 
+	%(MapName)s[d->ret] = ret; 
 	''',
 	'before': '',
     'after': '',

@@ -63,11 +63,16 @@ void dump_map() {
             print("int wrapped_", function.name, "(void * data)", sep='', file=output)
             print("{\n", "\t", "posix_", function.name ,"_data * d = (posix_", function.name  ,"_data*) data;", sep='', file=output)
 
+            print("\tint ret =-1;\n", file=output)
+
             print("// GENERATED FROM TEMPLATE\n", file=output)
-            for templ in function.usedTemplateList:
-                outputString = templ.output('init', functionVariables)
-                if outputString != '':
-                    print('\t', outputString, end='\n', sep='', file=output)
+            sections = ["feign_wrapper_before", "init", "feign_wrapper_after"]
+            # insert the previous sections in that order
+            for sectionName in sections:
+                for templ in function.usedTemplateList:
+                    outputString = templ.output(sectionName, functionVariables)
+                    if outputString != '':
+                        print('\t', outputString, end='\n', sep='', file=output)
             print("// GENERATED FROM TEMPLATE END\n", file=output)
 
             print("\t","DEBUG(\"'-", function.name, "()\");", sep='', file=output)

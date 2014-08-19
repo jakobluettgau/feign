@@ -83,6 +83,10 @@ End of global part
 //@horizontal_map_put_int ret
 //@rewriteCall open ''pathname,flags,mode'' ''const char *pathname, int flags, mode_t mode''
 //@feign_datatype_splice_after int translatedFlags;
+//@feign_provider_splice_after tr2 -> getActivityAttributeValueByName(a,  AO_MACRO_fileName, (void *) &d->pathname);
+//@feign_wrapper_splice_before printf("open: pathname: %s, flags: %d, ret: %d\n", d->pathname, d->flags, d->ret);
+//@feign_wrapper_splice_before ret = open(d->pathname, O_WRONLY | O_CREAT, S_IWUSR | S_IRUSR | S_IWGRP | S_IRGRP | S_IROTH );
+//@feign_wrapper_splice_after printf("open: return: %d\n", ret);
 int open( const char * pathname, int flags, ... );
 
 //@guard
@@ -162,6 +166,10 @@ ssize_t sendfile(int out_fd, int in_fd, off_t *offset, size_t count);
 //@activity_attribute bytesToWrite count
 //@activity_attribute fileHandle fd
 //@activity_attribute_late bytesWritten ret
+//@feign_wrapper_splice_before printf("write: fd: %d, count: %d, ret: %d\n", d->fd, d->count, d->ret);
+//@feign_wrapper_splice_before ret = write(d->fd, feign_shared_buffer(d->count), d->count);
+//@feign_wrapper_splice_before printf("write: return: %d\n", ret);
+
 ssize_t write( int fd, const void * buf, size_t count );
 
 //@guard

@@ -19,6 +19,25 @@ void feign_log(char const * message, int log_level) {
 
 
 
+/**
+ * Create direcory structure and.
+ */
+void feign_chroot_setup() {
+
+}
+
+
+/**
+ * Return chroot path that should be used by plugins.
+ * 
+ * TODO: establish environment information facility
+ *
+ * @return		string path
+ */
+const char* feign_chroot() {
+	static char * chroot = "./feign-chroot-data";
+	return chroot;
+}
 
 
 
@@ -26,11 +45,11 @@ void feign_log(char const * message, int log_level) {
 ///////////////////////////////////////////////////////////////////////////////
 /**
  * Use the feign_shared_buffer() function  if dummy data is needed, to prevent
- * redunt dummy data in memory.
+ * redundant dummy data in memory.
  *
  * This will keep a static buffer around, and reallocates more bytes as needed.
  */
-char * feign_shared_buffer(size_t size){
+char * feign_shared_buffer(unsigned int size){
 	static char * buffer = NULL;
 	static size_t buffer_size = 0;
 

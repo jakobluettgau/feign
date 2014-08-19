@@ -1,4 +1,30 @@
 template = {
+
+###############################################################################
+# feign related
+###############################################################################
+'feign_provider_splice_before': {
+	'variables': 'PROGRAMCODE',
+	'global': '',
+	'init': '',
+	'before': '',
+	'after': '',
+	'cleanup': '',
+	'feign_provider_before': '%(PROGRAMCODE)s'
+},
+
+'feign_provider_splice_after': {
+	'variables': 'PROGRAMCODE',
+	'global': '',
+	'init': '',
+	'before': '',
+	'after': '',
+	'cleanup': '',
+	'feign_provider_after': '%(PROGRAMCODE)s'
+},
+
+
+
 # component
 #
 # Registers (and unregisters) a new component with SIOX and
