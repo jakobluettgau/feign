@@ -304,7 +304,7 @@ Plugin * init() {
         str = "// provide"
         str += """
 Activity * provide(Activity * activity) {
-    FEIGN_LOG(4, "provide");
+    FEIGN_LOG(3, "provide");
 
     activity = NULL;
 
@@ -353,7 +353,7 @@ void free_sub_activity(posix_activity * pa) {
         # actual destroy
         str += """\n\n
 Activity * destroy(Activity * activity) {
-    FEIGN_LOG(4, "destroy");
+    FEIGN_LOG(3, "destroy");
 
     if ( activity->provider == plugin.instance_id ) {
         if ( activity->data != NULL ) {
@@ -384,7 +384,7 @@ Activity * destroy(Activity * activity) {
         str = "// reset"
         str = """
 Activity * reset(Activity * activity) {
-    CDEBUG("reset");
+    FEIGN_LOG(3,"reset");
     create_trace_reader();
     return NULL;
 }"""

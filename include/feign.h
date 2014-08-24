@@ -170,7 +170,7 @@ extern "C" {
 	int feign_register_hook_callback(char * hook, void * callback); // feign_callback_type?
 	int feign_register_hook_dlsym(char * hook, char * symbol);
 
-	void feign_log(int level, char* format, ...);
+	void feign_log(int level, const char* format, ...);
 
 	char * feign_shared_buffer(unsigned int bytes);
 	int feign_precreate_file(const char * filename, size_t size);

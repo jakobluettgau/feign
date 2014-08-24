@@ -15,7 +15,7 @@ extern int loglevel;
 
 // General helpers for debugging and information
 ///////////////////////////////////////////////////////////////////////////////
-void feign_log(int level, char* format, ...)
+void feign_log(int level, const char* format, ...)
 {
 	if ( level <= loglevel ) {
 		va_list args;

@@ -108,6 +108,10 @@ int creat( const char * pathname, mode_t mode );
 //@activity_attribute_late fileHandle ret
 //@rewriteCall open ''pathname,flags,mode'' ''const char *pathname, int flags, mode_t mode''
 //@feign_datatype_splice_after int translatedFlags;
+//@feign_provider_splice_after tr2 -> getActivityAttributeValueByName(a,  AO_MACRO_fileName, (void *) &d->pathname);
+//@feign_wrapper_splice_before printf("open64: pathname: %s, flags: %d, ret: %d\n", d->pathname, d->flags, d->ret);
+//@feign_wrapper_splice_before ret = open64(d->pathname, O_WRONLY | O_CREAT, S_IWUSR | S_IRUSR | S_IWGRP | S_IRGRP | S_IROTH );
+//@feign_wrapper_splice_after printf("open64: return: %d\n", ret);
 int open64( const char * pathname, int flags, ... );
 
 //@guard
@@ -124,6 +128,9 @@ int creat64( const char * pathname, mode_t mode );
 //@activity_attribute fileHandle fd
 //@horizontal_map_remove_int fd
 //@horizontal_map_remove_int fd MapName=activityHashTable_network_int
+//@feign_wrapper_splice_before feign_log(9,"close: fd: %d, ret: %d\n", d->ret);
+//@feign_wrapper_splice_before ret = close(d->fd);
+//@feign_wrapper_splice_before feign_log(9,"close: return: %d\n", ret);
 int close( int fd );
 
 //@guard
@@ -166,10 +173,9 @@ ssize_t sendfile(int out_fd, int in_fd, off_t *offset, size_t count);
 //@activity_attribute bytesToWrite count
 //@activity_attribute fileHandle fd
 //@activity_attribute_late bytesWritten ret
-//@feign_wrapper_splice_before printf("write: fd: %d, count: %d, ret: %d\n", d->fd, d->count, d->ret);
+//@feign_wrapper_splice_before feign_log(9,"write: fd: %d, count: %d, ret: %d\n", d->fd, d->count, d->ret);
 //@feign_wrapper_splice_before ret = write(d->fd, feign_shared_buffer(d->count), d->count);
-//@feign_wrapper_splice_before printf("write: return: %d\n", ret);
-
+//@feign_wrapper_splice_before feign_log(9,"write: return: %d\n", ret);
 ssize_t write( int fd, const void * buf, size_t count );
 
 //@guard
@@ -178,6 +184,9 @@ ssize_t write( int fd, const void * buf, size_t count );
 //@activity_attribute bytesToRead count
 //@activity_attribute_late bytesRead ret
 //@activity_attribute fileHandle fd
+//@feign_wrapper_splice_before feign_log(9,"read: fd: %d, count: %d, ret: %d\n", d->fd, d->count, d->ret);
+//@feign_wrapper_splice_before ret = read(d->fd, feign_shared_buffer(d->count), d->count);
+//@feign_wrapper_splice_before feign_log(9,"read: return: %d\n", ret);
 ssize_t read( int fd, void * buf, size_t count );
 
 //@guard
@@ -289,8 +298,13 @@ int fdatasync( int fd );
 //@errorErrno ''ret == (off_t) -1''
 //@activity
 //@activity_attribute fileHandle fd
+//@activity_attribute filePosition offset
+//#activity_attribute fileSeekMode whence
 //@activity_link_int fd
 //@activity_attribute filePosition ret
+//@feign_wrapper_splice_before feign_log(9,"lseek: fd=%d, offset=%d, whence=%d, ret=%d\n", d->fd, d->offset, d->whence, d->ret);
+//@feign_wrapper_splice_before ret = lseek(d->fd, d->offset, SEEK_SET);
+//@feign_wrapper_splice_after feign_log(9,"lseek: return: %d\n", ret);
 off_t lseek(int fd, off_t offset, int whence);
 
 
@@ -306,6 +320,9 @@ off_t lseek(int fd, off_t offset, int whence);
 //@activity_attribute fileAdviseExtent len
 //@activity_attribute fileAdvise advise
 //@activity_link_int fd
+//@feign_wrapper_splice_before feign_log(9,"posix_fadvise: fd=%d, offset=%d, len=%d, advise=%d, ret=%d\n", d->fd, d->offset, d->len, d->advise, d->ret);
+//@feign_wrapper_splice_before ret = posix_fadvise(d->fd, d->offset, d->len, d->advise);
+//@feign_wrapper_splice_after feign_log(9,"posix_fadvise: return: %d\n", ret);
 int posix_fadvise( int fd, off_t offset, off_t len, int advise );
 
 
