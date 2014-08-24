@@ -22,4 +22,5 @@ FEIGN_SIOX_PROVIDER=/home/pq/wr/siox/build/src/tools/TraceReader/feign_siox-prov
 feign \
 --plugin $FEIGN_SIOX_PROVIDER/libfeign_siox-provider.so \
 --plugin $FEIGN_DEV_PLUGIN_PATH/posix/libfeign_posix-replayer.so \
+$@
 #--plugin $FEIGN_DEV_PLUGIN_PATH/posix/libfeign_posix-precreator.so \

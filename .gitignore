@@ -3,6 +3,9 @@ build
 .waf*
 .lock-waf*
 
+# patch
+plugins.reference/
+
 # design
 design/*.svg
 design/*.png
