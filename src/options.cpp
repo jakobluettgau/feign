@@ -26,6 +26,7 @@ static GOptionEntry arguments[] =
   {"verbose", 'v', 0, G_OPTION_ARG_NONE, &verbose, "Verbose mode", NULL },
   {"version", 'V', 0, G_OPTION_ARG_NONE, &version, "Display version information", NULL },
   {"lookahead", 'l', 0, G_OPTION_ARG_INT, &lookahead, "Set fixed lookahead.", NULL },
+  {"loglevel", 'l', 0, G_OPTION_ARG_INT, &loglevel, "Set log level (higher = more).", NULL },
   {"plugin",  'p', 0, G_OPTION_ARG_FILENAME_ARRAY, &plugins, "Load plugin", "plugin.so" },
   {"plugin-global",  'P', 0, G_OPTION_ARG_FILENAME_ARRAY, &plugins_global, "Load plugin with RTLD_GLOBAL", "plugin.so" },
   { NULL },

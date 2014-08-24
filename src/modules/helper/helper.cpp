@@ -1,4 +1,6 @@
 #include <stdio.h>
+#include <stdarg.h>
+
 #include <fcntl.h>
 #include <errno.h>
 #include <stdlib.h>
@@ -9,14 +11,19 @@
 
 #include "helper.h"
 
+extern int loglevel;
 
 // General helpers for debugging and information
 ///////////////////////////////////////////////////////////////////////////////
-void feign_log(char const * message, int log_level) {
-	printf("LOG! LOG! LOG! :)\n");
+void feign_log(int level, char* format, ...)
+{
+	if ( level <= loglevel ) {
+		va_list args;
+		va_start(args,format);
+		vprintf(format,args);
+		va_end(args);
+	}
 }
-
-
 
 
 /**
@@ -66,11 +73,11 @@ char * feign_shared_buffer(unsigned int size){
 
 		buffer_size = size;
 
-		printf("Memory reallocated for %lld bytes\n", (long long int) size);
+		feign_log(6, "Memory reallocated for %lld bytes\n", (long long int) size);
 		return buffer;
 	}
 	else {
-		printf("Not enough memory available to allocate %lld bytes!\n",  (long long int) size);
+		feign_log(6, "Not enough memory available to allocate %lld bytes!\n",  (long long int) size);
 		exit(1);
 	}
 }

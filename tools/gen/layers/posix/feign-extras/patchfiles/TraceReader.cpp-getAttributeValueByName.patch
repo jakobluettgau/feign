@@ -1,5 +1,5 @@
 --- ../TraceReader.reference/TraceReader.cpp	2014-07-15 17:25:32.666452930 +0200
-+++ TraceReader.cpp	2014-08-11 13:26:26.195594188 +0200
++++ TraceReader.cpp	2014-08-24 17:08:31.476130352 +0200
 @@ -12,11 +12,44 @@
  #include <monitoring/association_mapper/modules/TopologyAssociationMapper/TopologyAssociationMapperOptions.hpp>
  #include <monitoring/ontology/modules/TopologyOntology/TopologyOntologyOptions.hpp>
@@ -89,7 +89,7 @@
  		strdelta( a->time_stop() - a->time_start(), str );
  		if( printHostname )
  			str << " " << s->lookup_node_hostname( a->aid().cid.pid.nid );
-@@ -170,6 +231,54 @@
+@@ -170,6 +231,50 @@
  }
  
  
@@ -97,7 +97,6 @@
 +void TraceReader::getActivityAttributeValueByName( Activity * a, const char * domain, const char * name, void * buf )
 +{
 +	
-+	printf("TR: trying to find attribute\n");
 +	try {
 +		
 +
@@ -109,15 +108,12 @@
 +			if ( itr->id == oa.aID ){
 +				// activity has attribute write to buf
 +				// TODO: buf = (void *) a->value;
-+				printf("Attribute found! :)\n");
 +				convert_attribute_back(oa, itr->value, buf);
 +				break; // TODO: check if multiple instances of same attribute are allowed
 +			} else {
 +				// not found
 +			}
 +		}
-+
-+		
 +
 +		// parent ids!?
 +//		if( a->parentArray().begin() != a->parentArray().end() ) {
@@ -144,7 +140,7 @@
  //try{
  //   o->set_process_attribute(pid, a1, v2);
  //   assert(false);
-@@ -180,4 +289,4 @@
+@@ -180,4 +285,4 @@
  //  assert(false);
  // }catch(NotFoundError & e){
  

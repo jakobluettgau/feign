@@ -230,7 +230,7 @@ Plugin * init() {
 
             str += "\t"*3 + "// GENERATED FROM TEMPLATE END\n"
 
-            str += "\t"*3 + """DEBUG("create %s()");\n""" % (function.name)
+            str += "\t"*3 + """FEIGN_LOG(3, "create %s()");\n""" % (function.name)
             ###
             str += "\t"*2 + "}\n"
             str += "\t"*3 + """break;\n\n"""
@@ -304,7 +304,7 @@ Plugin * init() {
         str = "// provide"
         str += """
 Activity * provide(Activity * activity) {
-    CDEBUG("provide");
+    FEIGN_LOG(4, "provide");
 
     activity = NULL;
 
@@ -342,7 +342,7 @@ void free_sub_activity(posix_activity * pa) {
             # write function signature
 
             str += "\t"*2 + """case POSIX_%s:\n""" % (function.name)
-            str += "\t"*3 + """DEBUG("free %s()");\n""" % (function.name)
+            str += "\t"*3 + """FEIGN_LOG(4, "free %s()");\n""" % (function.name)
             str += "\t"*3 + """break;\n\n"""
 
 
@@ -353,7 +353,7 @@ void free_sub_activity(posix_activity * pa) {
         # actual destroy
         str += """\n\n
 Activity * destroy(Activity * activity) {
-    CDEBUG("destroy");
+    FEIGN_LOG(4, "destroy");
 
     if ( activity->provider == plugin.instance_id ) {
         if ( activity->data != NULL ) {

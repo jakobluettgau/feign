@@ -12,9 +12,10 @@
 
 
 
-#define DEBUG(a) printf("%-30s %3d %s:%d\n", a, -1 /* plugin.instance_id */, __FILE__, __LINE__)
+#define FEIGN_LOG(loglevel, msg) feign_log(loglevel, "%-30s %3d %s:%d\n", msg, -1 /* plugin.instance_id */, __FILE__, __LINE__)
+#define DEBUG(msg) feign_log(5,"%-30s %3d %s:%d\n", msg, -1 /* plugin.instance_id */, __FILE__, __LINE__)
 //#define DEBUG(a)
-#define CDEBUG(a) printf("%-30s %3d %s:%d\n", a, -1 /* plugin.instance_id */, __FILE__, __LINE__)
+#define CDEBUG(msg) feign_log(5,"%-30s %3d %s:%d\n", msg, -1 /* plugin.instance_id */, __FILE__, __LINE__)
 //#define CDEBUG(a)
 
 
@@ -169,7 +170,7 @@ extern "C" {
 	int feign_register_hook_callback(char * hook, void * callback); // feign_callback_type?
 	int feign_register_hook_dlsym(char * hook, char * symbol);
 
-	void feign_log(char const * message, int log_level);
+	void feign_log(int level, char* format, ...);
 
 	char * feign_shared_buffer(unsigned int bytes);
 	int feign_precreate_file(const char * filename, size_t size);

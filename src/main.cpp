@@ -20,6 +20,8 @@ gboolean version = FALSE;
 gchar ** plugins;
 gchar ** plugins_global;
 int lookahead;
+int loglevel = 1;
+
 
 
 int load_plugins(gchar ** list, int(*load_plugin)(char const *)) {
@@ -56,9 +58,14 @@ int main(int argc, char *argv[])
 	printf("Option: version = %d\n", version);
 	printf("Option: lookahead = %d\n", lookahead);
 
+	// loglevel test
+	for ( int l = 0; l < 10; l++) 
+	{
+		feign_log(l, "Loglevel %d active.\n", l);
+	}
+
 	// keep everything nice and tidy
 	printf("\n");
-
 	
 	int num_plugins_loaded = 0;
 

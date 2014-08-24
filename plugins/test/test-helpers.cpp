@@ -31,7 +31,7 @@ Plugin * init() {
 	// gonna be provider and replayer
 	// but provider should negotiate identifier
 
-	feign_log("blub", 2);
+	feign_log(2, "testing loglevel 2");
 	feign_shared_buffer(3);
 
 

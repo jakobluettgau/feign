@@ -18,6 +18,8 @@ extern gchar * environment_path;	// TODO: propose feign tmp directory structure
 extern gboolean rollback;			// rollback environment after replay?
 extern int lookahead;			// rollback environment after replay?
 
+extern int loglevel;
+
 // debug, verbose and other helpers that are available throughout feign core
 //void Debug();
 //void Verbose();
