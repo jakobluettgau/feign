@@ -8,14 +8,19 @@
 #include <list>
 #endif
 
-
-
-
-
-#define FEIGN_LOG(loglevel, msg) feign_log(loglevel, "%-30s %3d %s:%d\n", msg, -1 /* plugin.instance_id */, __FILE__, __LINE__)
+/**
+ * Feign provides a logging facility that should be used to make use of the
+ * different modes of verbosity when replaying traces. 
+ *
+ * TODO: Either way this comes with a panelty. Convienience adds at least the
+ * calltime and the condition to execution time. Getting rid of this would
+ * require to compile everything again or to keep two copies around. One with
+ * and one without logging.
+ */
+#define FEIGN_LOG(loglevel, msg) feign_log(loglevel, "%-30s %3d %s:%d\n", msg, -1 /* plugin.instance_id */, __FILE__, __LINE__) 
 #define DEBUG(msg) feign_log(5,"%-30s %3d %s:%d\n", msg, -1 /* plugin.instance_id */, __FILE__, __LINE__)
 //#define DEBUG(a)
-#define CDEBUG(msg) feign_log(5,"%-30s %3d %s:%d\n", msg, -1 /* plugin.instance_id */, __FILE__, __LINE__)
+#define CDEBUG(msg) feign_log(5,"%-30s %3d %s:%d\n", msg, -1 /*plugin.instance_id*/, __FILE__, __LINE__)
 //#define CDEBUG(a)
 
 
@@ -43,25 +48,6 @@ typedef struct Statistic {
 	int status;
 } Statistic;
 
-
-
-/**
- * Intermediate Datatype: FunctionArgument, to get rid of void* for data
- */
-//@serializable
-typedef union FunctionArgumentValue {
-	char * c;
-	int * i;
-	long * l;
-	float * f;
-	double * d;
-} FunctionArgumentValue;
-
-//@serializable
-typedef struct FunctionArgument {
-	int type;
-	FunctionArgumentValue value;
-} FunctionArgument;
 
 
 /**

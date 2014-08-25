@@ -135,7 +135,37 @@ Plugin * init() {
 
     // announce features and request further action
     return &plugin;
-}"""
+}
+
+
+int provided_count = 0;
+long int last_start = -1;
+long int last_stop = -1;
+long int siox_get_offset(monitoring::Activity * a) {
+	
+	long int start = a->time_start();
+	long int stop = a->time_stop();
+
+	if ( 0 == provided_count ) {
+		last_stop = start;
+		provided_count++;
+	}
+
+	//printf("* last_start: %ld\\n", last_start);
+	//printf("* last_stop: %ld\\n", last_stop);
+	//printf("* start: %ld\\n", start);
+	//printf("* stop: %ld\\n", stop);
+
+	long int offset = start - last_stop;
+	printf("* offset: %ld\\n", offset);
+
+	last_start = start;
+	last_stop = stop;
+
+	return offset;
+}
+
+"""
 
         return str
 
@@ -385,6 +415,7 @@ Activity * destroy(Activity * activity) {
         str = """
 Activity * reset(Activity * activity) {
     FEIGN_LOG(3,"reset");
+    provided_count = 0;
     create_trace_reader();
     return NULL;
 }"""

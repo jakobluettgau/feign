@@ -5,6 +5,8 @@
 #include "replay.h"
 #include "plugins.h"
 
+#include "modules/helper/helper.h"
+
 // buffer settings
 std::list<Activity*> buffer;
 int capacity = 10000;				// max capacity
@@ -187,14 +189,14 @@ int replay() {
 		}
 
 
-		//printf("offset: %ld\n", a->offset);
+		feign_log(3,"offset: %ld\n", a->offset);
 		long actual_sleep = a->offset;
-		//struct timespec start;
-		//struct timespec end;
+		struct timespec start;
+		struct timespec end;
 
-		//start_timer(&start);
+		start_timer(&start);
 		nsleep(actual_sleep);
-		//stop_timer(&start, &end, -1);
+		stop_timer(&start, &end, -1);
 
 
 		if ( precreation ) {
