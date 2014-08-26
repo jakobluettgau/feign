@@ -4,14 +4,20 @@ Make sure you got the "../siox-replay" demo running before trying this one.
 The example case, uses previously recorded trace data and injects fadvise 
 readahead hints automatically. 
 
+Unfortunetly the tracefiles are very large, which si why they are not provided
+with the repository. You can however easily generate the trace files when you
+have SIOX installed. Run make to create the executables and user trace.sh
+to create an application trace.
+
+	make
+	./trace.sh demo-trace ../fadvise-readAhead.withoutfadvise.stride12288.think100
 
 
-
-
-The plugin code can be found and modified in the "feign_posix-fadvise-injection"
-directory.
+The optimizer plugin can be found and modified in the "feign_posix-fadvise-injection"
+directory. You may use waf to build the modified plugin.
 
 	cd feign_posix-fadvise-injection
+	$FEIGN/waf
 
 
 
