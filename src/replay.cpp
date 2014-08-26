@@ -212,7 +212,6 @@ typedef struct Activity {
 			continue;
 		}
 
-
 		print_replay_buffer();
 
 
@@ -221,9 +220,9 @@ typedef struct Activity {
 		struct timespec start;
 		struct timespec end;
 
-		start_timer(&start);
+		//start_timer(&start);
 		nsleep(actual_sleep);
-		stop_timer(&start, &end, -1);
+		//stop_timer(&start, &end, -1);
 
 
 		if ( precreation ) {

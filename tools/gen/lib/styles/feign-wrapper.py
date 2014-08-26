@@ -75,7 +75,7 @@ void dump_map() {
                         print('\t', outputString, end='\n', sep='', file=output)
             print("// GENERATED FROM TEMPLATE END\n", file=output)
 
-            print("\t","DEBUG(\"'-", function.name, "()\");", sep='', file=output)
+            print("\t","FEIGN_LOG(2,\"'-", function.name, "()\");", sep='', file=output)
             print("\t","return 0;\n}", sep='', file=output)
 
 

@@ -2,6 +2,8 @@
 #include <iostream>
 #include <list>
 
+#include <fcntl.h> // for posix fadvise
+
 #include <feign.h>
 #include "posix/datatypes.h"
 
@@ -95,15 +97,7 @@ Activity * create_posix_fadvise(int fd, off_t offset, off_t len, int advise, int
 
 
 int mutate_context(std::list<Activity*>::iterator iter, std::list<Activity*>::iterator end, std::list<Activity*> list) {
-	FEIGN_LOG(3, "mutate_context(): inject fadvise before lseek");
-
-	Activity * activity = (*iter);
-
-	// how many activities in the future do we consider?
-	int check_num = 5;
-
 // TURN (original):
-
 // [...]
 // lseek(3, 37552128, SEEK_SET)            = 37552128
 // nanosleep({0, 100000}, NULL)            = 0
@@ -122,7 +116,6 @@ int mutate_context(std::list<Activity*>::iterator iter, std::list<Activity*>::it
 // [...]
 
 // TO (original with injected fadvise):
-
 // [...]
 // fadvise64(3, 24563712, 1024, POSIX_FADV_WILLNEED) = 0
 // lseek(3, 24563712, SEEK_SET)            = 24563712
@@ -140,27 +133,66 @@ int mutate_context(std::list<Activity*>::iterator iter, std::list<Activity*>::it
 // mincore(0x7f9d9c738000, 1024, [10000000000000000000000010000000...]) = 0
 // [...]
 
-	int stopit = 0;
+	FEIGN_LOG(5, "mutate_context(): inject fadvise before lseek");
 
+	Activity * activity = (*iter);
 
-	while ( iter != end && check_num > 0 )
+	if ( iter != end )
 	{
-		feign_log(4, "m: activity->layer = %d, check_num = %d\n", activity->layer, check_num);
+		iter++;
+		activity = (*iter);
+	
+		if ( activity->layer == layer_id ) {
+
+			posix_activity * sub_activity = (posix_activity*)activity->data;
+
+			if ( sub_activity->type == POSIX_lseek && activity->status != 77 )
+			{
+				// make sure to insert only once
+				activity->status = 77;
+
+				// get lseek data
+				void * data = sub_activity->data;
+				posix_lseek_data * d = (posix_lseek_data*) data;
+			
+				// create new posix_fadvise activity
+				Activity * a = create_posix_fadvise(d->fd, 1180876800, 1024, POSIX_FADV_WILLNEED, 0);
+				feign_log(9, "## MUT: %p, status=%d, provider=%d, offset=%d, layer=%d, size=%d, rank=%d\n",
+									   a, a->status, a->provider, a->offset, a->layer, a->size, a->rank);
+
+				//insert the activity and exit	
+				list.insert(iter, a);
+				feign_log(1, "advice added! %p      %s:%d\n", a, __FILE__, __LINE__);
+
+				return 1;
+			}
+		}
+	}
+			
+
+		/*
+
+		feign_log(4, "activity: %p, m: activity->layer = %d, check_num = %d\n", activity, activity->layer, check_num);
 
 		if ( activity->layer == layer_id ) {
 			posix_activity * sub_activity = (posix_activity*)activity->data;
 
+			feign_log(4, "sub-activity: %p, m: sub->type = %d (lseek is %d)\n", sub_activity, sub_activity->type, POSIX_lseek);
 			void * data = sub_activity->data;
 
 			switch ( sub_activity->type ) {
-				case POSIX_write:
+
+				case POSIX_lseek:
 					{
-						posix_write_data * d = (posix_write_data*) data;
-						FEIGN_LOG(1, "write found!");
+						posix_lseek_data * d = (posix_lseek_data*) data;
+						FEIGN_LOG(1, "lseek found!");
 
-						Activity * a = create_posix_fadvise(0,0,0,0,0);
+						
 
-	feign_log(9, "## MUT: status=%d, provider=%d, offset=%d, layer=%d, size=%d, rank=%d\n", a->status, a->provider, a->offset, a->layer, a->size, a->rank);
+
+						Activity * a = create_posix_fadvise(d->fd, 1180876800, 1024, POSIX_FADV_WILLNEED, 0);
+
+	feign_log(9, "## MUT: %p, status=%d, provider=%d, offset=%d, layer=%d, size=%d, rank=%d\n", a, a->status, a->provider, a->offset, a->layer, a->size, a->rank);
 
 					
 						std::cout << "list size=" << list.size() << std::endl;
@@ -169,37 +201,22 @@ int mutate_context(std::list<Activity*>::iterator iter, std::list<Activity*>::it
 						if ( check_num < 5 )
 						{
 							list.insert(iter, a);
+							stopit = 1;
 						}
 
-						feign_log(1, "advice added! %p\n", a);
-
-					}
-					break;
-
-
-				case POSIX_lseek:
-					{
-						posix_lseek_data * d = (posix_lseek_data*) data;
-						FEIGN_LOG(1, "lseek found!");
-
-						Activity * a = create_posix_fadvise(0,0,0,0,0);
-						// insert inserts after
-						
-						//list.insert(iter, a);
-						feign_log(1, "advice added! %p\n", a);
+						feign_log(1, "advice added! %p      %s:%d\n", a, __FILE__, __LINE__);
 					}
 					break;
 			}
 
 
-			if ( stopit ) {
-				break;
-			}
+
 
 		}
 
+		*/
 
-		iter++;
+
 		/*
 		activity = (*iter);
 		// insert after 4 if not followed by 5
@@ -208,8 +225,8 @@ int mutate_context(std::list<Activity*>::iterator iter, std::list<Activity*>::it
 		}
 		*/
 
-		check_num--;
-	}
+	
+
 
 
 	//activity = (*it);

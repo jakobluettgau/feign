@@ -382,20 +382,29 @@ void free_sub_activity(posix_activity * pa) {
 }"""
         # actual destroy
         str += """\n\n
+
 Activity * destroy(Activity * activity) {
-    FEIGN_LOG(3, "destroy");
+    feign_log(9, "destroy: %p\\n", activity);
+
+	Activity * a = activity;
+	feign_log(9, "$Destroy: status=%d, provider=%d, offset=%d, layer=%d, size=%d, rank=%d\\n", a->status, a->provider, a->offset, a->layer, a->size, a->rank);
 
     if ( activity->provider == plugin.instance_id ) {
+    	FEIGN_LOG(3, "I destroy!");   
         if ( activity->data != NULL ) {
             posix_activity * sub_activity = (posix_activity *)(activity->data);
 
             if ( sub_activity->data != NULL ) {
-                //free(sub_activity->data);
+            	FEIGN_LOG(3,"not really freeing sub_activity->data");
+            	feign_log(9, "free(sub->data: %p)\\n", activity);
+				free(sub_activity->data);
             } else {
             }
-            free(sub_activity);
+            feign_log(9, "free(sub: %p)\\n", activity);
+			free(sub_activity);
         } else {
         }
+        feign_log(9, "free(activity: %p)\\n", activity);
         free(activity);
         return NULL;
     } else {
@@ -403,7 +412,9 @@ Activity * destroy(Activity * activity) {
     }
 
     return NULL;
-}"""
+}
+
+"""
         return str
 
 
