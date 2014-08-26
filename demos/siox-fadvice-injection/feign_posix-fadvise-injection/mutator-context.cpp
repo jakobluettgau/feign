@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <iostream>
 #include <list>
 
 #include <feign.h>
@@ -13,11 +14,11 @@
 Plugin plugin = {
 	.name = "fadvise-injector",
 	.version = NULL,
-	.intents = FEIGN_MUTATOR_CONTEXT,
+	.intents = FEIGN_MUTATOR_CONTEXT | FEIGN_DESTROYER,
 };
 
-
 int layer_id = 13;
+
 
 
 // implement handlers
@@ -30,6 +31,68 @@ Plugin * init() {
 	return &plugin;
 }
 
+/**
+ *  As a reminder for the relevant declarations and definitons.
+ **
+// feign activity
+typedef struct Activity {
+	int status;  // like to discard an activity without reorganisation penalty
+	int provider;
+	long long offset;
+	int layer;
+	int size;
+	void * data;
+	Statistic * stats;
+	int rank;
+} Activity;
+
+// posix activity
+typedef struct posix_activity {
+	int type;
+	void * data;
+	int ret;
+} posix_activity;
+
+// posix_fadvise data
+struct posix_posix_fadvise_struct
+{
+	int  fd;
+ 	off_t  offset;
+ 	off_t  len;
+ 	int  advise;
+ 	int ret;
+};
+typedef struct posix_posix_fadvise_struct posix_posix_fadvise_data;
+
+ **
+ * @return	pointer to a newly craeted activity
+ */
+Activity * create_posix_fadvise(int fd, off_t offset, off_t len, int advise, int ret) 
+{
+	// allocate memory for the activity
+    Activity * activity = (Activity *) malloc(sizeof(Activity));
+    posix_activity * sub_activity = (posix_activity *) malloc(sizeof(posix_activity));
+	posix_posix_fadvise_data * d = (posix_posix_fadvise_data *) malloc(sizeof(posix_posix_fadvise_data));
+
+	// set values
+	d->fd = fd;
+	d->offset = offset;
+	d->len = len;
+	d->advise = advise;
+	d->ret = ret;
+
+    sub_activity->type = POSIX_posix_fadvise;
+    sub_activity->data = (void *) d;
+
+    activity->layer = layer_id;
+    activity->offset = 0;
+    activity->data = (void *) sub_activity;
+    activity->provider = plugin.instance_id;
+
+	return activity;
+}
+
+
 
 int mutate_context(std::list<Activity*>::iterator iter, std::list<Activity*>::iterator end, std::list<Activity*> list) {
 	FEIGN_LOG(3, "mutate_context(): inject fadvise before lseek");
@@ -39,7 +102,7 @@ int mutate_context(std::list<Activity*>::iterator iter, std::list<Activity*>::it
 	// how many activities in the future do we consider?
 	int check_num = 5;
 
-// TURN:
+// TURN (original):
 
 // [...]
 // lseek(3, 37552128, SEEK_SET)            = 37552128
@@ -58,7 +121,7 @@ int mutate_context(std::list<Activity*>::iterator iter, std::list<Activity*>::it
 // nanosleep({0, 100000}, NULL)            = 0
 // [...]
 
-// TO:
+// TO (original with injected fadvise):
 
 // [...]
 // fadvise64(3, 24563712, 1024, POSIX_FADV_WILLNEED) = 0
@@ -77,6 +140,8 @@ int mutate_context(std::list<Activity*>::iterator iter, std::list<Activity*>::it
 // mincore(0x7f9d9c738000, 1024, [10000000000000000000000010000000...]) = 0
 // [...]
 
+	int stopit = 0;
+
 
 	while ( iter != end && check_num > 0 )
 	{
@@ -85,12 +150,50 @@ int mutate_context(std::list<Activity*>::iterator iter, std::list<Activity*>::it
 		if ( activity->layer == layer_id ) {
 			posix_activity * sub_activity = (posix_activity*)activity->data;
 
+			void * data = sub_activity->data;
+
 			switch ( sub_activity->type ) {
-				case POSIX_lseek:
+				case POSIX_write:
 					{
-						FEIGN_LOG(1, "lseek found!");
+						posix_write_data * d = (posix_write_data*) data;
+						FEIGN_LOG(1, "write found!");
+
+						Activity * a = create_posix_fadvise(0,0,0,0,0);
+
+	feign_log(9, "## MUT: status=%d, provider=%d, offset=%d, layer=%d, size=%d, rank=%d\n", a->status, a->provider, a->offset, a->layer, a->size, a->rank);
+
+					
+						std::cout << "list size=" << list.size() << std::endl;
+
+						// insert inserts before
+						if ( check_num < 5 )
+						{
+							list.insert(iter, a);
+						}
+
+						feign_log(1, "advice added! %p\n", a);
+
 					}
 					break;
+
+
+				case POSIX_lseek:
+					{
+						posix_lseek_data * d = (posix_lseek_data*) data;
+						FEIGN_LOG(1, "lseek found!");
+
+						Activity * a = create_posix_fadvise(0,0,0,0,0);
+						// insert inserts after
+						
+						//list.insert(iter, a);
+						feign_log(1, "advice added! %p\n", a);
+					}
+					break;
+			}
+
+
+			if ( stopit ) {
+				break;
 			}
 
 		}
@@ -122,6 +225,36 @@ int mutate_context(std::list<Activity*>::iterator iter, std::list<Activity*>::it
 	return 0;
 }
 
+Activity * destroy(Activity * activity) {
+    FEIGN_LOG(3, "destroy");
+    feign_log(9, "destroy: %p\n", activity);
+
+	Activity * a = activity;
+	feign_log(9, "$Destroy: status=%d, provider=%d, offset=%d, layer=%d, size=%d, rank=%d\n", a->status, a->provider, a->offset, a->layer, a->size, a->rank);
+
+    if ( activity->provider == plugin.instance_id ) {
+		FEIGN_LOG(3, "I destroy!");
+        if ( activity->data != NULL ) {
+            posix_activity * sub_activity = (posix_activity *)(activity->data);
+
+            if ( sub_activity->data != NULL ) {
+				feign_log(9, "free(sub->data: %p)\n", activity);
+                free(sub_activity->data);
+            } else {
+            }
+			feign_log(9, "free(sub: %p)\n", activity);
+            free(sub_activity);
+        } else {
+        }
+		feign_log(9, "free(activity: %p)\n", activity);
+        free(activity);
+        return NULL;
+    } else {
+        return activity;
+    }
+
+    return NULL;
+}
 
 int finalize() {
 

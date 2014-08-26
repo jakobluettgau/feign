@@ -314,7 +314,7 @@ long int siox_get_offset(monitoring::Activity * a) {
         #TODO: offset calculation is wrong, needs to consider previos activity!
         str += """
 	// siox timestamps come in nanosecond resolution
-	long offset = a->time_stop() - a->time_start();
+	long offset = siox_get_offset(a);
 
 	if ( activity != NULL ) {
 		activity->offset = offset;

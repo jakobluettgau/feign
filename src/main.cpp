@@ -17,6 +17,7 @@
 // TODO: reconsider dropping "real" globals within feign core
 gboolean verbose = FALSE;
 gboolean version = FALSE;
+gboolean with_precreation = FALSE;
 gchar ** plugins;
 gchar ** plugins_global;
 int lookahead;
@@ -78,24 +79,18 @@ int main(int argc, char *argv[])
 		return 0;
 	}
 
-
+	// set sanitized default lookahead
 	if ( lookahead < 1 ) {
-		lookahead = 1;
+		lookahead = 4;
 	}
 
+	// replay/provider phase status flags
+	int r = -1;
+	int p = -1;
 
-	// replay trace
-	//
-	//
-	// phased replay
-	//
-	//
-
-		int r = -1;
-		int p = -1;
-
-
-		printf("begin precreation ================================================\n");
+	// precreate environment
+	if ( with_precreation ) {
+		feign_log(2,"begin precreation ================================================\n");
 
 		p = preload();
 		while ( (r = replay()) != 1 ) {
@@ -103,22 +98,22 @@ int main(int argc, char *argv[])
 			p = preload();
 		}
 
-		printf("precreation create files =========================================\n\n");
+		feign_log(2,"precreation create files =========================================\n\n");
 
 		activity_precreate(NULL);
 
-		printf("finish precreation ===============================================\n\n");
+		feign_log(2,"finish precreation ===============================================\n\n");
 
 		// reset
 		replay_manager_print_stats();
 		reset_replay_stats();
 		reset_buffer_flags();
 		activity_reset(NULL);
+	}
 
+	// collect times for the actual application run
 	struct timespec start;
 	struct timespec end;
-
-
 
 	// phased replay
 	printf("begin replay =====================================================\n");

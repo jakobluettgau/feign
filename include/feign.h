@@ -85,6 +85,7 @@ enum feign_plugin_intents {
 	FEIGN_MUTATOR_CONTEXT      = (1 << 4),
 	FEIGN_WRITER               = (1 << 5),
 	FEIGN_REPLAYER             = (1 << 6),
+	FEIGN_DESTROYER			   = (1 << 7),
 //	FEIGN_REPLAYER_EXCLUSIVE   = (1 << 7),
 //	FEIGN_REPLAYER_PSEUDO      = (1 << 8),
 	FEIGN_PRECREATOR           = (1 << 9),

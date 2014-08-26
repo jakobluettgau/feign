@@ -1,5 +1,5 @@
 all:
-	sh run-fadvise-test.sh
+	sh compile-fadvise-test.sh
 
 clean:
 	rm -rf fadvise-readAhead.fadvise.*

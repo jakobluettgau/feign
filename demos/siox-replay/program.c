@@ -15,6 +15,7 @@ int main(int argc, char *argv[])
 	if ( fd != -1 )
 	{
 		write(fd, "abc", 3);
+		write(fd, "def", 3);
 		close(fd);
 	}
 

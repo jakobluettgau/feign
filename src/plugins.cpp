@@ -178,7 +178,11 @@ int pm_load_handlers(void * handle, int intents) {
 			"\nMake sure to define \"Activity * precreate_check(Activity * activity) {}\" when the FEIGN_PRECREATOR flag is set.\n");
 	}
 
-
+	if ( FEIGN_DESTROYER & intents ) {
+		printf("'-> This plugin wants to register as a destroyer.\n");
+		dlsym_push_back_handler(handle, &destroyers, "destroy",
+			"\nMake sure to define \"Activity * destroy(Activity * activity) {}\" when the FEIGN_PROVIDER flag is set.\n");
+	}
 
 	return 0;
 }

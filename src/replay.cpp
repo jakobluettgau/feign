@@ -16,7 +16,8 @@ int provider_depleted = 0;		// providers depleted?
 int buffer_depleted = 0;		// providers depleted?
 
 // replay flags
-int precreation = 1;
+//int precreation = 1;
+int precreation = 0;
 
 
 // replay statistics
@@ -82,10 +83,15 @@ int preload() {
 			provide_count++;
 			preload_count++;
 
+
+
+			feign_log(9, "Preload Activity %p: status=%d, provider=%d, offset=%d, layer=%d, size=%d, rank=%d\n", a, a->status, a->provider, a->offset, a->layer, a->size, a->rank);
+
 			// filter
 			Activity * filtered = activity_filter(a);
 			if ( filtered == NULL ) {
 				filter_count++;
+				feign_log(9, "$Destroy: status=%d, provider=%d, offset=%d, layer=%d, size=%d, rank=%d\n", a->status, a->provider, a->offset, a->layer, a->size, a->rank);
 				activity_destroy(a);
 				//printf("- - -\n");
 				a = activity_provide();
@@ -104,6 +110,7 @@ int preload() {
 					if ( mutated == NULL ) {
 						filter_count++;
 						// TODO: decide if to destroy
+						feign_log(9, "$Destroy: status=%d, provider=%d, offset=%d, layer=%d, size=%d, rank=%d\n", a->status, a->provider, a->offset, a->layer, a->size, a->rank);
 						activity_destroy(a);
 						printf("- - -\n");
 						a = activity_provide();
@@ -149,6 +156,22 @@ int replay() {
 
 		Activity * a = buffer.front();
 
+/*
+typedef struct Activity {
+	int status;  // like to discard an activity without reorganisation penalty
+	int provider;
+	long long offset;
+	int layer;
+	int size;
+	void * data;
+	Statistic * stats;
+	int rank;
+} Activity;
+*/
+
+		feign_log(9, "Activity %p: status=%d, provider=%d, offset=%d, layer=%d, size=%d, rank=%d\n", a, a->status, a->provider, a->offset, a->layer, a->size, a->rank);
+		
+
 		//provide_count++;
 
 		// context aware filter
@@ -174,6 +197,7 @@ int replay() {
 		}
 
 
+		print_replay_buffer();
 
 		int mutated = activity_mutate_context(buffer.begin(), buffer.end(), buffer);
 		if ( mutated == 1 ) {
@@ -187,6 +211,9 @@ int replay() {
 			a = activity_provide();
 			continue;
 		}
+
+
+		print_replay_buffer();
 
 
 		feign_log(3,"offset: %ld\n", a->offset);
@@ -235,10 +262,13 @@ int replay() {
 
 
 void print_replay_buffer() {
+	feign_log(9, "========================\n");
 	for (auto it=buffer.begin(); it != buffer.end(); ++it) {
 		Activity * a = (*it);
-		activity_replay(a);
+		feign_log(9, "Activity %p: status=%d, provider=%d, offset=%d, layer=%d, size=%d, rank=%d\n", a, a->status, a->provider, a->offset, a->layer, a->size, a->rank);
+		//activity_replay(a);
 	}
+	feign_log(9, "========================\n");
 }
 
 

@@ -9,6 +9,7 @@
 // TODO the following variables don't get global scope, but every *.cpp has their own :/
 extern gboolean verbose;			// display debug?
 extern gboolean version;			// display feign version
+extern gboolean with_precreation;			// precreation run?
 extern gchar ** plugins;			// for normal shared libraries
 extern gchar ** plugins_global;		// for shared libraries that require RTLD_GLOBAL
 
