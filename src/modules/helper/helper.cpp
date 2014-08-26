@@ -13,6 +13,11 @@
 
 extern int loglevel;
 
+
+int feign_get_loglevel() {
+	return loglevel;
+}
+
 // General helpers for debugging and information
 ///////////////////////////////////////////////////////////////////////////////
 void feign_log(int level, const char* format, ...)
@@ -50,7 +55,7 @@ const char* feign_chroot() {
 
 // I/O related helpers
 ///////////////////////////////////////////////////////////////////////////////
-/**
+/*
  * Use the feign_shared_buffer() function  if dummy data is needed, to prevent
  * redundant dummy data in memory.
  *

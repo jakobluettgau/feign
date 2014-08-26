@@ -162,6 +162,8 @@ extern "C" {
 	char * feign_shared_buffer(unsigned int bytes);
 	int feign_precreate_file(const char * filename, size_t size);
 
+	int feign_get_loglevel();
+
 }
 
 /**

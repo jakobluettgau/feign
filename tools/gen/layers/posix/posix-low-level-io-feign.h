@@ -84,8 +84,9 @@ End of global part
 //@rewriteCall open ''pathname,flags,mode'' ''const char *pathname, int flags, mode_t mode''
 //@feign_datatype_splice_after int translatedFlags;
 //@feign_provider_splice_after tr2 -> getActivityAttributeValueByName(a,  AO_MACRO_fileName, (void *) &d->pathname);
-//@feign_wrapper_splice_before printf("open: pathname: %s, flags: %d, ret: %d\n", d->pathname, d->flags, d->ret);
-//@feign_wrapper_splice_before ret = open(d->pathname, O_WRONLY | O_CREAT, S_IWUSR | S_IRUSR | S_IWGRP | S_IRGRP | S_IROTH );
+//@feign_provider_splice_after d ->flags = translateSIOXFlagsToPOSIX( d->translatedFlags );
+//@feign_wrapper_splice_before printf("open: pathname: %s, flags: %d, translatedFlags=%d, ret: %d\n", d->pathname, d->flags, d->translatedFlags, d->ret);
+//@feign_wrapper_splice_before ret = open(d->pathname, d->flags, S_IWUSR | S_IRUSR | S_IWGRP | S_IRGRP | S_IROTH );
 //@feign_wrapper_splice_after printf("open: return: %d\n", ret);
 int open( const char * pathname, int flags, ... );
 

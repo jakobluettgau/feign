@@ -40,6 +40,7 @@ class Style(skeletonBuilder.Writer):
         print("""namespace feign {
     #define FEIGN_NO_CPP_INCLUDES
     #include "feign.h"
+    #include "feign-provider-helper.h"
     #include "feign_posix/datatypes.h"
 }
 """, end='\n\n', file=output)
@@ -157,7 +158,7 @@ long int siox_get_offset(monitoring::Activity * a) {
 	//printf("* stop: %ld\\n", stop);
 
 	long int offset = start - last_stop;
-	printf("* offset: %ld\\n", offset);
+	//printf("* offset: %ld\\n", offset);
 
 	last_start = start;
 	last_stop = stop;
@@ -344,7 +345,9 @@ jump:
     if( a == nullptr )
         return NULL;
 
-    tr2->printActivity( a );
+    if ( feign_get_loglevel() >= 5 ) {
+        tr2->printActivity( a );
+    }
 
     activity = convert_siox_to_feign(a);
     delete(a);
@@ -387,24 +390,24 @@ Activity * destroy(Activity * activity) {
     feign_log(9, "destroy: %p\\n", activity);
 
 	Activity * a = activity;
-	feign_log(9, "$Destroy: status=%d, provider=%d, offset=%d, layer=%d, size=%d, rank=%d\\n", a->status, a->provider, a->offset, a->layer, a->size, a->rank);
+	feign_log(15, "$Destroy: status=%d, provider=%d, offset=%d, layer=%d, size=%d, rank=%d\\n", a->status, a->provider, a->offset, a->layer, a->size, a->rank);
 
     if ( activity->provider == plugin.instance_id ) {
-    	FEIGN_LOG(3, "I destroy!");   
+    	FEIGN_LOG(15, "I destroy!");   
         if ( activity->data != NULL ) {
             posix_activity * sub_activity = (posix_activity *)(activity->data);
 
             if ( sub_activity->data != NULL ) {
             	FEIGN_LOG(3,"not really freeing sub_activity->data");
-            	feign_log(9, "free(sub->data: %p)\\n", activity);
+            	feign_log(15, "free(sub->data: %p)\\n", activity);
 				free(sub_activity->data);
             } else {
             }
-            feign_log(9, "free(sub: %p)\\n", activity);
+            feign_log(15, "free(sub: %p)\\n", activity);
 			free(sub_activity);
         } else {
         }
-        feign_log(9, "free(activity: %p)\\n", activity);
+        feign_log(15, "free(activity: %p)\\n", activity);
         free(activity);
         return NULL;
     } else {

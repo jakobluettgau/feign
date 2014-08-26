@@ -64,7 +64,15 @@ struct posix_posix_fadvise_struct
  	int  advise;
  	int ret;
 };
-typedef struct posix_posix_fadvise_struct posix_posix_fadvise_data;
+
+struct posix_lseek_struct
+{
+	int  fd;
+	off_t  offset;
+	int  whence;
+	off_t ret;
+};
+
 
  **
  * @return	pointer to a newly craeted activity
@@ -140,6 +148,10 @@ int mutate_context(std::list<Activity*>::iterator iter, std::list<Activity*>::it
 	if ( iter != end )
 	{
 		iter++;
+
+		if ( iter == end )
+			return 0;
+
 		activity = (*iter);
 	
 		if ( activity->layer == layer_id ) {
@@ -154,9 +166,11 @@ int mutate_context(std::list<Activity*>::iterator iter, std::list<Activity*>::it
 				// get lseek data
 				void * data = sub_activity->data;
 				posix_lseek_data * d = (posix_lseek_data*) data;
-			
+		
+				feign_log(9, "posix_data: fd=%d, offset=%d, whence=%d, ret=%d \n", d->fd, d->offset, d->whence, d->ret); 	
+
 				// create new posix_fadvise activity
-				Activity * a = create_posix_fadvise(d->fd, 1180876800, 1024, POSIX_FADV_WILLNEED, 0);
+				Activity * a = create_posix_fadvise(d->fd, d->offset, 1024, POSIX_FADV_WILLNEED, 0);
 				feign_log(9, "## MUT: %p, status=%d, provider=%d, offset=%d, layer=%d, size=%d, rank=%d\n",
 									   a, a->status, a->provider, a->offset, a->layer, a->size, a->rank);
 

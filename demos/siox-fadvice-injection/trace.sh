@@ -18,6 +18,7 @@ cd $TRACE_DIR
 
 # symling siox.conf and create trace
 ln -s ../siox.conf
+ln -s ../tmp_test
 siox-inst posix $PROGRAM
 
 # symlink activities.dat1234 for convienience

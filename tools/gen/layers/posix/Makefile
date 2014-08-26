@@ -39,6 +39,8 @@ siox: export
 	cp ${REPO_HOME}/include/feign.h ${SIOX_TR}  # TODO: maybe replace with symlink?
 	cp feign-extras/CMakeLists.txt ${SIOX_TR}
 	cp ${OUTPUT_PATH}/siox-provider.cpp ${SIOX_TR}/feign_siox-provider.cpp
+	cp ${OUTPUT_PATH}/feign-provider-helper.h ${SIOX_TR}/
+	cp ${OUTPUT_PATH}/../siox-datatypes-helper-posix.h ${SIOX_TR}/
 	# You may want to apply the patch to TraceReader CMakeLists.txt manually:
 	# patch ${SIOX_TR}/../CMakeLists.txt < feign-extras/patchfiles/CMakeLists.txt-add-feign_siox-provider.patch
 	# patch ${SIOX_TR}/../TraceReader.hpp < feign-extras/patchfiles/TraceReader.hpp-getAttributeValueByName.patch

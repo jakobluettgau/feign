@@ -2,6 +2,7 @@
 
 # pass datadir with first argument
 TRACE_DIR=$1
+CHUNKSIZE=$2
 
 if [ -z "$TRACE_DIR"]; then
 	echo "Please specifiy a directory that contains a trace to replay."
@@ -16,13 +17,15 @@ export FEIGN_SIOX_SYSTEMINFO=${TRACE_DIR}/system-info.dat
 export FEIGN_SIOX_ONTOLOGY=${TRACE_DIR}/ontology.dat
 export FEIGN_SIOX_ASSOCIATION=${TRACE_DIR}/association.dat
 
+# environment variables used by be the coalescing plugin
+export FEIGN_COALESCING_CHUNKSIZE=${CHUNKSIZE}
+
 
 FEIGN_SIOX_PROVIDER=/home/pq/wr/siox/build/src/tools/TraceReader/feign_siox-provider
 
 feign \
 --plugin $FEIGN_SIOX_PROVIDER/libfeign_siox-provider.so \
---plugin $FEIGN_DEV_PLUGIN_PATH/posix/libfeign_posix-replayer.so \     # replays and manages the POSIX function calls
---plugin-global $FEIGN_DEV_PLUGIN_PATH/mpi/libfeign_mpi-replayer.so \  # this does only replay the MPI function calls
+--plugin $FEIGN_DEV_PLUGIN_PATH/../demos/siox-parallel-replay-flash/feign_posix-coalescing/libfeign_posix-coalescing.so \
+--plugin $FEIGN_DEV_PLUGIN_PATH/posix/libfeign_posix-replayer.so \
 $@
-
-#--plugin ../build/src/plugins/mpi/libfeign_precreator-mpi.so \
+#--plugin $FEIGN_DEV_PLUGIN_PATH/posix/libfeign_posix-precreator.so \
