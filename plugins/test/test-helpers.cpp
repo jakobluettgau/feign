@@ -32,7 +32,7 @@ Plugin * init() {
 	// but provider should negotiate identifier
 
 	feign_log(2, "testing loglevel 2");
-	feign_shared_buffer(3);
+	feign_shared_byte_buffer(3);
 
 
 	// announce features and request further action

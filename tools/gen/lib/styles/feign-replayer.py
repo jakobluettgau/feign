@@ -32,7 +32,7 @@ int layer_id = 13;
 
 Plugin * init() {
     // give a sign of life
-	printf("Hello from %s\\n", __FILE__);
+	printf("Hello from %s\\n", plugin.name);
 
 	// announce features and request further action
 	return &plugin;
@@ -42,7 +42,7 @@ Plugin * init() {
 
         print("""Activity * replay(Activity * activity) 
 {
-	DEBUG("replay");
+	FEIGN_LOG(3,"replay");
 
 	if ( activity->layer == layer_id ) {
 		posix_activity * sub_activity = (posix_activity*)activity->data;
@@ -62,10 +62,10 @@ Plugin * init() {
 
         print("""
             default:
-                DEBUG("unknown type");
+                FEIGN_LOG(8,"unknown type");
         }
     } else {
-        DEBUG("!");
+        FEIGN_LOG(5, "!");
     }
 
     return NULL;

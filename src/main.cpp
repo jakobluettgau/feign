@@ -21,6 +21,7 @@ int loglevel = 1;
 
 // replay related
 gboolean with_precreation = FALSE;
+gboolean option_strict = FALSE;
 gchar * option_chroot;
 int lookahead;
 

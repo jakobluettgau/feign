@@ -175,7 +175,7 @@ ssize_t sendfile(int out_fd, int in_fd, off_t *offset, size_t count);
 //@activity_attribute fileHandle fd
 //@activity_attribute_late bytesWritten ret
 //@feign_wrapper_splice_before feign_log(9,"write: fd: %d, count: %d, ret: %d\n", d->fd, d->count, d->ret);
-//@feign_wrapper_splice_before ret = write(d->fd, feign_shared_buffer(d->count), d->count);
+//@feign_wrapper_splice_before ret = write(d->fd, feign_shared_byte_buffer(d->count), d->count);
 //@feign_wrapper_splice_before feign_log(9,"write: return: %d\n", ret);
 ssize_t write( int fd, const void * buf, size_t count );
 
@@ -186,7 +186,7 @@ ssize_t write( int fd, const void * buf, size_t count );
 //@activity_attribute_late bytesRead ret
 //@activity_attribute fileHandle fd
 //@feign_wrapper_splice_before feign_log(9,"read: fd: %d, count: %d, ret: %d\n", d->fd, d->count, d->ret);
-//@feign_wrapper_splice_before ret = read(d->fd, feign_shared_buffer(d->count), d->count);
+//@feign_wrapper_splice_before ret = read(d->fd, feign_shared_byte_buffer(d->count), d->count);
 //@feign_wrapper_splice_before feign_log(9,"read: return: %d\n", ret);
 ssize_t read( int fd, void * buf, size_t count );
 

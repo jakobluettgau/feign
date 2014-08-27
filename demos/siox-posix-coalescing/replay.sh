@@ -27,7 +27,7 @@ export FEIGN_COALESCING_CHUNKSIZE=${CHUNKSIZE}
 
 FEIGN_SIOX_PROVIDER=/home/pq/wr/siox/build/src/tools/TraceReader/feign_siox-provider
 
-strace feign \
+feign \
 --plugin $FEIGN_SIOX_PROVIDER/libfeign_siox-provider.so \
 --plugin $FEIGN_DEV_PLUGIN_PATH/../demos/siox-posix-coalescing/feign_posix-coalescing/libfeign_posix-coalescing.so \
 --plugin $FEIGN_DEV_PLUGIN_PATH/posix/libfeign_posix-replayer.so \

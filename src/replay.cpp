@@ -151,8 +151,8 @@ int replay() {
 	//printf("fillstate: %f\n", fillstate);
 
 
-	while ( (buffer.size() > lookahead) || (buffer.size() && provider_depleted) )
-	{
+	//while ( (buffer.size() > lookahead) || (buffer.size() && provider_depleted) )
+	//{
 
 		Activity * a = buffer.front();
 
@@ -193,7 +193,7 @@ typedef struct Activity {
 			activity_destroy(a);
 			//printf("- - -\n");
 			a = activity_provide();
-			continue;
+			//continue;
 		}
 
 
@@ -209,7 +209,7 @@ typedef struct Activity {
 			activity_destroy(a);
 			//printf("- - -\n");
 			a = activity_provide();
-			continue;
+			//continue;
 		}
 
 		print_replay_buffer();
@@ -246,7 +246,7 @@ typedef struct Activity {
 		// end of cycle, provide next
 		//printf("- - -\n");
 
-	}
+	//}
 
 
 	if ( buffer.size() == 0 ) {

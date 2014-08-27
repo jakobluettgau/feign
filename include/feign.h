@@ -53,8 +53,8 @@ typedef struct Statistic {
 /**
  * The activity datatype that is known to all plugins, it is the communication
  * backbone for everything replay sepcific.
- * It holds only what is absolutely necessary to allow "scheduling" and event
- * for replay and to build context sensitive filters and mutators. It is however
+ * It holds only what is absolutely necessary to allow "scheduling" events for
+ * replay and to build context sensitive filters and mutators. It is however
  * flexiable to an extend that plugins can attach data. Feign makes no attempt
  * to change the data pointed to, but needs to know the size for serialisation.
  */
@@ -157,11 +157,12 @@ extern "C" {
 	int feign_register_hook_callback(char * hook, void * callback); // feign_callback_type?
 	int feign_register_hook_dlsym(char * hook, char * symbol);
 
-	void feign_log(int level, const char* format, ...);
+	void feign_assert(int expression);
 
-	char * feign_shared_buffer(unsigned int bytes);
+	char * feign_shared_byte_buffer(unsigned int bytes);
 	int feign_precreate_file(const char * filename, size_t size);
 
+	void feign_log(int level, const char* format, ...);
 	int feign_get_loglevel();
 
 }

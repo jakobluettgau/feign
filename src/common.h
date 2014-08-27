@@ -9,18 +9,19 @@
 // TODO the following variables don't get global scope, but every *.cpp has their own :/
 extern gboolean verbose;			// display debug?
 extern gboolean version;			// display feign version
-extern gboolean with_precreation;			// precreation run?
+extern gboolean with_precreation;	// precreation run?
 extern gchar ** plugins;			// for normal shared libraries
 extern gchar ** plugins_global;		// for shared libraries that require RTLD_GLOBAL
 
 extern gboolean direct;				// do no preprocession runs, default: FALSE
-extern gchar * option_chroot;				// default to feign-<timestamp> ?
+extern gboolean option_strict;		// do no preprocession runs, default: FALSE
+extern gchar * option_chroot;		// default to feign-<timestamp> ?
 extern gchar * precreation_path; 	// default to feign-<timestamp> ?
 extern gchar * environment_path;	// TODO: propose feign tmp directory structure
 extern gboolean rollback;			// rollback environment after replay?
-extern int lookahead;			// rollback environment after replay?
+extern int lookahead;				// rollback environment after replay?
 
-extern int loglevel;
+extern int loglevel;				// how verbose would you like it?
 
 // debug, verbose and other helpers that are available throughout feign core
 //void Debug();

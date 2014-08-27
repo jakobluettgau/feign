@@ -11,7 +11,10 @@
 
 #include "helper.h"
 
-extern int loglevel;
+#include "assert.h"
+
+#include "../../common.h"
+
 
 
 int feign_get_loglevel() {
@@ -58,6 +61,16 @@ const char* feign_chroot() {
 
 
 
+
+void feign_assert(int expression) {
+	if ( option_strict ) {
+		assert(expression);
+	}
+}
+
+
+
+
 // I/O related helpers
 ///////////////////////////////////////////////////////////////////////////////
 /*
@@ -66,7 +79,7 @@ const char* feign_chroot() {
  *
  * This will keep a static buffer around, and reallocates more bytes as needed.
  */
-char * feign_shared_buffer(unsigned int size){
+char * feign_shared_byte_buffer(unsigned int size){
 	static char * buffer = NULL;
 	static size_t buffer_size = 0;
 
@@ -100,7 +113,7 @@ int feign_precreate_file(const char * filename, size_t size) {
 
 	size_t buf_size = 1024*4;
 
-	char * buf = feign_shared_buffer(buf_size);
+	char * buf = feign_shared_byte_buffer(buf_size);
 
 	fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0664);
 
