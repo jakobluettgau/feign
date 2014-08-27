@@ -4,12 +4,16 @@
 TRACE_DIR=$1
 CHUNKSIZE=$2
 
-if [ -z "$TRACE_DIR"]; then
+if [ -z "$TRACE_DIR" ]; then
 	echo "Please specifiy a directory that contains a trace to replay."
 	echo "Example:"
 	echo "$0 mytrace"
 	exit
 fi
+
+
+# options for feign
+export FEIGN_CHROOT=$PWD/chroot
 
 # populate environment variables used by the plugin (feing_siox-provider)
 export FEIGN_SIOX_ACTIVITIES=${TRACE_DIR}/activities.dat
@@ -23,9 +27,9 @@ export FEIGN_COALESCING_CHUNKSIZE=${CHUNKSIZE}
 
 FEIGN_SIOX_PROVIDER=/home/pq/wr/siox/build/src/tools/TraceReader/feign_siox-provider
 
-feign \
+strace feign \
 --plugin $FEIGN_SIOX_PROVIDER/libfeign_siox-provider.so \
---plugin $FEIGN_DEV_PLUGIN_PATH/../demos/siox-parallel-replay-flash/feign_posix-coalescing/libfeign_posix-coalescing.so \
+--plugin $FEIGN_DEV_PLUGIN_PATH/../demos/siox-posix-coalescing/feign_posix-coalescing/libfeign_posix-coalescing.so \
 --plugin $FEIGN_DEV_PLUGIN_PATH/posix/libfeign_posix-replayer.so \
 $@
 #--plugin $FEIGN_DEV_PLUGIN_PATH/posix/libfeign_posix-precreator.so \

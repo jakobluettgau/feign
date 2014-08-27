@@ -11,18 +11,22 @@
 #include "replay.h"
 #include "modules/helper/helper.h"
 
-
-
-// set some default options
 // TODO: reconsider dropping "real" globals within feign core
+
+// GLOBALS
+// debug related
 gboolean verbose = FALSE;
 gboolean version = FALSE;
-gboolean with_precreation = FALSE;
-gchar ** plugins;
-gchar ** plugins_global;
-int lookahead;
 int loglevel = 1;
 
+// replay related
+gboolean with_precreation = FALSE;
+gchar * option_chroot;
+int lookahead;
+
+// plugin loading
+gchar ** plugins;
+gchar ** plugins_global;
 
 
 int load_plugins(gchar ** list, int(*load_plugin)(char const *)) {

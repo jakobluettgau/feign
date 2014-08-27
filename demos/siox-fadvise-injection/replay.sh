@@ -3,7 +3,7 @@
 # pass datadir with first argument
 TRACE_DIR=$1
 
-if [ -z "$TRACE_DIR"]; then
+if [ -z "$TRACE_DIR" ]; then
 	echo "Please specifiy a directory that contains a trace to replay."
 	echo "Example:"
 	echo "$0 mytrace"
@@ -21,7 +21,7 @@ FEIGN_SIOX_PROVIDER=/home/pq/wr/siox/build/src/tools/TraceReader/feign_siox-prov
 
 feign \
 --plugin $FEIGN_SIOX_PROVIDER/libfeign_siox-provider.so \
---plugin $FEIGN_DEV_PLUGIN_PATH/../demos/siox-fadvice-injection/feign_posix-fadvise-injection/libfeign_posix-fadvise-injection.so \
+--plugin $FEIGN_DEV_PLUGIN_PATH/../demos/siox-fadvise-injection/feign_posix-fadvise-injection/libfeign_posix-fadvise-injection.so \
 --plugin $FEIGN_DEV_PLUGIN_PATH/posix/libfeign_posix-replayer.so \
 $@
 #--plugin $FEIGN_DEV_PLUGIN_PATH/posix/libfeign_posix-precreator.so \

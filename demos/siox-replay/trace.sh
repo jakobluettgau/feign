@@ -4,7 +4,7 @@
 TRACE_DIR=$1
 PROGRAM=$2
 
-if [ -z "$TRACE_DIR"];
+if [ -z "$TRACE_DIR" ];
 then
 	echo "Please specifiy a directory to create and store the trace in."
 	echo "Example:"

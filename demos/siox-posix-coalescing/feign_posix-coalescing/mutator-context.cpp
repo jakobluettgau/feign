@@ -20,7 +20,7 @@
 Plugin plugin = {
 	.name = "posix-coalescing optimizer",
 	.version = NULL,
-	.intents = FEIGN_MUTATOR_CONTEXT | FEIGN_DESTROYER,
+	.intents = FEIGN_MUTATOR_CONTEXT | FEIGN_FILTER_CONTEXT | FEIGN_DESTROYER,
 };
 
 int layer_id = 13;
@@ -101,41 +101,48 @@ struct posix_lseek_struct
  **
  */
 
+
+int filter_context(std::list<Activity*>::iterator iter, std::list<Activity*>::iterator end, std::list<Activity*> list) {
+	
+	FEIGN_LOG(5, "filter_context(): remove marked");
+		
+	Activity * activity = (*iter);
+
+	if ( activity->layer == layer_id ) 
+	{
+		posix_activity * sub_activity = (posix_activity*)activity->data;
+		void * data = sub_activity->data;
+		
+		if ( sub_activity->type == POSIX_write && activity->status != 77 )
+		{
+			posix_write_data * d = (posix_write_data*) data;
+			feign_log(9, "posix_write_data: fd=%d, buf=%d, count=%d, ret=%d \n", d->fd, d->buf, d->count, d->ret); 	
+		}
+	}
+
+	int filterthis = 0;
+
+	if ( filterthis )
+		return 1;
+	else
+		return 0;
+}
+
+int uninterrupted_write = 0;
+
 int mutate_context(std::list<Activity*>::iterator iter, std::list<Activity*>::iterator end, std::list<Activity*> list) {
 // TURN (original):
 // [...]
-// lseek(3, 37552128, SEEK_SET)            = 37552128
-// nanosleep({0, 100000}, NULL)            = 0
-// mincore(0x7f19b28c1000, 1024, [00000000000000000000000010000000...]) = 0
-// read(3, "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"..., 1024) = 1024
-// lseek(3, 37564416, SEEK_SET)            = 37564416
-// nanosleep({0, 100000}, NULL)            = 0
-// mincore(0x7f19b28c4000, 1024, [00000000000000000000000010000000...]) = 0
-// read(3, "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"..., 1024) = 1024
-// lseek(3, 37576704, SEEK_SET)            = 37576704
-// nanosleep({0, 100000}, NULL)            = 0
-// mincore(0x7f19b28c7000, 1024, [00000000000000000000000010000000...]) = 0
-// read(3, "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"..., 1024) = 1024
-// lseek(3, 37588992, SEEK_SET)            = 37588992
-// nanosleep({0, 100000}, NULL)            = 0
+// write(fd, buf, 10);
+// write(fd, buf, 10);
+// write(fd, buf, 10);
+// write(fd, buf, 10);
+// write(fd, buf, 10);
 // [...]
 
 // TO (original with injected fadvise):
 // [...]
-// fadvise64(3, 24563712, 1024, POSIX_FADV_WILLNEED) = 0
-// lseek(3, 24563712, SEEK_SET)            = 24563712
-// nanosleep({0, 100000}, NULL)            = 0
-// mincore(0x7f9d9c732000, 1024, [10000000000000000000000010000000...]) = 0
-// read(3, "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"..., 1024) = 1024
-// fadvise64(3, 24576000, 1024, POSIX_FADV_WILLNEED) = 0
-// lseek(3, 24576000, SEEK_SET)            = 24576000
-// nanosleep({0, 100000}, NULL)            = 0
-// mincore(0x7f9d9c735000, 1024, [10000000000000000000000010000000...]) = 0
-// read(3, "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"..., 1024) = 1024
-// fadvise64(3, 24588288, 1024, POSIX_FADV_WILLNEED) = 0
-// lseek(3, 24588288, SEEK_SET)            = 24588288
-// nanosleep({0, 100000}, NULL)            = 0
-// mincore(0x7f9d9c738000, 1024, [10000000000000000000000010000000...]) = 0
+// write(fd, buf, 50);
 // [...]
 
 	FEIGN_LOG(5, "mutate_context(): inject fadvise before lseek");
@@ -166,9 +173,7 @@ int mutate_context(std::list<Activity*>::iterator iter, std::list<Activity*>::it
 		
 				feign_log(9, "posix_write_data: fd=%d, buf=%d, count=%d, ret=%d \n", d->fd, d->buf, d->count, d->ret); 	
 
-
-
-				return 1;
+				return 0;
 			}
 		}
 	}

@@ -23,20 +23,21 @@ void parse_env() {
 // core args
 static GOptionEntry arguments[] =
 {
+  // debug related
   {"verbose", 'v', 0, G_OPTION_ARG_NONE, &verbose, "Verbose mode", NULL },
   {"version", 'V', 0, G_OPTION_ARG_NONE, &version, "Display version information", NULL },
-  {"lookahead", 'l', 0, G_OPTION_ARG_INT, &lookahead, "Set fixed lookahead.", NULL },
   {"loglevel", NULL, 0, G_OPTION_ARG_INT, &loglevel, "Set log level (higher = more).", NULL },
+  
+  // replay related 
+  {"lookahead", NULL, 0, G_OPTION_ARG_INT, &lookahead, "Set fixed lookahead.", NULL },
   {"precreation", NULL, 0, G_OPTION_ARG_INT, &with_precreation, "Also perform a precreation run.", NULL },
+  {"chroot", NULL, 0, G_OPTION_ARG_FILENAME_ARRAY, &option_chroot, "Set chroot to be used by plugins (if supported by plugin)", "./chroot" },
+
+  // plugin loading
   {"plugin",  'p', 0, G_OPTION_ARG_FILENAME_ARRAY, &plugins, "Load plugin", "plugin.so" },
   {"plugin-global",  'P', 0, G_OPTION_ARG_FILENAME_ARRAY, &plugins_global, "Load plugin with RTLD_GLOBAL", "plugin.so" },
-  { NULL },
-  { NULL },
-  { NULL },
-  { NULL },
-  { NULL },
-  { NULL },
-  { NULL },
+
+  // placeholders (list shall terminate with NULL)
   { NULL },
   { NULL },
   { NULL },

@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdarg.h>
-
+#include <cstdio>
 #include <fcntl.h>
 #include <errno.h>
 #include <stdlib.h>
@@ -32,7 +32,7 @@ void feign_log(int level, const char* format, ...)
 
 
 /**
- * Create direcory structure and.
+ * Ensure the chroot directory exists, create it in case its not existing.
  */
 void feign_chroot_setup() {
 
@@ -44,10 +44,15 @@ void feign_chroot_setup() {
  * 
  * TODO: establish environment information facility
  *
- * @return		string path
+ * @param	a filesystem path
+ * @return	chroot corrected path
  */
 const char* feign_chroot() {
 	static char * chroot = "./feign-chroot-data";
+
+	//char buf[256];
+	//snprintf(buf, sizeof buf, "%s%s%s%s", str1, str2, str3, str4);
+
 	return chroot;
 }
 

@@ -14,6 +14,7 @@ extern gchar ** plugins;			// for normal shared libraries
 extern gchar ** plugins_global;		// for shared libraries that require RTLD_GLOBAL
 
 extern gboolean direct;				// do no preprocession runs, default: FALSE
+extern gchar * option_chroot;				// default to feign-<timestamp> ?
 extern gchar * precreation_path; 	// default to feign-<timestamp> ?
 extern gchar * environment_path;	// TODO: propose feign tmp directory structure
 extern gboolean rollback;			// rollback environment after replay?

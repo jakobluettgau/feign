@@ -36,9 +36,9 @@ int replay_count = 0;
 void nsleep(long ns) {
 	static long spin = 9;
 
-	if ( ns > 70000 )
-	{
-		ns -= 65000;
+//	if ( ns > 70000 )
+//	{
+//		ns -= 65000;
 		struct timespec req = {
 			.tv_sec = 0,
 			.tv_nsec = ns
@@ -51,11 +51,11 @@ void nsleep(long ns) {
 			a = b;
 			b = tmp;
 		}
-	} else {
-		while ( ns > 0 ) {
-			ns -= spin;
-		}
-	}
+//	} else {
+//		while ( ns > 0 ) {
+//			ns -= spin;
+//		}
+//	}
 }
 
 
