@@ -86,7 +86,7 @@ int main(int argc, char *argv[])
 
 	// set sanitized default lookahead
 	if ( lookahead < 1 ) {
-		lookahead = 4;
+		lookahead = 2;
 	}
 
 	// replay/provider phase status flags

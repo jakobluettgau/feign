@@ -36,9 +36,9 @@ int replay_count = 0;
 void nsleep(long ns) {
 	static long spin = 9;
 
-//	if ( ns > 70000 )
-//	{
-//		ns -= 65000;
+	if ( ns > 70000 )
+	{
+		ns -= 65000;
 		struct timespec req = {
 			.tv_sec = 0,
 			.tv_nsec = ns
@@ -51,11 +51,11 @@ void nsleep(long ns) {
 			a = b;
 			b = tmp;
 		}
-//	} else {
-//		while ( ns > 0 ) {
-//			ns -= spin;
-//		}
-//	}
+	} else {
+		while ( ns > 0 ) {
+			ns -= spin;
+		}
+	}
 }
 
 
@@ -73,9 +73,12 @@ int preload() {
 
 	//std::cout << "buffer.size=" << buffer.size() << "\n";
 
+	feign_log(4, "bufsize: %d\n", buffer.size() );  
+
 	int firstrun = 1;
 	Activity * a;
-	while ( (preload_count < lookahead*1 && a != NULL) || firstrun ) {
+	//while ( (preload_count < lookahead && a != NULL) || firstrun ) {
+	while ( buffer.size() < lookahead && a != NULL )  {
 		firstrun = 0;
 		a = activity_provide();
 		if ( a != NULL )
@@ -152,7 +155,7 @@ int replay() {
 
 
 	//while ( (buffer.size() > lookahead) || (buffer.size() && provider_depleted) )
-	//{
+	//	{
 
 		Activity * a = buffer.front();
 
