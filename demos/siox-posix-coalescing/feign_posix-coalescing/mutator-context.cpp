@@ -66,7 +66,8 @@ Plugin * init() {
 int filter_context(std::list<Activity*>::iterator iter, std::list<Activity*>::iterator end, std::list<Activity*> list) {
 	
 	FEIGN_LOG(5, "filter_context(): remove marked");
-		
+	
+
 	Activity * activity = (*iter);
 
 	if ( activity->layer == layer_id ) 

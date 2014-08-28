@@ -39,6 +39,7 @@ touch _feign-chroot/flash_io_test_hdf5_plt_crn_0000
 
 feign \
 --plugin $FEIGN_SIOX_PROVIDER/libfeign_siox-provider.so \
+--plugin $FEIGN_DEV_PLUGIN_PATH/../demos/siox-posix-coalescing/feign_fix-open-path/libfeign_fix-open-path.so \
 --plugin $FEIGN_DEV_PLUGIN_PATH/posix/libfeign_posix-replayer.so \
 $@
 #--plugin $FEIGN_DEV_PLUGIN_PATH/posix/libfeign_posix-precreator.so \
