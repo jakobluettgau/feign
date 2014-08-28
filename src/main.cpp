@@ -133,6 +133,10 @@ int main(int argc, char *argv[])
 	stop_timer(&start, &end, 1e4);
 	printf("finish replay ====================================================\n\n");
 
+
+	printf("being plugin reports =================================================\n\n");
+	printf("end plugin reports ===================================================\n\n");
+
 	replay_manager_print_stats();
 	plugin_manager_print_stats();
 

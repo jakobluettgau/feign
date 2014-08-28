@@ -264,14 +264,14 @@ typedef struct Activity {
 
 
 void print_replay_buffer() {
-	if ( loglevel >= 9 ) {
-		feign_log(9, "== Current Buffer =====================================================================================\n");
+	if ( loglevel >= 15 ) {
+		feign_log(15, "== Current Buffer =====================================================================================\n");
 		for (auto it=buffer.begin(); it != buffer.end(); ++it) {
 			Activity * a = (*it);
-			feign_log(9, "= Activity %p: status=%d, provider=%d, offset=%d, layer=%d, size=%d, rank=%d\n", a, a->status, a->provider, a->offset, a->layer, a->size, a->rank);
+			feign_log(15, "= Activity %p: status=%d, provider=%d, offset=%d, layer=%d, size=%d, rank=%d\n", a, a->status, a->provider, a->offset, a->layer, a->size, a->rank);
 			//activity_replay(a);
 		}
-		feign_log(9, "=======================================================================================================\n");
+		feign_log(15, "=======================================================================================================\n");
 	}
 }
 

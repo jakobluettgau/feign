@@ -57,6 +57,8 @@ std::list<activity_handler> precreate_checkers;
 std::list<activity_handler> replayers;
 std::list<activity_handler> destroyers;
 
+std::list<activity_handler> reporters;
+
 // plugin management interface
 int plugin_manager_discover()
 {
@@ -111,6 +113,7 @@ void plugin_manager_print_stats()
 	printf("Precreators: %-5ld\n", precreators.size() );
 	printf("Replayers:   %-5ld\n", replayers.size() );
 	printf("Destroyers:  %-5ld\n", destroyers.size() );
+	printf("Reporters:  %-5ld\n", reporters.size() );
 	printf("\n");
 }
 
@@ -181,7 +184,13 @@ int pm_load_handlers(void * handle, int intents) {
 	if ( FEIGN_DESTROYER & intents ) {
 		printf("'-> This plugin wants to register as a destroyer.\n");
 		dlsym_push_back_handler(handle, &destroyers, "destroy",
-			"\nMake sure to define \"Activity * destroy(Activity * activity) {}\" when the FEIGN_PROVIDER flag is set.\n");
+			"\nMake sure to define \"Activity * destroy(Activity * activity) {}\" when the FEIGN_DESTROYER flag is set.\n");
+	}
+
+	if ( FEIGN_REPORTER & intents ) {
+		printf("'-> This plugin wants to register as a reporter.\n");
+		dlsym_push_back_handler(handle, &reporters, "report",
+			"\nMake sure to define \"Activity * report(Activity * activity) {}\" when the FEIGN_REPORTER flag is set.\n");
 	}
 
 	return 0;
@@ -430,6 +439,20 @@ int activity_reset(Activity * activity) {
 	for (auto it=provider_resets.begin(); it != provider_resets.end(); ++it)
 	{
 		result = (*it)(activity);
+	}
+	return 0;
+}
+
+
+/**
+ * pass activity to replayers and issue replay
+ */
+int activity_report(Activity * activity) {
+	Activity * result;
+	for (auto it=reporters.begin(); it != reporters.end(); ++it)
+	{
+		result = (*it)(activity);
+		printf("-----------------------------------------------------------------------\n");
 	}
 	return 0;
 }

@@ -38,4 +38,5 @@ int activity_replay(Activity * activity);
 int activity_destroy(Activity * activity);
 
 int activity_reset(Activity * activity);
+int activity_report(Activity * activity);
 #endif /* end of include guard: PLUGINS_H_ENCMHGFO */

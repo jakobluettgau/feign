@@ -1,9 +1,13 @@
-#include <stdio.h>
-#include <stdarg.h>
 #include <cstdio>
-#include <fcntl.h>
 #include <errno.h>
+#include <fcntl.h>
+#include <libgen.h>
+#include <stdarg.h>
+#include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+#include <sys/stat.h>
+#include <sys/types.h>
 #include <time.h>
 #include <unistd.h>
 
@@ -44,19 +48,31 @@ void feign_chroot_setup() {
 
 /**
  * Return chroot path that should be used by plugins.
+ * Ownership is transfered to caller.
  * 
  * TODO: establish environment information facility
  *
  * @param	a filesystem path
  * @return	chroot corrected path
  */
-const char* feign_chroot() {
-	static char * chroot = "./feign-chroot-data";
+const char* feign_chroot_path(const char* path) {
+	int option_use_chroot = 1;
 
-	//char buf[256];
-	//snprintf(buf, sizeof buf, "%s%s%s%s", str1, str2, str3, str4);
+	if ( option_use_chroot ) 
+	{
+		static char * chroot = "./_feign-chroot";
+		// TODO: lock in chroot
+		char * buf = (char *) malloc(255 * sizeof(char));
+		snprintf(buf, 255, "%s/%s", chroot, path);
+		return buf;
 
-	return chroot;
+	} else {
+		// do not use chroot
+		char * buf = (char *) malloc(255 * sizeof(char));
+		strncpy(buf, path, 255);
+		buf[254] = '\0';
+		return buf;	
+	}
 }
 
 
@@ -66,6 +82,33 @@ void feign_assert(int expression) {
 	if ( option_strict ) {
 		assert(expression);
 	}
+}
+
+
+int feign_get_lookahead() {
+	return lookahead;
+}
+
+
+int feign_set_lookahead(int newlookahead) {
+	lookahead = newlookahead;
+	return 0;
+}
+
+
+//
+///////////////////////////////////////////////////////////////////////////////
+char const * feign_getenv(char const * name, char const * fallback) {
+    char const * value;
+    value = getenv (name);
+    if (! value) {
+        value = fallback;
+    }
+    else {
+        printf ("%s = %s\n", name, value);
+    }
+
+    return value;
 }
 
 
@@ -144,6 +187,42 @@ int feign_precreate_file(const char * filename, size_t size) {
 }
 
 
+
+int feign_precreate_directory(const char * s, mode_t mode) {
+	char *q, *r = NULL, *path = NULL, *up = NULL;
+	int rv;
+
+	rv = -1;
+	if (strcmp(s, ".") == 0 || strcmp(s, "/") == 0)
+		return (0);
+
+	if ((path = strdup(s)) == NULL)
+		exit(1);
+
+	if ((q = strdup(s)) == NULL)
+		exit(1);
+
+	if ((r = dirname(q)) == NULL)
+		goto out;
+
+	if ((up = strdup(r)) == NULL)
+		exit(1);
+
+	if ((feign_precreate_directory(up, mode) == -1) && (errno != EEXIST))
+		goto out;
+
+	if ((mkdir(path, mode) == -1) && (errno != EEXIST))
+		rv = -1;
+	else
+		rv = 0;
+
+out:
+	if (up != NULL)
+		free(up);
+	free(q);
+	free(path);
+	return (rv);
+}
 
 
 

@@ -11,8 +11,6 @@
 #include <feign.h>
 #include "posix/datatypes.h"
 
-// some data
-////////////
 
 
 // provide some information about the plugin
@@ -20,7 +18,8 @@
 Plugin plugin = {
 	.name = "posix-coalescing optimizer",
 	.version = NULL,
-	.intents = FEIGN_MUTATOR_CONTEXT | FEIGN_FILTER_CONTEXT | FEIGN_DESTROYER,
+	//.intents = FEIGN_MUTATOR_CONTEXT | FEIGN_FILTER_CONTEXT | FEIGN_DESTROYER,
+	.intents = FEIGN_MUTATOR_CONTEXT | FEIGN_DESTROYER,
 };
 
 int layer_id = 13;
@@ -51,55 +50,17 @@ Plugin * init() {
     char const * str_chunksize = get_dat_env("FEIGN_COALESCING_CHUNKSIZE", "1024");
 	max_chunksize = strtol(str_chunksize,NULL,10);
 
+	if ( 0 == max_chunksize ) {
+		max_chunksize = 1024*4;	
+	}
+
 	feign_log(0, "using max_chunksize=%d  (input: %s) \n", max_chunksize, str_chunksize);
 
 	// return plugin
 	return &plugin;
 }
 
-/**
- *  As a reminder for the relevant declarations and definitons.
- **
-// feign activity
-typedef struct Activity {
-	int status;  // like to discard an activity without reorganisation penalty
-	int provider;
-	long long offset;
-	int layer;
-	int size;
-	void * data;
-	Statistic * stats;
-	int rank;
-} Activity;
 
-// posix activity
-typedef struct posix_activity {
-	int type;
-	void * data;
-	int ret;
-} posix_activity;
-
-// posix_fadvise data
-struct posix_posix_fadvise_struct
-{
-	int  fd;
- 	off_t  offset;
- 	off_t  len;
- 	int  advise;
- 	int ret;
-};
-
-struct posix_lseek_struct
-{
-	int  fd;
-	off_t  offset;
-	int  whence;
-	off_t ret;
-};
-
-
- **
- */
 
 
 int filter_context(std::list<Activity*>::iterator iter, std::list<Activity*>::iterator end, std::list<Activity*> list) {
@@ -144,6 +105,8 @@ int mutate_context(std::list<Activity*>::iterator iter, std::list<Activity*>::it
 // [...]
 // write(fd, buf, 50);
 // [...]
+
+	int lasttype = -1;
 
 	FEIGN_LOG(5, "mutate_context(): inject fadvise before lseek");
 

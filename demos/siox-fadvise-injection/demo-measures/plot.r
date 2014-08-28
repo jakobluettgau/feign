@@ -1,6 +1,6 @@
 library(ggplot2)
 
-pdf("fadvise-injection-runtimes.pdf", width=5, height=2)
+pdf("plot-fadvise-injection-runtimes.pdf", width=5, height=2)
 
 # baseline_application.csv
 # baseline_replay.csv

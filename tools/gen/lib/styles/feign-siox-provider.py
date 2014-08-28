@@ -398,7 +398,6 @@ Activity * destroy(Activity * activity) {
             posix_activity * sub_activity = (posix_activity *)(activity->data);
 
             if ( sub_activity->data != NULL ) {
-            	FEIGN_LOG(3,"not really freeing sub_activity->data");
             	feign_log(15, "free(sub->data: %p)\\n", activity);
 				free(sub_activity->data);
             } else {

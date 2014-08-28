@@ -93,6 +93,7 @@ enum feign_plugin_intents {
 	FEIGN_REQUIRE_HOOK         = (1 << 11),
 	FEIGN_FILTER_CONTEXT_FREE  = (1 << 12),
 	FEIGN_MUTATOR_CONTEXT_FREE = (1 << 13),
+	FEIGN_REPORTER             = (1 << 14),
 };
 
 /**
@@ -144,6 +145,8 @@ extern "C" {
 	int feign_register_arg(const char * arg);
 	int feign_register_env(const char * env);
 
+	char const * feign_getenv(char const * name, char const * fallback);
+
 	/**
 	 * Feign maintains a layer map to allow for optimisation and to allow
 	 * plugins to easily hook onto the layer procession path
@@ -152,10 +155,14 @@ extern "C" {
 	 */
 	int feign_register_layer(Layer * layer);
 
-	int feign_update_lookahead(int newlookahead);
+	int feign_get_lookahead();
+	int feign_set_lookahead(int newlookahead);
 
 	int feign_register_hook_callback(char * hook, void * callback); // feign_callback_type?
 	int feign_register_hook_dlsym(char * hook, char * symbol);
+
+
+	const char* feign_chroot_path(const char* path);
 
 	void feign_assert(int expression);
 
@@ -189,6 +196,7 @@ extern "C" {
 	Activity * replay(Activity * activity);
 	Activity * destroy(Activity * activity);
 	Activity * reset(Activity * activity);
+	Activity * report(Activity * activity);
 }
 
 #endif /* end of include guard: FEIGN_PLUGIN_H_AYZ49SYK */
