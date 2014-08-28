@@ -27,6 +27,16 @@ export FEIGN_COALESCING_CHUNKSIZE=${CHUNKSIZE}
 
 FEIGN_SIOX_PROVIDER=/home/pq/wr/siox/build/src/tools/TraceReader/feign_siox-provider
 
+
+# clear and create feign chroot
+rm -rf _feign-chroot
+mkdir _feign-chroot
+
+# some traces require the files to be present
+touch _feign-chroot/flash_io_test_hdf5_chk_0000
+touch _feign-chroot/flash_io_test_hdf5_plt_cnt_0000
+touch _feign-chroot/flash_io_test_hdf5_plt_crn_0000
+
 feign \
 --plugin $FEIGN_SIOX_PROVIDER/libfeign_siox-provider.so \
 --plugin $FEIGN_DEV_PLUGIN_PATH/../demos/siox-posix-coalescing/feign_posix-coalescing/libfeign_posix-coalescing.so \
