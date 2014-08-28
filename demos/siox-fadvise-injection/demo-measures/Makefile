@@ -3,6 +3,7 @@ all:
 
 update:
 	cp ../*.csv .
+	cp ../*.raw .
 
 print:
 	more *.csv | cat
