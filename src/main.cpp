@@ -89,6 +89,10 @@ int main(int argc, char *argv[])
 		lookahead = 2;
 	}
 
+	
+	// init bytebuffer with 10MiB
+	feign_shared_byte_buffer(1024*1024*10);
+
 	// replay/provider phase status flags
 	int r = -1;
 	int p = -1;

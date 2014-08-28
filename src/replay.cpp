@@ -28,6 +28,7 @@ int swap_count = 0;
 int insert_count = 0;
 int precreate_check_count = 0;
 int replay_count = 0;
+int skipped_count = 0;
 
 
 /**
@@ -217,27 +218,36 @@ typedef struct Activity {
 
 		print_replay_buffer();
 
+		
+		// TODO: weird effect here if an activity is remove using context aware filter!?
+		// a becomes nil, but if ( !a ) does not catch this
 
 		feign_log(3,"offset: %ld\n", a->offset);
 		long actual_sleep = a->offset;
 		struct timespec start;
 		struct timespec end;
 
-		//start_timer(&start);
-		nsleep(actual_sleep);
-		//stop_timer(&start, &end, -1);
 
 
-		if ( precreation ) {
-			// precreation_check
-			activity_precreate_check(a);
-			precreate_check_count++;
+		if ( FEIGN_STATUS_SKIP == a->status ) {
+			skipped_count++;
+	
 		} else {
-			// replay
-			activity_replay(a);
-			replay_count++;
-		}
+			//start_timer(&start);
+			nsleep(actual_sleep);
+			//stop_timer(&start, &end, -1);
 
+
+			if ( precreation ) {
+				// precreation_check
+				activity_precreate_check(a);
+				precreate_check_count++;
+			} else {
+				// replay
+				activity_replay(a);
+				replay_count++;
+			}
+		}
 
 
 
@@ -295,6 +305,7 @@ void replay_manager_print_stats() {
 	printf("'-Inserted: %-5d\n", insert_count);
 	printf("Replayed:   %-5d\n", precreate_check_count);
 	printf("Replayed:   %-5d\n", replay_count);
+	printf("Skipped:   %-5d\n", skipped_count);
 
 	printf("Option: lookahead = %d\n", lookahead);
 	printf("\n");
@@ -309,4 +320,5 @@ void reset_replay_stats() {
 	insert_count = 0;
 	precreate_check_count = 0;
 	replay_count = 0;
+	skipped_count = 0;
 }

@@ -51,7 +51,7 @@ Plugin * init() {
 	max_chunksize = strtol(str_chunksize,NULL,10);
 
 	if ( 0 == max_chunksize ) {
-		max_chunksize = 1024*4;	
+		max_chunksize = 1024*1024*4;	
 	}
 
 	feign_log(0, "using max_chunksize=%d  (input: %s) \n", max_chunksize, str_chunksize);
@@ -65,24 +65,28 @@ Plugin * init() {
 
 int filter_context(std::list<Activity*>::iterator iter, std::list<Activity*>::iterator end, std::list<Activity*> list) {
 	
-	FEIGN_LOG(5, "filter_context(): remove marked");
-	
+	FEIGN_LOG(1, "filter_context(): remove marked");
+
+	int filterthis = 0;
+
 
 	Activity * activity = (*iter);
+
 
 	if ( activity->layer == layer_id ) 
 	{
 		posix_activity * sub_activity = (posix_activity*)activity->data;
 		void * data = sub_activity->data;
 		
-		if ( sub_activity->type == POSIX_write && activity->status != 77 )
+		if ( sub_activity->type == POSIX_write && activity->status == 77 )
 		{
 			posix_write_data * d = (posix_write_data*) data;
-			feign_log(9, "posix_write_data: fd=%d, buf=%d, count=%d, ret=%d \n", d->fd, d->buf, d->count, d->ret); 	
+			feign_log(9, "rm: posix_write_data: fd=%d, buf=%d, count=%d, ret=%d \n", d->fd, d->buf, d->count, d->ret); 	
+
+			//filterthis = 1;
 		}
 	}
 
-	int filterthis = 0;
 
 	if ( filterthis )
 		return 1;
@@ -90,7 +94,6 @@ int filter_context(std::list<Activity*>::iterator iter, std::list<Activity*>::it
 		return 0;
 }
 
-int uninterrupted_write = 0;
 
 int mutate_context(std::list<Activity*>::iterator iter, std::list<Activity*>::iterator end, std::list<Activity*> list) {
 // TURN (original):
@@ -107,15 +110,85 @@ int mutate_context(std::list<Activity*>::iterator iter, std::list<Activity*>::it
 // write(fd, buf, 50);
 // [...]
 
-	int lasttype = -1;
-
-	FEIGN_LOG(5, "mutate_context(): inject fadvise before lseek");
+	FEIGN_LOG(1, "mutate_context(): coalescing");
 
 	Activity * activity = (*iter);
+	Activity * first = NULL;
+	posix_activity * sub_activity = NULL;
+	posix_write_data * d = NULL;
+	posix_write_data * df = NULL;
+
+	if ( iter != end ) {
+
+		if ( activity->layer == layer_id ) {
+			
+			sub_activity = (posix_activity*)activity->data;
+
+			if ( sub_activity->type == POSIX_write ) {
+
+				// ok is a write, remember this
+				first = activity;
+				df = (posix_write_data*) sub_activity->data;
+
+				iter++;
+
+				if ( iter == end )
+				{
+					// last activity nothing to collapse
+					return 0;
+				}
+
+				// let activity point to updated iterator
+				activity = (*iter);
+
+				
+				if ( activity->layer == layer_id ) {
+					// cast subactivity to get actual data
+					sub_activity = (posix_activity*)activity->data;
+
+					if ( sub_activity->type == POSIX_write ) {
+
+						// ok, also write
+						d = (posix_write_data*) sub_activity->data;
+
+						// compare
+						int sum_count = d->count + df->count;
+
+						if ( d->fd == df->fd && sum_count < max_chunksize ) {
+							FEIGN_LOG(1, "COOL, filehandles match, and smalle max chunk");
+
+							first->status = FEIGN_STATUS_SKIP;
+							
+							d->count = sum_count;
+							first->offset = 0;
+							activity->offset = 0;
+
+							return 3;
+
+						}
+
+					}
+
+				}
+
+
+			}
+
+		}
+
+
+	}
+
+
+	/*
+	Activity * activity = (*iter);
+	Activity * first = NULL;
+	posix_write_data * df = NULL;
+
+
 
 	if ( iter != end )
 	{
-		iter++;
 
 		if ( iter == end )
 			return 0;
@@ -126,47 +199,64 @@ int mutate_context(std::list<Activity*>::iterator iter, std::list<Activity*>::it
 
 			posix_activity * sub_activity = (posix_activity*)activity->data;
 
-			if ( sub_activity->type == POSIX_write && activity->status != 77 )
+			if ( sub_activity->type == POSIX_write && activity->status != FEIGN_STATUS_SKIP )
 			{
-				// make sure to insert only once
-				activity->status = 77;
 
-				// get lseek data
-				void * data = sub_activity->data;
-				posix_write_data * d = (posix_write_data*) data;
+				if ( first == NULL ) {
+					first = activity;
+					// make sure to insert only once
+					activity->status = 99;  // to mark also in trace
+
+					// quick access to first data
+					void * data = sub_activity->data;
+					posix_write_data * d = (posix_write_data*) data;
+					df = d;
+					
+
+					feign_log(1, "§ posix_write_data: fd=%d, buf=%d, count=%d, ret=%d \n", d->fd, d->buf, d->count, d->ret); 	
+
+
+				} else {
+					// not first write
+
+
+					void * data = sub_activity->data;
+					posix_write_data * d = (posix_write_data*) data;
+
+					if (
+							df->fd == d->fd 
+						&& (df->count+d->count) < max_chunksize 
+					) {
+						FEIGN_LOG(1, ":: doing merge");
+						// writes match, (no seek .. inbetween)
+						activity->status = FEIGN_STATUS_SKIP;
+						df->count += d->count;
+						mutated = 3;
+					}
+
+
+					Activity * a = activity;
+					feign_log(1, " /     Activity %p: status=%d, provider=%d, offset=%d, layer=%d, size=%d, rank=%d\n", 
+							first, first->status, first->provider, first->offset, first->layer, first->size, first->rank); 
+					feign_log(1, "/$ df: posix_write_data: fd=%d, buf=%d, count=%d, ret=%d \n", df->fd, df->buf, df->count, df->ret); 	
+					feign_log(1, "\\$     posix_write_data: fd=%d, buf=%d, count=%d, ret=%d \n", d->fd, d->buf, d->count, d->ret); 	
+					feign_log(1, " \\     Activity %p: status=%d, provider=%d, offset=%d, layer=%d, size=%d, rank=%d\n", 
+							a, a->status, a->provider, a->offset, a->layer, a->size, a->rank); 
+
+
+
+				}
 		
-				feign_log(9, "posix_write_data: fd=%d, buf=%d, count=%d, ret=%d \n", d->fd, d->buf, d->count, d->ret); 	
-
-				return 0;
+			} else {
+				// no write, chain interrupted	
+				FEIGN_LOG(1, "### Chain interrupted!");
+				break;
 			}
 		}
+
+		//iter++;
 	}
-			
-
-
-
-
-		/*
-		activity = (*iter);
-		// insert after 4 if not followed by 5
-		if ( last == 4 && activity->layer != 5 ) {
-			list.insert(iter, &a0);
-		}
-		*/
-
-	
-
-
-
-	//activity = (*it);
-	//printf("f: activity->layer = %d\n", activity->layer);
-
-	/*
-	if ( activity->layer == 1 )
-		return NULL;
-	else
-		return activity;
-	*/
+	*/	
 
 	return 0;
 }

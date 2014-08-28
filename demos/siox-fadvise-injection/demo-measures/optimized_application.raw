@@ -1,0 +1,3 @@
+iter: 873813 stride: 12288 blocksize: 1024 runtime: 215.484988s iotime: 70.436566s volume: 853.333008 MiB throughput: 12.114915 MiB/s; pages cached: 53.964844 MiB, pages not cached: 3359.367188 MiB
+iter: 873813 stride: 12288 blocksize: 1024 runtime: 216.153589s iotime: 71.059374s volume: 853.333008 MiB throughput: 12.008732 MiB/s; pages cached: 53.882812 MiB, pages not cached: 3359.449219 MiB
+iter: 873813 stride: 12288 blocksize: 1024 runtime: 215.930637s iotime: 70.873195s volume: 853.333008 MiB throughput: 12.040278 MiB/s; pages cached: 54.121094 MiB, pages not cached: 3359.210938 MiB
