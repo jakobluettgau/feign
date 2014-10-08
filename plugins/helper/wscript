@@ -1,0 +1,24 @@
+#! /usr/bin/env python
+# encoding: utf-8
+
+from waflib import Build
+from subprocess import call
+
+active = [
+        "consuming-replayer",
+        "whitelist-rank",
+        "posix-chroot-open-path",
+    ]
+
+def options(ctx):
+    pass
+
+def configure(ctx):
+    for foldername in active:
+        ctx.recurse(foldername)
+    pass
+
+def build(ctx):
+    for foldername in active:
+        ctx.recurse(foldername)
+    pass
