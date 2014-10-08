@@ -730,7 +730,10 @@ at the end of """)
             ### # belongs to the command parsed in a earlier line and the line only
             ### # contains command arguments.
             else:
-                print( "Warning: \"", commandName, "\" not in availableCommands.\n" )
+                # !! uncommented for feign:
+                #print( "Warning: \"", commandName, "\" not in availableCommands.\n" )
+                pass
+
             ###     if commandArgs[0] == "=":
             ###         templateList[-1].setParameters(commandName + commandArgs)
             ###     else:
@@ -854,7 +857,8 @@ class Template():
             return text.strip();
         else:
             # Error
-            print('ERROR: Section: ', type, ' not known.', file=sys.stderr)
+            # feign-related-change: uncomment when problems occur
+            # print('ERROR: Section: ', type, ' not known.', file=sys.stderr)
             #sys.exit(1)
             # feign: more graceful handling:
             return ""

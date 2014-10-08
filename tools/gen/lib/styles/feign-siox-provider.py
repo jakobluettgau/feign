@@ -347,9 +347,14 @@ jump:
 
     if ( feign_get_loglevel() >= 5 ) {
         tr2->printActivity( a );
+
+        //std::cout << a->aid() << std::endl; 
+        printf("Activity Rank : %d \\n", a->aid().cid.pid.pid );
+
     }
 
     activity = convert_siox_to_feign(a);
+    activity->rank = a->aid().cid.pid.pid;
     delete(a);
 
     if ( activity == NULL )

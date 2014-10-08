@@ -8,6 +8,7 @@ dirs = [
         "posix",
         "sample",
         "test",
+        "helper",
     ]
 
 def options(ctx):
