@@ -52,7 +52,7 @@ print(repm)
 # plot
 df = data.frame( chunksize = chunksizes, runtime = optmeans)
 print(df)
-p = ggplot(data=df, aes(x=chunksize, y=runtime)) + geom_point()  + ylim(0,repm) + stat_function(fun=function(x)repm, geom="line", aes(colour="replay baseline")) + scale_x_continuous(trans=log10_trans()) + ylab("runtime")
+p = ggplot(data=df, aes(x=chunksize, y=runtime)) + geom_point()  + ylim(0,repm) + stat_function(fun=function(x)repm, geom="line", aes(colour="replay baseline")) + scale_x_continuous(trans=log10_trans()) + ylab("runtime in s") + xlab("buffer size")
 #p = ggplot(data=df, aes(x=chunksize, y=runtime)) + geom_point()
 
 print(p)
