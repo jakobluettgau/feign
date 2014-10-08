@@ -19,6 +19,8 @@ int buffer_depleted = 0;		// providers depleted?
 //int precreation = 1;
 int precreation = 0;
 
+void set_precreation() { precreation = 1; }
+void unset_precreation() { precreation = 0; }
 
 // replay statistics
 int provide_count = 0;
@@ -233,16 +235,16 @@ typedef struct Activity {
 			skipped_count++;
 	
 		} else {
-			//start_timer(&start);
-			nsleep(actual_sleep);
-			//stop_timer(&start, &end, -1);
-
-
+			
 			if ( precreation ) {
 				// precreation_check
 				activity_precreate_check(a);
 				precreate_check_count++;
 			} else {
+				//start_timer(&start);
+				nsleep(actual_sleep);
+				//stop_timer(&start, &end, -1);
+
 				// replay
 				activity_replay(a);
 				replay_count++;

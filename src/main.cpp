@@ -20,7 +20,7 @@ gboolean version = FALSE;
 int loglevel = 1;
 
 // replay related
-gboolean with_precreation = FALSE;
+gboolean option_with_precreation = FALSE;
 gboolean option_strict = FALSE;
 gchar * option_chroot;
 int lookahead;
@@ -63,6 +63,8 @@ int main(int argc, char *argv[])
 	printf("Option: verbose = %d\n", verbose);
 	printf("Option: version = %d\n", version);
 	printf("Option: lookahead = %d\n", lookahead);
+	printf("Option: precreation = %d\n", option_with_precreation);
+
 
 	// loglevel test
 	for ( int l = 0; l < 10; l++) 
@@ -98,20 +100,22 @@ int main(int argc, char *argv[])
 	int p = -1;
 
 	// precreate environment
-	if ( with_precreation ) {
-		feign_log(2,"begin precreation ================================================\n");
+	if ( option_with_precreation ) {
+		feign_log(0,"begin precreation ================================================\n");
 
+		r = -1;
+		p = -1;
 		p = preload();
 		while ( (r = replay()) != 1 ) {
 			//printf("r: %d, p: %d\n", r, p);
 			p = preload();
 		}
 
-		feign_log(2,"precreation create files =========================================\n\n");
+		feign_log(0,"precreation create files =========================================\n\n");
 
 		activity_precreate(NULL);
 
-		feign_log(2,"finish precreation ===============================================\n\n");
+		feign_log(0,"finish precreation ===============================================\n\n");
 
 		// reset
 		replay_manager_print_stats();
