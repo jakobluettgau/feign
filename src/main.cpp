@@ -101,6 +101,9 @@ int main(int argc, char *argv[])
 
 	// precreate environment
 	if ( option_with_precreation ) {
+
+		set_precreation();	
+
 		feign_log(0,"begin precreation ================================================\n");
 
 		r = -1;
@@ -123,6 +126,9 @@ int main(int argc, char *argv[])
 		reset_buffer_flags();
 		activity_reset(NULL);
 	}
+
+
+	unset_precreation();	
 
 	// collect times for the actual application run
 	struct timespec start;

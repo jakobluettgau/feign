@@ -300,14 +300,14 @@ void reset_buffer_flags() {
  */
 void replay_manager_print_stats() {
 	printf("Replay Statistics\n");
-	printf("Provided:   %-5d\n", provide_count);
-	printf("Filtered:   %-5d\n", filter_count);
-	printf("Mutated:    %-5d\n", mutate_count);
-	printf("'-Swapped:  %-5d\n", swap_count);
-	printf("'-Inserted: %-5d\n", insert_count);
-	printf("Replayed:   %-5d\n", precreate_check_count);
-	printf("Replayed:   %-5d\n", replay_count);
-	printf("Skipped:   %-5d\n", skipped_count);
+	printf("Provided:          %-5d\n", provide_count);
+	printf("Filtered:          %-5d\n", filter_count);
+	printf("Mutated:           %-5d\n", mutate_count);
+	printf("'-Swapped:         %-5d\n", swap_count);
+	printf("'-Inserted:        %-5d\n", insert_count);
+	printf("Precreate_check:   %-5d\n", precreate_check_count);
+	printf("Replayed:          %-5d\n", replay_count);
+	printf("Skipped:           %-5d\n", skipped_count);
 
 	printf("Option: lookahead = %d\n", lookahead);
 	printf("\n");

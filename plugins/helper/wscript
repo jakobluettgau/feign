@@ -7,6 +7,7 @@ from subprocess import call
 active = [
         "consuming-replayer",
         "whitelist-rank",
+        "posix-precreator",
         "posix-chroot-open-path",
     ]
 
