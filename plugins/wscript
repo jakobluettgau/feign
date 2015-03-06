@@ -5,7 +5,7 @@ from waflib import Build
 from subprocess import call
 
 dirs = [
-        "posix",
+#        "posix",
         "sample",
         "test",
         "helper",

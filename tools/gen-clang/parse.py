@@ -8,6 +8,11 @@ import clang.cindex
 level = 0
 count = 0
 
+def srcrangestr(x):
+    return '%s:%d:%d - %s:%d:%d' % (x.start.file, x.start.line, x.start.column, x.end.file, x.end.line, x.end.column)
+
+
+
 def visit(node):
     global level
     global count
@@ -22,7 +27,8 @@ def visit(node):
     #print ""
     #print dir(node.get_definition())
     #print "\n\n\n"
-    
+
+    print "----------------------------"
     # Recurse fo^r children of this node
     children = node.get_children()
     if children:

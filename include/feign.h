@@ -129,10 +129,6 @@ typedef struct Layer {
 
 
 
-
-
-
-
 /**
  * Feign Services API
  *
@@ -148,6 +144,16 @@ extern "C" {
 
 	char const * feign_getenv(char const * name, char const * fallback);
 
+	/**
+	 * Feign allows you to load arbitrary plugins. Using a intend bitmap it
+	 * is possible to specify which hooks shall registered automatically on 
+	 * plugin initialisation.
+	 *
+	 * @param	plugin	plugin struct with name and intends
+	 */
+	int feign_register_plugin(Plugin * plugin);
+
+	
 	/**
 	 * Feign maintains a layer map to allow for optimisation and to allow
 	 * plugins to easily hook onto the layer procession path

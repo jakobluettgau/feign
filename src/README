@@ -1,5 +1,0 @@
-Feign SRC Readme
-
-source.(c|cpp|h)	core files
-modules 			core modules, linked into feign executable
-plugins				plugins that are not linked into the feign executable

@@ -12,8 +12,8 @@ from waflib import Build
 
 dirs = [
     "src",
-    "plugins",
-    "demos",
+#    "plugins",
+#    "demos",
 #    "doc",
     ]
 
@@ -54,7 +54,6 @@ def configure(ctx):
     pass
 
 def build(ctx):
-
     if ctx.options.doc:
         dirs.append("doc")
 
@@ -63,13 +62,26 @@ def build(ctx):
     #ctx.recurse('docs')
     pass
 
+
+def plugins(ctx):
+    if ctx.options.doc:
+        dirs.append("plugins")
+        dirs.append("demos")
+
+    ctx(features="build")
+
+    build(ctx)
+    #ctx.recurse('docs')
+    pass
+
+
 def doc(ctx):
     for d in dirs:
         ctx.recurse(d)
     pass
 
 
-def plugins(ctx):
+def generate_plugins(ctx):
     # generate plugins
     print "To generate plugins copy and run the following commands:"
     for p in feign_plugins:
